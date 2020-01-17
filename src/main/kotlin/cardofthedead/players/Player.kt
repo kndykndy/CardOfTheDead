@@ -11,7 +11,7 @@ class Player(
             TODO()
         }
 
-    val theRestOfTempCards: Set<Card>
+    val theRestOfHand: Set<Card>
         get() {
             TODO()
         }
@@ -28,7 +28,7 @@ class Player(
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    fun drawCard(deck: Deck) {
+    fun drawTopCard(deck: Deck): Card {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
