@@ -1,9 +1,10 @@
 package main.kotlin.cardofthedead.game
 
 import main.kotlin.cardofthedead.cards.Action
-import main.kotlin.cardofthedead.cards.Alert
 import main.kotlin.cardofthedead.cards.Deck
+import main.kotlin.cardofthedead.cards.Event
 import main.kotlin.cardofthedead.cards.StandardDeck
+import main.kotlin.cardofthedead.cards.WayToPlayCard
 import main.kotlin.cardofthedead.cards.Zombie
 import main.kotlin.cardofthedead.players.Player
 import java.util.stream.IntStream
@@ -11,10 +12,10 @@ import kotlin.random.Random
 
 class Game() {
 
-    private val players: Set<Player>
+    private val players: MutableSet<Player>
 
     private val deck: Deck = StandardDeck()
-    private val graveyard: Deck = Deck()
+    private val discard: Deck = Deck()
 
     init {
         // todo get amount of players from args
@@ -32,33 +33,35 @@ class Game() {
     private fun playRound() {
         prepareForRound()
 
-        val firstPlayerIdx = getFirstPlayerIdx()
-        var currentPLayerIdx = firstPlayerIdx
+        var currentPlayer = getFirstPlayer()
 
         while (isRoundRunning()) {
-            val player = players.elementAt(currentPLayerIdx)
+            val drawnCard = currentPlayer.drawTopCard(deck)
+            if(drawnCard==null){ // end of deck
 
-            val drawnCard = player.drawTopCard(deck)
+            }
+
             when (drawnCard) {
-                is Action -> {
-                    player.take(drawnCard)
-                }
-                is Zombie -> {
-                    player.surroundBy(drawnCard)
-                }
-                is Alert -> {
-                    player.play(drawnCard)
-                    player.
+                is Action -> currentPlayer.takeToHand(drawnCard)
+                is Zombie -> currentPlayer.chasedByZombie(drawnCard)
+                is Event -> {
+                    currentPlayer.play(drawnCard)
+                    currentPlayer.discard(drawnCard)
                 }
             }
 
-            player.playLastCard()
-            player.playCardFromHand()
+            val decisionToPlayCardFromHand = currentPlayer.decideToPlayCardFromHand()
+            if (decisionToPlayCardFromHand != WayToPlayCard.DO_NOT_PLAY) {
+                val actionCardFromHand = currentPlayer.drawFromHand()
 
-            currentPLayerIdx++
-            if (currentPLayerIdx > players.size) {
-                currentPLayerIdx = 0
+                if (decisionToPlayCardFromHand == WayToPlayCard.PLAY_AS_ACTION) {
+                    currentPlayer.play(actionCardFromHand)
+                } else { // as movement points
+                    currentPlayer.addMovementPoints(actionCardFromHand)
+                }
             }
+
+            currentPlayer = getNextPlayer(currentPlayer)
         }
     }
 
@@ -66,7 +69,7 @@ class Game() {
         players.forEach { player ->
             player.returnCardsToDeck(player.hand, deck)
         }
-        deck.merge(graveyard)
+        deck.merge(discard)
 
         deck.shuffle() // before initial dealing
 
@@ -82,9 +85,23 @@ class Game() {
         deck.shuffle()
     }
 
-    private fun getFirstPlayerIdx(): Int {
-        return Random.nextInt(players.size) // for first round,
+    private fun getFirstPlayer(): Player {
+        return lastPlayerWentToShoppingMall() // for first round,
         // todo for second and third, the winner for previous round
+    }
+
+    private fun getNextPlayer(afterPlayer: Player): Player {
+        val iterator = players.iterator()
+        while (iterator.hasNext()) {
+            if (iterator.next() == afterPlayer) {
+                return if (iterator.hasNext()) iterator.next() else players.elementAt(0)
+            }
+        }
+        return null
+    }
+
+    private fun lastPlayerWentToShoppingMall(): Player {
+        return players.elementAt(Random.nextInt(players.size))
     }
 
     private fun isRoundRunning(): Boolean {

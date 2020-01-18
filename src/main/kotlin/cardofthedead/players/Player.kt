@@ -1,7 +1,10 @@
 package main.kotlin.cardofthedead.players
 
+import main.kotlin.cardofthedead.cards.Action
 import main.kotlin.cardofthedead.cards.Card
 import main.kotlin.cardofthedead.cards.Deck
+import main.kotlin.cardofthedead.cards.WayToPlayCard
+import main.kotlin.cardofthedead.cards.Zombie
 
 class Player(
     name: String
@@ -28,15 +31,39 @@ class Player(
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    fun drawTopCard(deck: Deck): Card {
+    fun drawTopCard(deck: Deck): Card? {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    fun playLastCard() {
+    fun playCardFromHand(): WayToPlayCard {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    fun playCardFromHand() {
+    fun takeToHand(card: Card) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    fun chasedByZombie(card: Zombie) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    fun play(card: Card) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    fun discard(card: Card) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    fun decideToPlayCardFromHand(): WayToPlayCard {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    fun drawFromHand():Action {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    fun addMovementPoints(actionCardFromHand: Action) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
