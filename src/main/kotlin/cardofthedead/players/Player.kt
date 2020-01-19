@@ -7,8 +7,10 @@ import main.kotlin.cardofthedead.cards.WayToPlayCard
 import main.kotlin.cardofthedead.cards.Zombie
 
 class Player(
-    name: String
+    name: String,
+    level: Level
 ) {
+
     val hand: Set<Card>
         get() {
             TODO()
@@ -31,7 +33,7 @@ class Player(
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    fun drawTopCard(deck: Deck): Card? {
+    fun drawTopCard(deck: Deck): Card {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
@@ -56,14 +58,34 @@ class Player(
     }
 
     fun decideToPlayCardFromHand(): WayToPlayCard {
+        // todo if not surrounded
+
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    fun drawFromHand():Action {
+    fun drawFromHand(): Action {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     fun addMovementPoints(actionCardFromHand: Action) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+
+    fun getZombiesAroundCount(): Int {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    fun die() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    fun getMovementPointsCount(): Int {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+}
+
+enum class Level {
+    EASY,
+    MEDIUM,
+    HIGH
 }

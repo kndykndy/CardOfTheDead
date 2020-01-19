@@ -2,13 +2,14 @@ package main.kotlin.cardofthedead.cards
 
 open class Deck {
 
-    protected val cards: MutableSet<Card> = mutableSetOf()
+    protected val cards: MutableList<Card> = mutableListOf()
 
-    fun shuffle() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    fun shuffle() = cards.shuffle()
 
     fun merge(deck: Deck) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        cards.addAll(deck.cards)
+        deck.cards.clear()
     }
+
+    fun isEmpty(): Boolean = cards.isEmpty()
 }
