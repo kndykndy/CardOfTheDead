@@ -19,6 +19,8 @@ class Game(
     private val deck: Deck = StandardDeck()
     private val discard: Deck = Deck()
 
+    private var cardsToPlay: Int = 1 // because of Horde may be =2
+
     val playersToZombiesToBeSurrounded = mapOf(2 to 5, 3 to 4, 4 to 4, 5 to 3)
     private val playersToZombiesToBeEaten = mapOf(2 to 7, 3 to 6, 4 to 6, 5 to 5)
     private val playersToMovementPointsToEscape = mapOf(2 to 7, 3 to 6, 4 to 6, 5 to 5)
@@ -34,43 +36,49 @@ class Game(
 
         var currentPlayer = getFirstPlayer()
 
-        loop@ while (isRoundRunning()) {
-            when (val drawnCard = currentPlayer.drawTopCard(deck)) {
-                is Action -> currentPlayer.takeToHand(drawnCard)
-                is Zombie -> {
-                    currentPlayer.chasedByZombie(drawnCard)
-                    if (currentPlayer.getZombiesAroundCount() >=
-                        playersToZombiesToBeEaten.getValue(initialPlayersCount)
-                    ) {
-                        currentPlayer.die()
-                        removePlayer(currentPlayer)
-
-                        continue@loop
-                    }
-                }
-                is Event -> {
-                    currentPlayer.play(drawnCard)
-                    currentPlayer.discard(drawnCard)
-                }
-            }
-
-            val decisionToPlayCardFromHand = currentPlayer.decideToPlayCardFromHand()
-            if (decisionToPlayCardFromHand != WayToPlayCard.DO_NOT_PLAY) {
-                val actionCardFromHand = currentPlayer.drawFromHand()
-
-                if (decisionToPlayCardFromHand == WayToPlayCard.PLAY_AS_ACTION) {
-                    currentPlayer.play(actionCardFromHand)
-                } else { // as movement points
-                    currentPlayer.addMovementPoints(actionCardFromHand)
-                    if (currentPlayer.getMovementPointsCount() >=
-                        playersToMovementPointsToEscape.getValue(initialPlayersCount)
-                    ) {
-                        continue@loop
-                    }
-                }
+        while (isRoundRunning()) {
+            IntStream.of(cardsToPlay).forEach {
+                playTurn(currentPlayer)
             }
 
             currentPlayer = getNextPlayer(currentPlayer)
+        }
+    }
+
+    private fun playTurn(currentPlayer: Player) {
+        when (val drawnCard = currentPlayer.drawTopCard(deck)) {
+            is Action -> currentPlayer.takeToHand(drawnCard)
+            is Zombie -> {
+                currentPlayer.chasedByZombie(drawnCard)
+                if (currentPlayer.getZombiesAroundCount() >=
+                    playersToZombiesToBeEaten.getValue(initialPlayersCount)
+                ) {
+                    currentPlayer.die()
+                    removePlayer(currentPlayer)
+
+                    return
+                }
+            }
+            is Event -> {
+                currentPlayer.play(drawnCard)
+                currentPlayer.discard(drawnCard)
+            }
+        }
+
+        val decisionToPlayCardFromHand = currentPlayer.decideToPlayCardFromHand()
+        if (decisionToPlayCardFromHand != WayToPlayCard.DO_NOT_PLAY) {
+            val actionCardFromHand = currentPlayer.drawFromHand()
+
+            if (decisionToPlayCardFromHand == WayToPlayCard.PLAY_AS_ACTION) {
+                currentPlayer.play(actionCardFromHand)
+            } else { // as movement points
+                currentPlayer.addMovementPoints(actionCardFromHand)
+                if (currentPlayer.getMovementPointsCount() >=
+                    playersToMovementPointsToEscape.getValue(initialPlayersCount)
+                ) {
+                    return
+                }
+            }
         }
     }
 
