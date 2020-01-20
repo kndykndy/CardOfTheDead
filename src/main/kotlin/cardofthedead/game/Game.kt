@@ -11,8 +11,10 @@ import java.util.stream.IntStream
 import kotlin.random.Random
 
 class Game(
-    private val players: MutableSet<Player>
+    private val players: MutableList<Player>
 ) {
+
+    private val winners: MutableList<List<Player>> = mutableListOf()
 
     private val initialPlayersCount: Int = players.size
 
@@ -26,6 +28,10 @@ class Game(
     private val playersToMovementPointsToEscape = mapOf(2 to 7, 3 to 6, 4 to 6, 5 to 5)
 
     private constructor(builder: Builder) : this(builder.players)
+
+    init {
+        winners.add(listOf(lastPlayerWentToShoppingMall()))
+    }
 
     fun play() {
         IntStream.of(3).forEach { playRound() }
@@ -102,11 +108,8 @@ class Game(
         deck.shuffle()
     }
 
-    private fun getFirstPlayer(): Player {
-        return lastPlayerWentToShoppingMall() // for first round,
-        // todo for second and third, the winner for previous round
-        // todo winners set
-    }
+    private fun getFirstPlayer(): Player =
+        winners[winners.size - 1].elementAt(Random.nextInt(winners.size))
 
     private fun getNextPlayer(afterPlayer: Player): Player {
         val iterator = players.iterator()
@@ -149,12 +152,10 @@ class Game(
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    private fun getAlivePlayersCount(): Int {
-        return players.size
-    }
+    private fun getAlivePlayersCount(): Int = players.size
 
     class Builder {
-        val players: MutableSet<Player> = mutableSetOf()
+        val players: MutableList<Player> = mutableListOf()
 
         fun withPlayer(player: Player) = apply { players.add(player) }
 
