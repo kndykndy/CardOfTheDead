@@ -123,21 +123,47 @@ class Game(
         return players.elementAt(0)
     }
 
-    private fun lastPlayerWentToShoppingMall(): Player {
-        return players.elementAt(Random.nextInt(players.size))
-    }
+    private fun lastPlayerWentToShoppingMall(): Player =
+        players.elementAt(Random.nextInt(players.size))
 
     private fun isRoundRunning(): Boolean {
         if (getAlivePlayersCount() == 1) {
-            // todo alive player gets 5 Survival points
+            players[0].addSurvivalPoints(5)
+
             return false
         }
+
         if (isPlayerWithEnoughPointsToEscape()) {
-            // todo give all non eaten players survival points=their movement points
-            return false
+            val winner = players.firstOrNull { player ->
+                player.getMovementPointsCount() >=
+                        playersToMovementPointsToEscape.getValue(initialPlayersCount)
+            }
+            if (winner != null) {
+                players.forEach { player ->
+                    player.addSurvivalPoints(player.getMovementPointsCount())
+                }
+
+                winners.add(listOf(winner))
+
+                return false
+            }
         }
+
         if (deck.isEmpty()) {
-            // todo give all non eaten players survival points=their movement points
+            val maxMovementPoints =
+                players.maxBy { player ->
+                    player.getMovementPointsCount()
+                }!!.getMovementPointsCount()
+            val winnersList = mutableListOf<Player>()
+            players.forEach { player ->
+                player.addSurvivalPoints(player.getMovementPointsCount())
+                if (player.getMovementPointsCount() == maxMovementPoints) {
+                    winnersList.add(player)
+                }
+            }
+
+            winners.add(winnersList)
+
             return false
         }
 
