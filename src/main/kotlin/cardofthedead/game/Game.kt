@@ -14,6 +14,7 @@ class Game(
     private val players: MutableList<Player>
 ) {
 
+    private val dead: MutableList<Player> = mutableListOf()
     private val winners: MutableList<List<Player>> = mutableListOf()
 
     private val initialPlayersCount: Int = players.size
@@ -89,6 +90,9 @@ class Game(
     }
 
     private fun prepareForRound() {
+        players.addAll(dead)
+        dead.clear()
+
         players.forEach { player ->
             player.returnCardsToDeck(player.hand, deck)
         }
@@ -132,7 +136,11 @@ class Game(
                 !isRoundOverBecauseOfEmptyDeck()
 
     private fun removePlayer(player: Player) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        players.remove(player)
+        dead.add(player)
+
+        player.returnCardsToDeck(player.hand, deck)
+        player.returnCardsToDeck(player.theRestOfHand, deck)
     }
 
     private fun isRoundOverBecauseOneAlivePlayerLeft(): Boolean =
