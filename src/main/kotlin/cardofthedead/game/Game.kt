@@ -126,29 +126,48 @@ class Game(
     private fun lastPlayerWentToShoppingMall(): Player =
         players.elementAt(Random.nextInt(players.size))
 
-    private fun isRoundRunning(): Boolean {
-        if (getAlivePlayersCount() == 1) {
-            players[0].addSurvivalPoints(5)
+    private fun isRoundRunning(): Boolean =
+        !isRoundOverBecauseOneAlivePlayerLeft() &&
+                !isRoundOverBecauseEscapedPlayer() &&
+                !isRoundOverBecauseOfEmptyDeck()
 
-            return false
+    private fun removePlayer(player: Player) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    private fun isRoundOverBecauseOneAlivePlayerLeft(): Boolean =
+        if (players.size == 1) {
+            val winner = players[0]
+
+            winner.addSurvivalPoints(5)
+
+            winners.add(listOf(winner))
+
+            true
+        } else {
+            false
         }
 
-        if (isPlayerWithEnoughPointsToEscape()) {
-            val winner = players.firstOrNull { player ->
-                player.getMovementPointsCount() >=
-                        playersToMovementPointsToEscape.getValue(initialPlayersCount)
-            }
-            if (winner != null) {
-                players.forEach { player ->
-                    player.addSurvivalPoints(player.getMovementPointsCount())
-                }
-
-                winners.add(listOf(winner))
-
-                return false
-            }
+    private fun isRoundOverBecauseEscapedPlayer(): Boolean {
+        val winner = players.firstOrNull { player ->
+            player.getMovementPointsCount() >=
+                    playersToMovementPointsToEscape.getValue(initialPlayersCount)
         }
 
+        return if (winner != null) {
+            players.forEach { player ->
+                player.addSurvivalPoints(player.getMovementPointsCount())
+            }
+
+            winners.add(listOf(winner))
+
+            true
+        } else {
+            false
+        }
+    }
+
+    private fun isRoundOverBecauseOfEmptyDeck(): Boolean =
         if (deck.isEmpty()) {
             val maxMovementPoints =
                 players.maxBy { player ->
@@ -164,21 +183,10 @@ class Game(
 
             winners.add(winnersList)
 
-            return false
+            true
+        } else {
+            false
         }
-
-        return true
-    }
-
-    private fun isPlayerWithEnoughPointsToEscape(): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    private fun removePlayer(player: Player) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    private fun getAlivePlayersCount(): Int = players.size
 
     class Builder {
         val players: MutableList<Player> = mutableListOf()
