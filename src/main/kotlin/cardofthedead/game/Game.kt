@@ -7,7 +7,6 @@ import main.kotlin.cardofthedead.cards.StandardDeck
 import main.kotlin.cardofthedead.cards.WayToPlayCard
 import main.kotlin.cardofthedead.cards.Zombie
 import main.kotlin.cardofthedead.players.Player
-import java.util.stream.IntStream
 import kotlin.random.Random
 
 class Game(
@@ -35,7 +34,7 @@ class Game(
     }
 
     fun play() {
-        IntStream.of(3).forEach { playRound() }
+        repeat(3) { playRound() }
     }
 
     private fun playRound() {
@@ -44,9 +43,7 @@ class Game(
         var currentPlayer = getFirstPlayer()
 
         while (isRoundRunning()) {
-            IntStream.of(cardsToPlay).forEach {
-                playTurn(currentPlayer)
-            }
+            repeat(cardsToPlay) { playTurn(currentPlayer) }
 
             currentPlayer = getNextPlayer(currentPlayer)
         }

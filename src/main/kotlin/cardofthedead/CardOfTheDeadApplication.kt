@@ -6,9 +6,9 @@ import main.kotlin.cardofthedead.players.Player
 
 fun main() {
     val game = Game.Builder()
-        .withPlayer(Player("Дима", Level.EASY))
-        .withPlayer(Player("Женя", Level.MEDIUM))
-        .withPlayer(Player("Настя", Level.HIGH))
+        .withPlayer(Player.of("Дима", Level.EASY))
+        .withPlayer(Player.of("Женя", Level.MEDIUM))
+        .withPlayer(Player.of("Настя", Level.HARD))
         .build()
     game.play()
 }

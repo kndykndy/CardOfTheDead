@@ -6,30 +6,29 @@ import main.kotlin.cardofthedead.cards.Deck
 import main.kotlin.cardofthedead.cards.WayToPlayCard
 import main.kotlin.cardofthedead.cards.Zombie
 
-class Player(
+abstract class Player(
     name: String,
     level: Level
 ) {
 
-    val hand: Set<Card>
-        get() {
-            TODO()
-        }
+    val hand: Deck = Deck()
 
-    val theRestOfHand: Set<Card>
-        get() {
-            TODO()
-        }
+    /**
+     * Temporary hold cards.
+     */
+    val theRestOfHand: Deck = Deck()
 
-    fun pickCards(num: Deck, deck: Int): Set<Card> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    /**
+     * Picks N top cards from the deck.
+     */
+    abstract fun pickCards(deck: Deck, n: Int)
 
-    fun chooseSinglePointCards(i1: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    /**
+     * Chooses N cards from the rest of the hand.
+     */
+    abstract fun chooseSinglePointCards(n: Int)
 
-    fun returnCardsToDeck(theRestOfCards: Set<Card>, deck: Deck) {
+    fun returnCardsToDeck(theRestOfCards: MutableList<Card>, deck: Deck) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
@@ -86,10 +85,21 @@ class Player(
     fun addSurvivalPoints(pointsCount: Int) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+
+    companion object {
+
+        fun of(name: String, level: Level = Level.EASY): Player {
+            if (level == Level.EASY) {
+                return EasyPlayer(name)
+            } else {
+                return EasyPlayer(name) // todo add other difficulties
+            }
+        }
+    }
 }
 
 enum class Level {
     EASY,
     MEDIUM,
-    HIGH
+    HARD
 }
