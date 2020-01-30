@@ -18,8 +18,8 @@ class Game(
 
     private val initialPlayersCount: Int = players.size
 
-    private val deck: Deck = StandardDeck()
-    private val discard: Deck = Deck()
+    private val playDeck: Deck = StandardDeck()
+    private val discardDeck: Deck = Deck()
 
     private var cardsToPlay: Int = 1 // because of Horde may be =2
 
@@ -50,7 +50,7 @@ class Game(
     }
 
     private fun playTurn(currentPlayer: Player) {
-        when (val drawnCard = currentPlayer.drawTopCard(deck)) {
+        when (val drawnCard = currentPlayer.drawTopCard(playDeck)) {
             is Action -> currentPlayer.takeToHand(drawnCard)
             is Zombie -> {
                 currentPlayer.chasedByZombie(drawnCard)
@@ -90,23 +90,23 @@ class Game(
         players.addAll(dead)
         dead.clear()
 
-        players.forEach { player ->
-            player.returnCardsToDeck(player.hand, deck)
+        players.forEach {
+            playDeck.merge(it.hand)
         }
-        deck.merge(discard)
+        playDeck.merge(discardDeck)
 
-        deck.shuffle() // before initial dealing
+        playDeck.shuffle() // before initial dealing
 
         // initial dealing
-        players.forEach { player ->
-            player.pickCards(deck, 10)
-            player.chooseSinglePointCards(3)
+        players.forEach {
+            it.pickCards(playDeck, 10)
+            it.chooseSinglePointCards(3)
         }
-        players.forEach { player ->
-            player.returnCardsToDeck(player.theRestOfHand, deck)
+        players.forEach {
+            playDeck.merge(it.candidatesToHand)
         }
 
-        deck.shuffle()
+        playDeck.shuffle()
     }
 
     private fun getFirstPlayer(): Player =
@@ -136,8 +136,8 @@ class Game(
         players.remove(player)
         dead.add(player)
 
-        player.returnCardsToDeck(player.hand, deck)
-        player.returnCardsToDeck(player.theRestOfHand, deck)
+        playDeck.merge(player.hand)
+        playDeck.merge(player.candidatesToHand)
     }
 
     private fun isRoundOverBecauseOneAlivePlayerLeft(): Boolean =
@@ -160,8 +160,8 @@ class Game(
         }
 
         return if (winner != null) {
-            players.forEach { player ->
-                player.addSurvivalPoints(player.getMovementPointsCount())
+            players.forEach {
+                it.addSurvivalPoints(it.getMovementPointsCount())
             }
 
             winners.add(listOf(winner))
@@ -173,7 +173,7 @@ class Game(
     }
 
     private fun isRoundOverBecauseOfEmptyDeck(): Boolean =
-        if (deck.isEmpty()) {
+        if (playDeck.isEmpty()) {
             val maxMovementPoints =
                 players.maxBy { player ->
                     player.getMovementPointsCount()

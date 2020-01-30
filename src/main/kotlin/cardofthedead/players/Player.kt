@@ -16,21 +16,23 @@ abstract class Player(
     /**
      * Temporary hold cards.
      */
-    val theRestOfHand: Deck = Deck()
+    val candidatesToHand: Deck = Deck()
 
     /**
-     * Picks N top cards from the deck.
+     * Picks N top cards from the play deck to the candidates deck.
      */
-    abstract fun pickCards(deck: Deck, n: Int)
+    fun pickCards(deck: Deck, n: Int) {
+        repeat(n) {
+            deck.pickTopCard()?.let {
+                candidatesToHand.addCard(it)
+            }
+        }
+    }
 
     /**
-     * Chooses N cards from the rest of the hand.
+     * Chooses N cards from the candidates deck.
      */
     abstract fun chooseSinglePointCards(n: Int)
-
-    fun returnCardsToDeck(theRestOfCards: MutableList<Card>, deck: Deck) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
     fun drawTopCard(deck: Deck): Card {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
