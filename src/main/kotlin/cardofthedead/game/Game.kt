@@ -13,7 +13,7 @@ class Game(
     private val players: MutableList<Player>
 ) {
 
-    private val dead: MutableList<Player> = mutableListOf()
+    private val deadPlayers: MutableList<Player> = mutableListOf()
     private val winners: MutableList<List<Player>> = mutableListOf()
 
     private val initialPlayersCount: Int = players.size
@@ -87,12 +87,10 @@ class Game(
     }
 
     private fun prepareForRound() {
-        players.addAll(dead)
-        dead.clear()
+        players.addAll(deadPlayers)
+        deadPlayers.clear()
 
-        players.forEach {
-            playDeck.merge(it.hand)
-        }
+        players.forEach { playDeck.merge(it.hand) }
         playDeck.merge(discardDeck)
 
         playDeck.shuffle() // before initial dealing
@@ -102,9 +100,7 @@ class Game(
             it.pickCards(playDeck, 10)
             it.chooseSinglePointCards(3)
         }
-        players.forEach {
-            playDeck.merge(it.candidatesToHand)
-        }
+        players.forEach { playDeck.merge(it.candidatesToHand) }
 
         playDeck.shuffle()
     }
@@ -134,7 +130,7 @@ class Game(
 
     private fun removePlayer(player: Player) {
         players.remove(player)
-        dead.add(player)
+        deadPlayers.add(player)
 
         playDeck.merge(player.hand)
         playDeck.merge(player.candidatesToHand)

@@ -17,9 +17,9 @@ open class Deck {
         deck.cards.clear()
     }
 
-    fun pickCard(card: Card): Card? = if (cards.remove(card)) card else null
-
     fun pickTopCard(): Card? = if (!isEmpty()) pickCard(cards[cards.size - 1]) else null
+
+    private fun pickCard(card: Card): Card? = if (cards.remove(card)) card else null
 
     fun pickActionCards(): Deck {
         val actionCardsDeck = Deck()
@@ -29,6 +29,8 @@ open class Deck {
     }
 
     fun pickRandomCards(n: Int): Deck {
+        require(n > 0) { "N cannot be less than 0" } // todo and more than cards in deck
+
         val randomCardsDeck = Deck()
         cards.shuffled()
             .take(n)

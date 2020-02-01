@@ -14,16 +14,16 @@ abstract class Player(
     val hand: Deck = Deck()
 
     /**
-     * Temporary hold cards.
+     * Temporary cards deck.
      */
     val candidatesToHand: Deck = Deck()
 
     /**
      * Picks N top cards from the play deck to the candidates deck.
      */
-    fun pickCards(deck: Deck, n: Int) {
+    fun pickCards(playDeck: Deck, n: Int) {
         repeat(n) {
-            deck.pickTopCard()?.let {
+            playDeck.pickTopCard()?.let {
                 candidatesToHand.addCard(it)
             }
         }
@@ -34,13 +34,7 @@ abstract class Player(
      */
     abstract fun chooseSinglePointCards(n: Int)
 
-    fun drawTopCard(deck: Deck): Card {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    fun playCardFromHand(): WayToPlayCard {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    fun drawTopCard(playDeck: Deck): Card? = playDeck.pickTopCard()
 
     fun takeToHand(card: Card) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
