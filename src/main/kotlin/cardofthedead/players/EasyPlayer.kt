@@ -1,5 +1,7 @@
 package main.kotlin.cardofthedead.players
 
+import main.kotlin.cardofthedead.cards.WayToPlayCard
+
 class EasyPlayer(name: String) : Player(name, Level.EASY) {
 
     /**
@@ -13,6 +15,12 @@ class EasyPlayer(name: String) : Player(name, Level.EASY) {
         } else {
             hand.merge(actionCardsDeck)
         }
+    }
+
+    override fun decideToPlayCardFromHand(): WayToPlayCard {
+        // todo if not surrounded
+
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 }

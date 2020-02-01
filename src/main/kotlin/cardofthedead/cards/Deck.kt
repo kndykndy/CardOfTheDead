@@ -38,4 +38,8 @@ open class Deck {
         return randomCardsDeck
     }
 
+    fun getMovementPointsSum(): Int =
+        cards.filterIsInstance<Action>()
+            .sumBy { it.movementPoints }
+
 }

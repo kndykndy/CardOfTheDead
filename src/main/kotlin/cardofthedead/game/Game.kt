@@ -1,6 +1,7 @@
 package main.kotlin.cardofthedead.game
 
 import main.kotlin.cardofthedead.cards.Action
+import main.kotlin.cardofthedead.cards.Card
 import main.kotlin.cardofthedead.cards.Deck
 import main.kotlin.cardofthedead.cards.Event
 import main.kotlin.cardofthedead.cards.StandardDeck
@@ -57,7 +58,7 @@ class Game(
                 if (currentPlayer.getZombiesAroundCount() >=
                     playersToZombiesToBeEaten.getValue(initialPlayersCount)
                 ) {
-                    currentPlayer.die()
+                    currentPlayer.die(discardDeck)
                     removePlayer(currentPlayer)
 
                     return
@@ -65,7 +66,7 @@ class Game(
             }
             is Event -> {
                 currentPlayer.play(drawnCard)
-                currentPlayer.discard(drawnCard)
+                currentPlayer.discard(drawnCard, discardDeck)
             }
             null -> {
                 return
@@ -73,13 +74,13 @@ class Game(
         }
 
         val decisionToPlayCardFromHand = currentPlayer.decideToPlayCardFromHand()
-        if (decisionToPlayCardFromHand != WayToPlayCard.DO_NOT_PLAY) {
-            val actionCardFromHand = currentPlayer.drawFromHand()
+        if (decisionToPlayCardFromHand.isGonnaPlay()) {
+            val actionCardFromHand: Card = decisionToPlayCardFromHand.card!!
 
-            if (decisionToPlayCardFromHand == WayToPlayCard.PLAY_AS_ACTION) {
+            if (decisionToPlayCardFromHand.wayToPlayCard == WayToPlayCard.PLAY_AS_ACTION) {
                 currentPlayer.play(actionCardFromHand)
             } else { // as movement points
-                currentPlayer.addMovementPoints(actionCardFromHand)
+                currentPlayer.addMovementPoints(actionCardFromHand as Action)
                 if (currentPlayer.getMovementPointsCount() >=
                     playersToMovementPointsToEscape.getValue(initialPlayersCount)
                 ) {
@@ -93,7 +94,7 @@ class Game(
         players.addAll(deadPlayers)
         deadPlayers.clear()
 
-        players.forEach { playDeck.merge(it.hand) }
+        players.forEach { it.discardAllCards(discardDeck) }
         playDeck.merge(discardDeck)
 
         playDeck.shuffle() // before initial dealing
@@ -103,7 +104,7 @@ class Game(
             it.pickCards(playDeck, 10)
             it.chooseSinglePointCards(3)
         }
-        players.forEach { playDeck.merge(it.candidatesToHand) }
+        players.forEach { it.discardCandidatesCards(discardDeck) }
 
         playDeck.shuffle()
     }
@@ -134,9 +135,6 @@ class Game(
     private fun removePlayer(player: Player) {
         players.remove(player)
         deadPlayers.add(player)
-
-        playDeck.merge(player.hand)
-        playDeck.merge(player.candidatesToHand)
     }
 
     private fun isRoundOverBecauseOneAlivePlayerLeft(): Boolean =
