@@ -67,6 +67,9 @@ class Game(
                 currentPlayer.play(drawnCard)
                 currentPlayer.discard(drawnCard)
             }
+            null -> {
+                return
+            }
         }
 
         val decisionToPlayCardFromHand = currentPlayer.decideToPlayCardFromHand()

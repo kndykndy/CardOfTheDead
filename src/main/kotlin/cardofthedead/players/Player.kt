@@ -36,9 +36,7 @@ abstract class Player(
 
     fun drawTopCard(playDeck: Deck): Card? = playDeck.pickTopCard()
 
-    fun takeToHand(card: Card) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    fun takeToHand(card: Card) = hand.addCard(card)
 
     fun chasedByZombie(card: Zombie) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
