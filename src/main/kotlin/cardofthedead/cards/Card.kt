@@ -17,6 +17,12 @@ class PlayCardDecision(
         wayToPlayCard != WayToPlayCard.CANNOT_PLAY &&
                 wayToPlayCard != WayToPlayCard.DO_NOT_PLAY
 
+    companion object {
+
+        fun cannotPlay(): PlayCardDecision = PlayCardDecision(WayToPlayCard.CANNOT_PLAY, null)
+
+        fun doNotPlay(): PlayCardDecision = PlayCardDecision(WayToPlayCard.DO_NOT_PLAY, null)
+    }
 }
 
 enum class WayToPlayCard {

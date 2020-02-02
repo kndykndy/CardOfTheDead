@@ -17,7 +17,7 @@ class Game(
     private val deadPlayers: MutableList<Player> = mutableListOf()
     private val winners: MutableList<List<Player>> = mutableListOf()
 
-    private val initialPlayersCount: Int = players.size
+    internal val initialPlayersCount: Int = players.size
 
     private val playDeck: Deck = StandardDeck()
     private val discardDeck: Deck = Deck()
@@ -35,6 +35,7 @@ class Game(
     }
 
     fun play() {
+        players.forEach { Player.setGameContext(it, this) }
         repeat(3) { playRound() }
     }
 

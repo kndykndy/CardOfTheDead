@@ -5,11 +5,13 @@ import main.kotlin.cardofthedead.cards.Card
 import main.kotlin.cardofthedead.cards.Deck
 import main.kotlin.cardofthedead.cards.PlayCardDecision
 import main.kotlin.cardofthedead.cards.Zombie
+import main.kotlin.cardofthedead.game.Game
 
 abstract class Player(
-    val name: String,
-    val level: Level
+    val name: String
 ) {
+
+    protected lateinit var gameContext: Game
 
     protected val hand: Deck = Deck()
 
@@ -91,6 +93,10 @@ abstract class Player(
             } else {
                 return EasyPlayer(name) // todo add other difficulties
             }
+        }
+
+        fun setGameContext(player: Player, game: Game) {
+            player.gameContext = game
         }
     }
 }

@@ -1,6 +1,5 @@
 package main.kotlin.cardofthedead.cards
 
-import main.kotlin.cardofthedead.cards.Card
-
-abstract class Zombie : Card {
-}
+abstract class Zombie(
+    val zombieCount: Int
+) : Card

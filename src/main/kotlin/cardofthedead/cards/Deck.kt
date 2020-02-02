@@ -28,6 +28,8 @@ open class Deck {
         return actionCardsDeck
     }
 
+    fun pickRandomCard(): Card = cards.shuffled().first()
+
     fun pickRandomCards(n: Int): Deck {
         require(n > 0) { "N cannot be less than 0" } // todo and more than cards in deck
 
@@ -41,5 +43,9 @@ open class Deck {
     fun getMovementPointsSum(): Int =
         cards.filterIsInstance<Action>()
             .sumBy { it.movementPoints }
+
+    fun getZombiesCount(): Int =
+        cards.filterIsInstance<Zombie>()
+            .sumBy { it.zombieCount }
 
 }
