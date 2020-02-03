@@ -20,50 +20,35 @@ class EasyPlayer(name: String) : Player(name) {
     }
 
     /**
-     * todo redo if -- two branches almost same
+     * If able to play, plays by throwing two dice.
      */
     override fun decideToPlayCardFromHand(): PlayCardDecision {
         if (hand.isEmpty()) return PlayCardDecision.cannotPlay()
 
         val zombiesToSurround =
             gameContext.playersToZombiesToBeSurrounded.getValue(gameContext.initialPlayersCount)
-        if (zombiesAround.getZombiesCount() < zombiesToSurround) {
-            // can DO_NOT_PLAY / PLAY_AS_ACTION / PLAY_AS_MOVEMENT_POINTS
-            val pickActionCards = hand.pickActionCards()
-            return if (!pickActionCards.isEmpty()) {
-                if (Random.nextBoolean()) {
-                    if (Random.nextBoolean()) {
-                        PlayCardDecision(
-                            WayToPlayCard.PLAY_AS_MOVEMENT_POINTS,
-                            pickActionCards.pickRandomCard()
-                        )
-                    } else {
-                        PlayCardDecision(
-                            WayToPlayCard.PLAY_AS_ACTION,
-                            pickActionCards.pickRandomCard()
-                        )
-                    }
+
+        val notSurrounded = zombiesAround.getZombiesCount() < zombiesToSurround
+
+        val pickActionCards = hand.pickActionCards()
+        return if (!pickActionCards.isEmpty()) {
+            if (Random.nextBoolean()) {
+                if (notSurrounded && Random.nextBoolean()) {
+                    PlayCardDecision(
+                        WayToPlayCard.PLAY_AS_MOVEMENT_POINTS,
+                        pickActionCards.pickRandomCard()
+                    )
                 } else {
-                    PlayCardDecision.doNotPlay()
-                }
-            } else {
-                PlayCardDecision.cannotPlay()
-            }
-        } else {
-            // can DO_NOT_PLAY / PLAY_AS_ACTION
-            val pickActionCards = hand.pickActionCards()
-            return if (!pickActionCards.isEmpty()) {
-                if (Random.nextBoolean()) {
                     PlayCardDecision(
                         WayToPlayCard.PLAY_AS_ACTION,
                         pickActionCards.pickRandomCard()
                     )
-                } else {
-                    PlayCardDecision.doNotPlay()
                 }
             } else {
-                PlayCardDecision.cannotPlay()
+                PlayCardDecision.doNotPlay()
             }
+        } else {
+            PlayCardDecision.cannotPlay()
         }
     }
 }
