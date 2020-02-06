@@ -1,4 +1,4 @@
-package main.kotlin.cardofthedead.cards.alerts
+package main.kotlin.cardofthedead.cards.events
 
 import main.kotlin.cardofthedead.cards.Event
 import main.kotlin.cardofthedead.players.Player

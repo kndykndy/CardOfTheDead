@@ -11,6 +11,6 @@ class StandardDeck : Deck() {
         // todo 56 cards:
         // 23 zombies
         // 27 actions
-        // 6 alerts
+        // 6 events
     }
 }
