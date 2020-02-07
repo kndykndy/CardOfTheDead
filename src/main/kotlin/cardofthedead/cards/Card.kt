@@ -2,10 +2,9 @@ package main.kotlin.cardofthedead.cards
 
 import main.kotlin.cardofthedead.players.Player
 
-interface Card {
+abstract class Card {
 
-    fun play(player: Player)
-
+    abstract fun play(player: Player)
 }
 
 class PlayCardDecision(

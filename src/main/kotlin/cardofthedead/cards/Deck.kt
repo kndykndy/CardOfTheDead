@@ -46,6 +46,6 @@ open class Deck {
 
     fun getZombiesCount(): Int =
         cards.filterIsInstance<Zombie>()
-            .sumBy { it.zombieCount }
+            .sumBy { it.zombiesOnCard }
 
 }
