@@ -66,7 +66,7 @@ class Game(
                 }
             }
             is Event -> {
-                currentPlayer.play(drawnCard)
+                currentPlayer.play(drawnCard, playDeck)
                 currentPlayer.discard(drawnCard, discardDeck)
             }
             null -> {
@@ -79,7 +79,7 @@ class Game(
             val actionCardFromHand: Card = decisionToPlayCardFromHand.card!!
 
             if (decisionToPlayCardFromHand.wayToPlayCard == WayToPlayCard.PLAY_AS_ACTION) {
-                currentPlayer.play(actionCardFromHand)
+                currentPlayer.play(actionCardFromHand, playDeck)
             } else { // as movement points
                 currentPlayer.addMovementPoints(actionCardFromHand as Action)
                 if (currentPlayer.getMovementPointsCount() >=

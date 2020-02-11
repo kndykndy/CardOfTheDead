@@ -13,8 +13,8 @@ import main.kotlin.cardofthedead.cards.actions.Tripped
 import main.kotlin.cardofthedead.cards.actions.`Nukes!`
 import main.kotlin.cardofthedead.cards.events.Cornered
 import main.kotlin.cardofthedead.cards.events.Fog
-import main.kotlin.cardofthedead.cards.events.Gopota
 import main.kotlin.cardofthedead.cards.events.Horde
+import main.kotlin.cardofthedead.cards.events.Mobs
 import main.kotlin.cardofthedead.cards.events.Ringtone
 import main.kotlin.cardofthedead.cards.zombies.BrideZombie
 import main.kotlin.cardofthedead.cards.zombies.GrannyZombie
@@ -31,13 +31,18 @@ class StandardDeck : Deck() {
      * 56 cards in total
      */
     private val cardTypeToCardDescriptor = mapOf(
+
         // 27 actions
         Armored::class to CardDescriptor(2, "put bitten on the bottom of the deck from your hand"),
         Barricade::class to CardDescriptor(
             2,
-            "draw three cards. choose one an put it on the bottom of the deck"
+            "draw three cards. choose one and put it on the bottom of the deck"
         ),
-        Bitten::class to CardDescriptor(1),
+        Bitten::class to CardDescriptor(
+            1,
+            "you're not getting survival points if this card's in your hand by the end of " +
+                    "the round. this card cannot be played as a movement card."
+        ),
         Chainsaw::class to CardDescriptor(4, "discard two zombie cards"),
         Dynamite::class to CardDescriptor(
             1,
@@ -45,14 +50,15 @@ class StandardDeck : Deck() {
         ),
         Hide::class to CardDescriptor(
             4,
-            "give one of your zombie cards to the next player. you may choose to draw no cards on your next turn."
+            "give one of your zombie cards to the next player. " +
+                    "you may choose to draw no cards on your next turn."
         ),
         Lure::class to CardDescriptor(4, "give one of your zombie cards to any player"),
         `Nukes!`::class to CardDescriptor(
             1,
-            "discard all zombie cards and all cards in hand from all players"
+            "discard all zombie cards and all cards in hand from all players (including yourself)"
         ),
-        Pillage::class to CardDescriptor(1),
+        Pillage::class to CardDescriptor(1, "blindly draw a card from every other player"),
         Slugger::class to CardDescriptor(
             4,
             "discard a zombie or take a card from another players hand"
@@ -64,9 +70,20 @@ class StandardDeck : Deck() {
 
         // 6 events
         Cornered::class to CardDescriptor(1, "discard all your movement cards"),
-        Fog::class to CardDescriptor(2),
-        Gopota::class to CardDescriptor(1),
-        Horde::class to CardDescriptor(1),
+        Fog::class to CardDescriptor(
+            2,
+            "all survivors take their zombies at hand. turn by turn players draw a card from " +
+                    "the player to the right. and then once more. survivors show their zombies."
+        ),
+        Mobs::class to CardDescriptor(
+            1,
+            "if you have a slugger at hand, ignore the event and pass it to the next player to " +
+                    "the left. otherwise put all your hand on the bottom of the deck"
+        ),
+        Horde::class to CardDescriptor(
+            1,
+            "every survivor draws two cards in their turn till the end of a round"
+        ),
         Ringtone::class to CardDescriptor(1, "take one zombie card from every other player"),
 
         // 23 zombies

@@ -12,6 +12,8 @@ open class Deck {
 
     fun addCard(card: Card?) = card?.let { cards.add(card) }
 
+    fun addCardToBottom(card: Card?) = card?.let { cards.add(0, card) }
+
     fun merge(deck: Deck) {
         cards.addAll(deck.cards)
         deck.cards.clear()

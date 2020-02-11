@@ -4,7 +4,7 @@ import main.kotlin.cardofthedead.players.Player
 
 abstract class Card {
 
-    abstract fun play(player: Player)
+    abstract fun play(player: Player, playDeck: Deck)
 }
 
 class PlayCardDecision(

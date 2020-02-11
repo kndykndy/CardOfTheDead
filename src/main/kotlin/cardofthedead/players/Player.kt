@@ -53,7 +53,7 @@ abstract class Player(
 
     fun chasedByZombie(zombieCard: Zombie) = zombiesAround.addCard(zombieCard)
 
-    fun play(card: Card) = card.play(this) // todo probably pass more context
+    fun play(card: Card, playDeck: Deck) = card.play(this, playDeck)
 
     fun discard(card: Card, discardDeck: Deck) = discardDeck.addCard(card)
 

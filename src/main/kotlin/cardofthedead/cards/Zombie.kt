@@ -6,7 +6,10 @@ abstract class Zombie(
     val zombiesOnCard: Int
 ) : Card() {
 
-    override fun play(player: Player) {
+    override fun play(
+        player: Player,
+        playDeck: Deck
+    ) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
