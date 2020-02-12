@@ -1,7 +1,11 @@
 package main.kotlin.cardofthedead.players
 
+import com.sun.tools.javac.jvm.ByteCodes.ret
+import main.kotlin.cardofthedead.cards.Card
 import main.kotlin.cardofthedead.cards.PlayCardDecision
 import main.kotlin.cardofthedead.cards.WayToPlayCard
+import main.kotlin.cardofthedead.cards.Zombie
+import main.kotlin.cardofthedead.cards.zombies.Zombies
 import kotlin.random.Random
 
 class EasyPlayer(name: String) : Player(name) {
@@ -50,5 +54,16 @@ class EasyPlayer(name: String) : Player(name) {
         } else {
             PlayCardDecision.cannotPlay()
         }
+    }
+
+    override fun chooseWorstCandidateForBarricade(): Card? {
+        // todo
+//        val zombieCards = candidatesToHand.getCardsOfClass(Zombie::class)
+//        if (zombieCards.isNotEmpty()) {
+//            if(zombieCards.contains())
+//            when(zombieCards.javaClass){
+//                is Zombies::javaClass -> ret
+//            }
+//        }
     }
 }

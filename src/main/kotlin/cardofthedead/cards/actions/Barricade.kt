@@ -9,15 +9,10 @@ class Barricade : Action(1) {
     override fun play(player: Player, playDeck: Deck) {
         player.pickCards(playDeck, 3)
 
-        val worstCandidateCard= player.chooseWorstCandidateForBarricade()
+        playDeck.addCardOnBottom(player.chooseWorstCandidateForBarricade())
 
-        playDeck.addCardToBottom(worstCandidateCard)
-
-        player.takeToHand(playDeck.)
-
-        // take top three cards from deck
-        // player: decide which one is worse
-        // put worse under deck
-        // take others to hand
+        repeat(2) {
+            player.takeTopCandidateToHand()
+        }
     }
 }

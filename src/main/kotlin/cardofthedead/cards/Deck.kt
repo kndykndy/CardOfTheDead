@@ -1,5 +1,7 @@
 package main.kotlin.cardofthedead.cards
 
+import kotlin.reflect.KClass
+
 open class Deck {
 
     protected val cards: MutableList<Card> = mutableListOf()
@@ -12,7 +14,7 @@ open class Deck {
 
     fun addCard(card: Card?) = card?.let { cards.add(card) }
 
-    fun addCardToBottom(card: Card?) = card?.let { cards.add(0, card) }
+    fun addCardOnBottom(card: Card?) = card?.let { cards.add(0, card) }
 
     fun merge(deck: Deck) {
         cards.addAll(deck.cards)
@@ -50,4 +52,7 @@ open class Deck {
         cards.filterIsInstance<Zombie>()
             .sumBy { it.zombiesOnCard }
 
+    fun getCardOfClass(card: KClass<out Card>): Card? = cards.first { it::class == card }
+
+    fun getCardsOfClass(card: KClass<out Card>): List<Card> = cards.filter { it::class == card }
 }
