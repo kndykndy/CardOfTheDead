@@ -41,7 +41,7 @@ abstract class Player(
 
     fun getCardOfClass(card: KClass<out Card>): Card? = hand.getCardOfClass(card)
 
-    fun getCardsOfClass(card: KClass<out Card>): List<Card> = hand.getCardOfClass(card)
+    fun getCardsOfClass(card: KClass<out Card>): List<Card> = hand.getCardsOfClass(card)
 
     /**
      * Picks N top cards from the play deck to the candidates deck.
@@ -100,15 +100,10 @@ abstract class Player(
 
     abstract fun chooseWorstCandidateForBarricade(): Card?
 
+
     companion object {
 
-        fun of(name: String, level: Level = Level.EASY): Player {
-            if (level == Level.EASY) {
-                return EasyPlayer(name)
-            } else {
-                return EasyPlayer(name) // todo add other difficulties
-            }
-        }
+        fun of(name: String, level: Level = Level.EASY): Player = EasyPlayer(name)
 
         fun setGameContext(player: Player, game: Game) {
             player.gameContext = game

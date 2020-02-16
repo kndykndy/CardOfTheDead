@@ -52,6 +52,8 @@ open class Deck {
         cards.filterIsInstance<Zombie>()
             .sumBy { it.zombiesOnCard }
 
+    fun getInnerCards(): List<Card> = cards.toList()
+
     fun getCardOfClass(card: KClass<out Card>): Card? = cards.first { it::class == card }
 
     fun getCardsOfClass(card: KClass<out Card>): List<Card> = cards.filter { it::class == card }

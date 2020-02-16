@@ -5,6 +5,7 @@ import main.kotlin.cardofthedead.cards.Deck
 import main.kotlin.cardofthedead.players.Player
 
 class Chainsaw: Action(1) {
+
     override fun play(
         player: Player,
         playDeck: Deck
