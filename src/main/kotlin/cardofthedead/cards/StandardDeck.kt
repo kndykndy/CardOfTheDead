@@ -25,7 +25,7 @@ import main.kotlin.cardofthedead.cards.zombies.`Zombies!!!`
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 
-class StandardDeck : Deck() {
+class StandardDeck : Deck<Card>() {
 
     /**
      * 56 cards in total

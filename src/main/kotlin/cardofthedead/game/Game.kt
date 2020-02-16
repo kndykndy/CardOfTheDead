@@ -19,8 +19,8 @@ class Game(
 
     internal val initialPlayersCount: Int = players.size
 
-    private val playDeck: Deck = StandardDeck()
-    private val discardDeck: Deck = Deck()
+    private val playDeck: Deck<Card> = StandardDeck()
+    private val discardDeck: Deck<Card> = Deck()
 
     private var cardsToPlay: Int = 1 // because of Horde may be =2
 
@@ -66,7 +66,7 @@ class Game(
                 }
             }
             is Event -> {
-                currentPlayer.play(drawnCard, playDeck)
+                currentPlayer.play(drawnCard, playDeck, discardDeck)
                 currentPlayer.discard(drawnCard, discardDeck)
             }
             null -> {
@@ -79,7 +79,7 @@ class Game(
             val actionCardFromHand: Card = decisionToPlayCardFromHand.card!!
 
             if (decisionToPlayCardFromHand.wayToPlayCard == WayToPlayCard.PLAY_AS_ACTION) {
-                currentPlayer.play(actionCardFromHand, playDeck)
+                currentPlayer.play(actionCardFromHand, playDeck, discardDeck)
             } else { // as movement points
                 currentPlayer.addMovementPoints(actionCardFromHand as Action)
                 if (currentPlayer.getMovementPointsCount() >=

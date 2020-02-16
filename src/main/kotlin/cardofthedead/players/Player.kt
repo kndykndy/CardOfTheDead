@@ -14,19 +14,19 @@ abstract class Player(
 
     protected lateinit var gameContext: Game
 
-    protected val hand: Deck = Deck()
+    protected val hand: Deck<Card> = Deck()
 
     /**
      * Temporary cards deck.
      */
-    protected val candidatesToHand: Deck = Deck()
+    protected val candidatesToHand: Deck<Card> = Deck()
 
     /**
      * Zombies that chase a player.
      */
-    protected val zombiesAround: Deck = Deck()
+    protected val zombiesAround: Deck<Zombie> = Deck()
 
-    private val escapeCards: Deck = Deck()
+    private val escapeCards: Deck<Action> = Deck()
 
     private var survivalPoints: Int = 0
 
@@ -39,14 +39,18 @@ abstract class Player(
 
     abstract fun decideToPlayCardFromHand(): PlayCardDecision
 
+    // Common logic
+
     fun getCardOfClass(card: KClass<out Card>): Card? = hand.getCardOfClass(card)
 
     fun getCardsOfClass(card: KClass<out Card>): List<Card> = hand.getCardsOfClass(card)
 
+    fun getZombies(): List<Zombie> = zombiesAround.getInnerCards()
+
     /**
      * Picks N top cards from the play deck to the candidates deck.
      */
-    fun pickCards(playDeck: Deck, n: Int) {
+    fun pickCards(playDeck: Deck<Card>, n: Int) {
         repeat(n) {
             playDeck.pickTopCard()?.let {
                 candidatesToHand.addCard(it)
@@ -54,15 +58,16 @@ abstract class Player(
         }
     }
 
-    fun drawTopCard(playDeck: Deck): Card? = playDeck.pickTopCard()
+    fun drawTopCard(playDeck: Deck<Card>): Card? = playDeck.pickTopCard()
 
     fun takeToHand(card: Card) = hand.addCard(card)
 
     fun takeTopCandidateToHand() = hand.addCard(candidatesToHand.pickTopCard())
 
-    fun putOnBottom(card: Card, deck: Deck) = deck.addCardOnBottom(card)
+    fun putOnBottom(card: Card, deck: Deck<Card>) = deck.addCardOnBottom(card)
 
-    fun play(card: Card, playDeck: Deck) = card.play(this, playDeck)
+    fun play(card: Card, playDeck: Deck<Card>, discardDeck: Deck<Card>) =
+        card.play(this, playDeck, discardDeck)
 
     fun chasedByZombie(zombieCard: Zombie) = zombiesAround.addCard(zombieCard)
 
@@ -76,23 +81,23 @@ abstract class Player(
 
     fun getZombiesAroundCount(): Int = zombiesAround.size()
 
-    fun discard(card: Card, discardDeck: Deck) = discardDeck.addCard(card)
+    fun discard(card: Card, discardDeck: Deck<Card>) = discardDeck.addCard(card)
 
-    fun discardAllCards(discardDeck: Deck) {
+    fun discardAllCards(discardDeck: Deck<Card>) {
         discardDeck.merge(hand)
         discardDeck.merge(candidatesToHand)
         discardDeck.merge(zombiesAround)
         discardDeck.merge(escapeCards)
     }
 
-    fun discardCandidatesCards(discardDeck: Deck) {
+    fun discardCandidatesCards(discardDeck: Deck<Card>) {
         discardDeck.merge(candidatesToHand)
     }
 
     /**
      * Survival points are not touched.
      */
-    fun die(discardDeck: Deck) {
+    fun die(discardDeck: Deck<Card>) {
         discardAllCards(discardDeck)
     }
 
