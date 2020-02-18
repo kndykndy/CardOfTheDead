@@ -19,10 +19,13 @@ class Game(
 
     internal val initialPlayersCount: Int = players.size
 
-    private val playDeck: Deck<Card> = StandardDeck()
+    internal val playDeck: Deck<Card> = StandardDeck()
     internal val discardDeck: Deck<Card> = Deck()
 
-    private var cardsToPlay: Int = 1 // because of Horde may be =2
+    /**
+     * Because of Horde cards per round taken by each turn will be two.
+     */
+    private var cardsToPlay: Int = 1
 
     val playersToZombiesToBeSurrounded = mapOf(2 to 5, 3 to 4, 4 to 4, 5 to 3)
     private val playersToZombiesToBeEaten = mapOf(2 to 7, 3 to 6, 4 to 6, 5 to 5)
@@ -31,11 +34,12 @@ class Game(
     private constructor(builder: Builder) : this(builder.players)
 
     init {
+        players.forEach { it.gameContext = this }
         winners.add(listOf(lastPlayerWentToShoppingMall()))
+        playDeck.cards.forEach { it.gameContext = this }
     }
 
     fun play() {
-        players.forEach { Player.setGameContext(it, this) }
         repeat(3) { playRound() }
     }
 
@@ -52,7 +56,7 @@ class Game(
     }
 
     private fun playTurn(currentPlayer: Player) {
-        when (val drawnCard = currentPlayer.drawTopCard(playDeck)) {
+        when (val drawnCard = currentPlayer.drawTopCard()) {
             is Action -> currentPlayer.takeToHand(drawnCard)
             is Zombie -> {
                 currentPlayer.chasedByZombie(drawnCard)
@@ -66,7 +70,7 @@ class Game(
                 }
             }
             is Event -> {
-                currentPlayer.play(drawnCard, playDeck)
+                currentPlayer.play(drawnCard)
                 currentPlayer.discard(drawnCard)
             }
             null -> {
@@ -79,7 +83,7 @@ class Game(
             val actionCardFromHand: Card = decisionToPlayCardFromHand.card!!
 
             if (decisionToPlayCardFromHand.wayToPlayCard == WayToPlayCard.PLAY_AS_ACTION) {
-                currentPlayer.play(actionCardFromHand, playDeck, discardDeck)
+                currentPlayer.play(actionCardFromHand)
             } else { // as movement points
                 currentPlayer.addMovementPoints(actionCardFromHand as Action)
                 if (currentPlayer.getMovementPointsCount() >=
@@ -102,7 +106,7 @@ class Game(
 
         // initial dealing
         players.forEach {
-            it.pickCards(playDeck, 10)
+            it.pickCards(10)
             it.chooseSinglePointCards(3)
         }
         players.forEach { it.discardCandidatesCards() }

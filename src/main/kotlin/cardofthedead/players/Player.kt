@@ -12,7 +12,7 @@ abstract class Player(
     val name: String
 ) {
 
-    protected lateinit var gameContext: Game
+    internal lateinit var gameContext: Game
 
     protected val hand: Deck<Card> = Deck()
 
@@ -54,15 +54,15 @@ abstract class Player(
     /**
      * Picks N top cards from the play deck to the candidates deck.
      */
-    fun pickCards(playDeck: Deck<Card>, n: Int) {
+    fun pickCards(n: Int) {
         repeat(n) {
-            playDeck.pickTopCard()?.let {
+            gameContext.playDeck.pickTopCard()?.let {
                 candidatesToHand.addCard(it)
             }
         }
     }
 
-    fun drawTopCard(playDeck: Deck<Card>): Card? = playDeck.pickTopCard()
+    fun drawTopCard(): Card? = gameContext.playDeck.pickTopCard()
 
     fun takeToHand(card: Card) = hand.addCard(card)
 
@@ -70,7 +70,7 @@ abstract class Player(
 
     fun putOnBottom(card: Card, deck: Deck<Card>) = deck.addCardOnBottom(card)
 
-    fun play(card: Card, playDeck: Deck<Card>) = card.play(this, playDeck)
+    fun play(card: Card) = card.play(this)
 
     fun chasedByZombie(zombieCard: Zombie) = zombiesAround.addCard(zombieCard)
 
@@ -110,10 +110,6 @@ abstract class Player(
     companion object {
 
         fun of(name: String, level: Level = Level.EASY): Player = EasyPlayer(name)
-
-        fun setGameContext(player: Player, game: Game) {
-            player.gameContext = game
-        }
     }
 }
 

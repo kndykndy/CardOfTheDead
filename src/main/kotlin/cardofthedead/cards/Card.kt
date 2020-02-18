@@ -1,10 +1,13 @@
 package main.kotlin.cardofthedead.cards
 
+import main.kotlin.cardofthedead.game.Game
 import main.kotlin.cardofthedead.players.Player
 
 abstract class Card {
 
-    open fun play(player: Player, playDeck: Deck<Card>) {
+    internal lateinit var gameContext: Game
+
+    open fun play(player: Player) {
         throw IllegalStateException("${this::class.simpleName} cannot be played directly.")
     }
 }

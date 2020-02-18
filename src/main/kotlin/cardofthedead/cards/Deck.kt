@@ -4,7 +4,7 @@ import kotlin.reflect.KClass
 
 open class Deck<T : Card> {
 
-    protected val cards: MutableList<T> = mutableListOf()
+    internal val cards: MutableList<T> = mutableListOf()
 
     fun size(): Int = cards.size
 
