@@ -62,12 +62,17 @@ class EasyPlayer(name: String) : Player(name) {
      * Picks random N cards from the candidates deck.
      */
     override fun chooseSinglePointCards(n: Int) {
-        val actionCardsDeck = candidatesToHand.pickActionCards()
-        if (actionCardsDeck.size() > n) {
-            hand.merge(actionCardsDeck.pickRandomCards(n))
-            candidatesToHand.merge(actionCardsDeck)
+        val actionCards = candidatesToHand.getActionCards()
+        if (actionCards.size > n) {
+            actionCards
+                .shuffled()
+                .take(n)
+                .map { candidatesToHand.pickCard(it) as Card }
+                .forEach { hand.addCard(it) }
         } else {
-            hand.merge(actionCardsDeck)
+            actionCards
+                .map { candidatesToHand.pickCard(it) as Card }
+                .forEach { hand.addCard(it) }
         }
     }
 
@@ -82,18 +87,18 @@ class EasyPlayer(name: String) : Player(name) {
 
         val notSurrounded = zombiesAround.getZombiesCount() < zombiesToSurround
 
-        val pickActionCards = hand.pickActionCards()
-        return if (!pickActionCards.isEmpty()) {
+        val actionCards = hand.getActionCards()
+        return if (actionCards.isNotEmpty()) {
             if (Random.nextBoolean()) {
                 if (notSurrounded && Random.nextBoolean()) {
                     PlayCardDecision(
                         WayToPlayCard.PLAY_AS_MOVEMENT_POINTS,
-                        pickActionCards.pickRandomCard()
+                        actionCards.random()
                     )
                 } else {
                     PlayCardDecision(
                         WayToPlayCard.PLAY_AS_ACTION,
-                        pickActionCards.pickRandomCard()
+                        actionCards.random()
                     )
                 }
             } else {
@@ -104,25 +109,20 @@ class EasyPlayer(name: String) : Player(name) {
         }
     }
 
-    override fun chooseWorstCandidateForBarricade(): Card? =
-        candidatesToHand.getInnerCards()
+    override fun chooseWorstCandidateForBarricade(): Card =
+        candidatesToHand.cards
             .map { Pair(it, cardTypeToRating[it::class]) }
-            .sortedBy { it.second }
-            .first()
-            .first
+            .minBy { it.second!! }
+            ?.first!!
 
-    override fun chooseWorstMovementCardForDynamite(): Card? {
-        return if (!escapeCards.isEmpty()) {
+    override fun chooseWorstMovementCardForDynamite(): Card? =
+        if (escapeCards.isNotEmpty()) {
             if (escapeCards.size() == 1) {
-
+                escapeCards.pickTopCard()
             } else {
-                escapeCards.getInnerCards().reversed().forEach {
-
-                }
+                escapeCards.pickRandomCard()
             }
-
         } else {
             null
         }
-    }
 }

@@ -6,7 +6,6 @@ import main.kotlin.cardofthedead.cards.Deck
 import main.kotlin.cardofthedead.cards.PlayCardDecision
 import main.kotlin.cardofthedead.cards.Zombie
 import main.kotlin.cardofthedead.game.Game
-import kotlin.reflect.KClass
 
 abstract class Player(
     val name: String
@@ -14,7 +13,7 @@ abstract class Player(
 
     internal lateinit var gameContext: Game
 
-    protected val hand: Deck<Card> = Deck()
+    internal val hand: Deck<Card> = Deck()
 
     /**
      * Temporary cards deck.
@@ -24,7 +23,7 @@ abstract class Player(
     /**
      * Zombies that chase a player.
      */
-    protected val zombiesAround: Deck<Zombie> = Deck()
+    internal val zombiesAround: Deck<Zombie> = Deck()
 
     protected val escapeCards: Deck<Action> = Deck()
 
@@ -45,12 +44,6 @@ abstract class Player(
 
     // Common logic
 
-    fun getCardOfClass(card: KClass<out Card>): Card? = hand.getCardOfClass(card)
-
-    fun getCardsOfClass(card: KClass<out Card>): List<Card> = hand.getCardsOfClass(card)
-
-    fun getZombieCards(): List<Zombie> = zombiesAround.getInnerCards()
-
     /**
      * Picks N top cards from the play deck to the candidates deck.
      */
@@ -66,9 +59,9 @@ abstract class Player(
 
     fun takeToHand(card: Card) = hand.addCard(card)
 
-    fun takeTopCandidateToHand() = hand.addCard(candidatesToHand.pickTopCard())
+    fun takeTopCandidateToHand() = candidatesToHand.pickTopCard()?.let { hand.addCard(it) }
 
-    fun putOnBottom(card: Card, deck: Deck<Card>) = deck.addCardOnBottom(card)
+    fun putOnBottom(card: Card) = gameContext.playDeck.addCardOnBottom(card)
 
     fun play(card: Card) = card.play(this)
 

@@ -8,7 +8,7 @@ class Barricade : Action(1) {
     override fun play(player: Player) {
         player.pickCards(3)
 
-        gameContext.playDeck.addCardOnBottom(player.chooseWorstCandidateForBarricade())
+        player.chooseWorstCandidateForBarricade()?.let { gameContext.playDeck.addCardOnBottom(it) }
 
         repeat(2) {
             player.takeTopCandidateToHand()

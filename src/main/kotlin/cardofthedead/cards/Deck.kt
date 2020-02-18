@@ -6,44 +6,55 @@ open class Deck<T : Card> {
 
     internal val cards: MutableList<T> = mutableListOf()
 
+    // Service funcs
+
     fun size(): Int = cards.size
 
     fun isEmpty(): Boolean = cards.isEmpty()
+    fun isNotEmpty(): Boolean = cards.isNotEmpty()
 
     fun shuffle() = cards.shuffle()
 
-    fun addCard(card: T?) = card?.let { cards.add(card) }
+    // Adding cards
 
-    fun addCardOnBottom(card: T?) = card?.let { cards.add(0, card) }
+    fun addCard(card: T) = cards.add(card)
+
+    fun addCardOnBottom(card: T) = cards.add(0, card)
 
     fun merge(deck: Deck<out T>) {
         cards.addAll(deck.cards)
         deck.cards.clear()
     }
 
-    fun pickTopCard(): Card? = if (!isEmpty()) pickCard(cards[cards.size - 1]) else null
+    // Picking cards
 
-    // todo think over making this function impossible without "to deck" -- where to pick to
     fun pickCard(card: Card): Card? = if (cards.remove(card)) card else null
 
-    fun pickActionCards(): Deck<Action> {
-        val actionCardsDeck = Deck<Action>()
-        cards.filterIsInstance<Action>()
-            .forEach { actionCardsDeck.addCard(pickCard(it) as Action?) }
-        return actionCardsDeck
-    }
+    fun pickTopCard(): Card? = if (isNotEmpty()) pickCard(cards[cards.size - 1]) else null
 
-    fun pickRandomCard(): Card = cards.shuffled().first()
+    fun pickCardOfClass(cKlass: KClass<out Card>): Card? =
+        pickCard(cards.first { it::class == cKlass })
 
-    fun pickRandomCards(n: Int): Deck<Card> {
-        require(n > 0) { "N cannot be less than 0" } // todo and more than cards in deck
+    fun getCardsOfClass(cKlass: KClass<out Card>): List<Card> =
+        cards.filter { it::class == cKlass }
 
-        val randomCardsDeck = Deck<Card>()
-        cards.shuffled()
-            .take(n)
-            .forEach { randomCardsDeck.addCard(pickCard(it)) }
-        return randomCardsDeck
-    }
+    fun getActionCards(): List<Card> = getCardsOfClass(Action::class)
+
+    fun getSingleZombieCards(): List<Card> =
+        cards.filter { it::class == Zombie::class }
+            .filter { (it as Zombie).zombiesOnCard == 1 }
+
+    fun pickRandomCard(): Card? = pickCard(cards.shuffled().first())
+
+//    fun pickRandomCards(n: Int): List<Card> {
+//        require(n > 0) { "N cannot be less than 0" } // todo and more than cards in deck
+//
+//        return cards.shuffled()
+//            .take(n)
+//            .map { pickCard(it) as Card }
+//    }
+
+    // Points relates funcs
 
     fun getMovementPointsSum(): Int =
         cards.filterIsInstance<Action>()
@@ -53,16 +64,12 @@ open class Deck<T : Card> {
         cards.filterIsInstance<Zombie>()
             .sumBy { it.zombiesOnCard }
 
-    fun getInnerCards(): List<T> = cards.toList()
+//    fun getInnerCards(): List<T> = cards.toList()
 
-    fun getCardOfClass(card: KClass<out Card>): Card? = cards.first { it::class == card }
 
-    fun getCardsOfClass(card: KClass<out Card>): List<Card> = cards.filter { it::class == card }
 }
 
 fun List<Zombie>.getZombieCard(zombieClass: KClass<out Zombie>): Zombie? =
     this.first { it::class == zombieClass }
 
-fun List<Zombie>.getSingleZombieCards(): List<Zombie> =
-    this.filter { it::class == Zombie::class }
-        .filter { it.zombiesOnCard == 1 }
+
