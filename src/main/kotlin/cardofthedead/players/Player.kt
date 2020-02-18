@@ -115,6 +115,5 @@ abstract class Player(
 
 enum class Level {
     EASY,
-    MEDIUM,
     HARD
 }

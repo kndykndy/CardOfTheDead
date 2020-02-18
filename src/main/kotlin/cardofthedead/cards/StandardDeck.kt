@@ -110,13 +110,6 @@ class StandardDeck : Deck<Card>() {
         cardTypeToCardDescriptor.keys.forEach { cardType ->
             repeat(cardTypeToAmountInDeck(cardType)) { cards.add(cardType.createInstance()) }
         }
-
-//        repeat(cardTypeToAmountInDeck(BrideZombie::class)) { cards.add(BrideZombie()) }
-//        repeat(cardTypeToAmountInDeck(LadZombie::class)) { cards.add(LadZombie()) }
-//        repeat(cardTypeToAmountInDeck(RedneckZombie::class)) { cards.add(RedneckZombie()) }
-//        repeat(cardTypeToAmountInDeck(GrannyZombie::class)) { cards.add(GrannyZombie()) }
-//        repeat(cardTypeToAmountInDeck(Zombies::class)) { cards.add(Zombies()) }
-//        repeat(cardTypeToAmountInDeck(`Zombies!!!`::class)) { cards.add(`Zombies!!!`()) }
     }
 
     private fun cardTypeToAmountInDeck(klass: KClass<out Card>): Int =

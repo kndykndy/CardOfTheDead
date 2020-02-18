@@ -7,7 +7,7 @@ import main.kotlin.cardofthedead.players.Player
 fun main() {
     val game = Game.Builder()
         .withPlayer(Player.of("Дима", Level.EASY))
-        .withPlayer(Player.of("Женя", Level.MEDIUM))
+        .withPlayer(Player.of("Женя", Level.EASY))
         .withPlayer(Player.of("Настя", Level.HARD))
         .build()
     game.play()
