@@ -1,16 +1,11 @@
 package main.kotlin.cardofthedead.cards.events
 
-import main.kotlin.cardofthedead.cards.Card
-import main.kotlin.cardofthedead.cards.Deck
 import main.kotlin.cardofthedead.cards.Event
 import main.kotlin.cardofthedead.players.Player
 
 class Mobs : Event() {
 
-    override fun play(
-        player: Player,
-        playDeck: Deck<Card>
-    ) {
+    override fun play(player: Player) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
