@@ -4,7 +4,7 @@ import main.kotlin.cardofthedead.players.Player
 
 abstract class Card {
 
-    open fun play(player: Player, playDeck: Deck<Card>, discardDeck: Deck<Card>) {
+    open fun play(player: Player, playDeck: Deck<Card>) {
         throw IllegalStateException("${this::class.simpleName} cannot be played directly.")
     }
 }

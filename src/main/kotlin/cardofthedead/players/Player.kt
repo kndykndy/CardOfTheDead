@@ -71,7 +71,7 @@ abstract class Player(
     fun putOnBottom(card: Card, deck: Deck<Card>) = deck.addCardOnBottom(card)
 
     fun play(card: Card, playDeck: Deck<Card>, discardDeck: Deck<Card>) =
-        card.play(this, playDeck, discardDeck)
+        card.play(this, playDeck)
 
     fun chasedByZombie(zombieCard: Zombie) = zombiesAround.addCard(zombieCard)
 
@@ -85,8 +85,10 @@ abstract class Player(
 
     fun getZombiesAroundCount(): Int = zombiesAround.size()
 
-    fun discard(card: Card?, fromDeck: Deck<Card>, discardDeck: Deck<Card>) =
-        card?.let { fromDeck.pickCard(card)?.let { discardDeck.addCard(it) } }
+    /**
+     * Put a card, not belonging to any deck, to a discard deck.
+     */
+    fun discard(card: Card) = gameContext.discardDeck.addCard(card)
 
     fun discardAllCards(discardDeck: Deck<Card>) {
         discardDeck.merge(hand)

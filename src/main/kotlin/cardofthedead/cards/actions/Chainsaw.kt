@@ -10,17 +10,17 @@ import main.kotlin.cardofthedead.players.Player
 
 class Chainsaw : Action(1) {
 
-    override fun play(player: Player, playDeck: Deck<Card>, discardDeck: Deck<Card>) {
-        val zombieCards = player.getZombieCards()
-        if (zombieCards.isNotEmpty()) {
-            zombieCards.getZombieCard(Zombies::class)?.let {
-                player.discard(it, discardDeck)
+    override fun play(player: Player, playDeck: Deck<Card>) {
+        val zombiesAround = player.getZombieCards()
+        if (zombiesAround.isNotEmpty()) {
+            zombiesAround.getZombieCard(Zombies::class)?.let {
+                player.discard(it)
                 return
             }
 
-            zombieCards.getSingleZombieCards()
+            zombiesAround.getSingleZombieCards()
                 .takeLast(2)
-                .forEach { player.discard(it, discardDeck) }
+                .forEach { player.discard(it) }
         }
     }
 }

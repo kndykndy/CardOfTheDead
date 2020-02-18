@@ -7,7 +7,10 @@ import main.kotlin.cardofthedead.players.Player
 
 class Barricade : Action(1) {
 
-    override fun play(player: Player, playDeck: Deck<Card>, discardDeck: Deck<Card>) {
+    override fun play(
+        player: Player,
+        playDeck: Deck<Card>
+    ) {
         player.pickCards(playDeck, 3)
 
         playDeck.addCardOnBottom(player.chooseWorstCandidateForBarricade())

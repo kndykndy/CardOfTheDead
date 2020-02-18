@@ -7,7 +7,10 @@ import main.kotlin.cardofthedead.players.Player
 
 class Armored : Action(1) {
 
-    override fun play(player: Player, playDeck: Deck<Card>, discardDeck: Deck<Card>) {
+    override fun play(
+        player: Player,
+        playDeck: Deck<Card>
+    ) {
         player.getCardOfClass(Bitten::class)?.let {
             player.putOnBottom(it, playDeck)
         }

@@ -7,7 +7,10 @@ import main.kotlin.cardofthedead.players.Player
 
 class Pillage : Action(2) {
 
-    override fun play(player: Player, playDeck: Deck<Card>, discardDeck: Deck<Card>) {
+    override fun play(
+        player: Player,
+        playDeck: Deck<Card>
+    ) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

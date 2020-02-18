@@ -20,7 +20,7 @@ class Game(
     internal val initialPlayersCount: Int = players.size
 
     private val playDeck: Deck<Card> = StandardDeck()
-    private val discardDeck: Deck<Card> = Deck()
+    internal val discardDeck: Deck<Card> = Deck()
 
     private var cardsToPlay: Int = 1 // because of Horde may be =2
 
@@ -67,7 +67,7 @@ class Game(
             }
             is Event -> {
                 currentPlayer.play(drawnCard, playDeck, discardDeck)
-                currentPlayer.discard(drawnCard, discardDeck)
+                currentPlayer.discard(drawnCard)
             }
             null -> {
                 return
