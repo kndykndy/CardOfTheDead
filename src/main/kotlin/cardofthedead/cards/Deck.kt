@@ -23,7 +23,8 @@ open class Deck<T : Card> {
 
     fun pickTopCard(): Card? = if (!isEmpty()) pickCard(cards[cards.size - 1]) else null
 
-    private fun pickCard(card: Card): Card? = if (cards.remove(card)) card else null
+    // todo think over making this function impossible without "to deck" -- where to pick to
+    fun pickCard(card: Card): Card? = if (cards.remove(card)) card else null
 
     fun pickActionCards(): Deck<Action> {
         val actionCardsDeck = Deck<Action>()

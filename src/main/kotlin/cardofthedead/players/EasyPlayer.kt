@@ -110,4 +110,19 @@ class EasyPlayer(name: String) : Player(name) {
             .sortedBy { it.second }
             .first()
             .first
+
+    override fun chooseWorstMovementCardForDynamite(): Card? {
+        return if(!escapeCards.isEmpty()){
+            if(escapeCards.size()==1){
+
+            }else{
+                escapeCards.getInnerCards().reversed().forEach {
+
+                }
+            }
+
+        } else {
+            null
+        }
+    }
 }

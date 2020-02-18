@@ -26,7 +26,7 @@ abstract class Player(
      */
     protected val zombiesAround: Deck<Zombie> = Deck()
 
-    private val escapeCards: Deck<Action> = Deck()
+    protected val escapeCards: Deck<Action> = Deck()
 
     private var survivalPoints: Int = 0
 
@@ -39,13 +39,17 @@ abstract class Player(
 
     abstract fun decideToPlayCardFromHand(): PlayCardDecision
 
+    abstract fun chooseWorstCandidateForBarricade(): Card?
+
+    abstract fun chooseWorstMovementCardForDynamite(): Card?
+
     // Common logic
 
     fun getCardOfClass(card: KClass<out Card>): Card? = hand.getCardOfClass(card)
 
     fun getCardsOfClass(card: KClass<out Card>): List<Card> = hand.getCardsOfClass(card)
 
-    fun getZombies(): List<Zombie> = zombiesAround.getInnerCards()
+    fun getZombieCards(): List<Zombie> = zombiesAround.getInnerCards()
 
     /**
      * Picks N top cards from the play deck to the candidates deck.
@@ -81,7 +85,8 @@ abstract class Player(
 
     fun getZombiesAroundCount(): Int = zombiesAround.size()
 
-    fun discard(card: Card, discardDeck: Deck<Card>) = discardDeck.addCard(card)
+    fun discard(card: Card?, fromDeck: Deck<Card>, discardDeck: Deck<Card>) =
+        card?.let { fromDeck.pickCard(card)?.let { discardDeck.addCard(it) } }
 
     fun discardAllCards(discardDeck: Deck<Card>) {
         discardDeck.merge(hand)
@@ -100,11 +105,6 @@ abstract class Player(
     fun die(discardDeck: Deck<Card>) {
         discardAllCards(discardDeck)
     }
-
-    // Cards specific funcs
-
-    abstract fun chooseWorstCandidateForBarricade(): Card?
-
 
     companion object {
 
