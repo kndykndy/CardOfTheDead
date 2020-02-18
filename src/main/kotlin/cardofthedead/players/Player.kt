@@ -70,8 +70,7 @@ abstract class Player(
 
     fun putOnBottom(card: Card, deck: Deck<Card>) = deck.addCardOnBottom(card)
 
-    fun play(card: Card, playDeck: Deck<Card>, discardDeck: Deck<Card>) =
-        card.play(this, playDeck)
+    fun play(card: Card, playDeck: Deck<Card>) = card.play(this, playDeck)
 
     fun chasedByZombie(zombieCard: Zombie) = zombiesAround.addCard(zombieCard)
 
@@ -90,22 +89,22 @@ abstract class Player(
      */
     fun discard(card: Card) = gameContext.discardDeck.addCard(card)
 
-    fun discardAllCards(discardDeck: Deck<Card>) {
-        discardDeck.merge(hand)
-        discardDeck.merge(candidatesToHand)
-        discardDeck.merge(zombiesAround)
-        discardDeck.merge(escapeCards)
+    fun discardAllCards() {
+        gameContext.discardDeck.merge(hand)
+        gameContext.discardDeck.merge(candidatesToHand)
+        gameContext.discardDeck.merge(zombiesAround)
+        gameContext.discardDeck.merge(escapeCards)
     }
 
-    fun discardCandidatesCards(discardDeck: Deck<Card>) {
-        discardDeck.merge(candidatesToHand)
+    fun discardCandidatesCards() {
+        gameContext.discardDeck.merge(candidatesToHand)
     }
 
     /**
      * Survival points are not touched.
      */
-    fun die(discardDeck: Deck<Card>) {
-        discardAllCards(discardDeck)
+    fun die() {
+        discardAllCards()
     }
 
     companion object {

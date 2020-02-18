@@ -59,14 +59,14 @@ class Game(
                 if (currentPlayer.getZombiesAroundCount() >=
                     playersToZombiesToBeEaten.getValue(initialPlayersCount)
                 ) {
-                    currentPlayer.die(discardDeck)
+                    currentPlayer.die()
                     removePlayer(currentPlayer)
 
                     return
                 }
             }
             is Event -> {
-                currentPlayer.play(drawnCard, playDeck, discardDeck)
+                currentPlayer.play(drawnCard, playDeck)
                 currentPlayer.discard(drawnCard)
             }
             null -> {
@@ -95,7 +95,7 @@ class Game(
         players.addAll(deadPlayers)
         deadPlayers.clear()
 
-        players.forEach { it.discardAllCards(discardDeck) }
+        players.forEach { it.discardAllCards() }
         playDeck.merge(discardDeck)
 
         playDeck.shuffle() // before initial dealing
@@ -105,7 +105,7 @@ class Game(
             it.pickCards(playDeck, 10)
             it.chooseSinglePointCards(3)
         }
-        players.forEach { it.discardCandidatesCards(discardDeck) }
+        players.forEach { it.discardCandidatesCards() }
 
         playDeck.shuffle()
     }
