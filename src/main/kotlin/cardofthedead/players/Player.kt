@@ -6,6 +6,7 @@ import main.kotlin.cardofthedead.cards.Deck
 import main.kotlin.cardofthedead.cards.PlayCardDecision
 import main.kotlin.cardofthedead.cards.Zombie
 import main.kotlin.cardofthedead.game.Game
+import kotlin.random.Random
 
 abstract class Player(
     val name: String
@@ -102,7 +103,12 @@ abstract class Player(
 
     companion object {
 
-        fun of(name: String, level: Level = Level.EASY): Player = EasyPlayer(name)
+        fun of(name: String, level: Level?): Player =
+            if (level != null) {
+                if (level == Level.HARD) HardPlayer(name) else EasyPlayer(name)
+            } else {
+                if (Random.nextBoolean()) HardPlayer(name) else EasyPlayer(name)
+            }
     }
 }
 

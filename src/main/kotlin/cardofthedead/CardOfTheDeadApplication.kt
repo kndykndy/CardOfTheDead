@@ -8,7 +8,7 @@ fun main() {
     val game = Game.Builder()
         .withPlayer(Player.of("Дима", Level.EASY))
         .withPlayer(Player.of("Женя", Level.EASY))
-        .withPlayer(Player.of("Настя", Level.HARD))
+        .withPlayer(Player.of("Настя", Level.EASY))
         .build()
     game.play()
 }

@@ -35,7 +35,7 @@ open class Deck<T : Card> {
     fun pickCardOfClass(cKlass: KClass<out Card>): Card? =
         pickCard(cards.first { it::class == cKlass })
 
-    fun getCardsOfClass(cKlass: KClass<out Card>): List<Card> =
+    private fun getCardsOfClass(cKlass: KClass<out Card>): List<Card> =
         cards.filter { it::class == cKlass }
 
     fun getActionCards(): List<Card> = getCardsOfClass(Action::class)
@@ -46,14 +46,6 @@ open class Deck<T : Card> {
 
     fun pickRandomCard(): Card? = pickCard(cards.shuffled().first())
 
-//    fun pickRandomCards(n: Int): List<Card> {
-//        require(n > 0) { "N cannot be less than 0" } // todo and more than cards in deck
-//
-//        return cards.shuffled()
-//            .take(n)
-//            .map { pickCard(it) as Card }
-//    }
-
     // Points relates funcs
 
     fun getMovementPointsSum(): Int =
@@ -63,13 +55,4 @@ open class Deck<T : Card> {
     fun getZombiesCount(): Int =
         cards.filterIsInstance<Zombie>()
             .sumBy { it.zombiesOnCard }
-
-//    fun getInnerCards(): List<T> = cards.toList()
-
-
 }
-
-fun List<Zombie>.getZombieCard(zombieClass: KClass<out Zombie>): Zombie? =
-    this.first { it::class == zombieClass }
-
-
