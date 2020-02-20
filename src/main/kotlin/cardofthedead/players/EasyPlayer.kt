@@ -67,11 +67,11 @@ class EasyPlayer(name: String) : Player(name) {
             actionCards
                 .shuffled()
                 .take(n)
-                .map { candidatesToHand.pickCard(it)  }
+                .map { candidatesToHand.pickCard(it) }
                 .forEach { hand.addCard(it!!) }
         } else {
             actionCards
-                .map { candidatesToHand.pickCard(it)  }
+                .map { candidatesToHand.pickCard(it) }
                 .forEach { hand.addCard(it!!) }
         }
     }
@@ -125,4 +125,8 @@ class EasyPlayer(name: String) : Player(name) {
         } else {
             null
         }
+
+    override fun decideToDrawNoCardsNextTurn() {
+        doDrawCardThisTurn = true
+    }
 }

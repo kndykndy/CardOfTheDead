@@ -6,8 +6,8 @@ import main.kotlin.cardofthedead.players.Player
 class Hide : Action(1) {
 
     /**
-     * Give one of your zombie cards to the next player. You may choose to draw no cards on your
-     * next turn.
+     * Give one of your zombie cards to the next player.
+     * You may choose to draw no cards on your next turn.
      */
     override fun play(player: Player) {
         val zombiesAround = player.zombiesAround
@@ -20,5 +20,7 @@ class Hide : Action(1) {
                     .chasedByZombie(it)
             }
         }
+
+        player.decideToDrawNoCardsNextTurn()
     }
 }

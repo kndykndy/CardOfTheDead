@@ -30,6 +30,8 @@ abstract class Player(
 
     private var survivalPoints: Int = 0
 
+    protected var doDrawCardThisTurn: Boolean = true
+
     // Decision funcs
 
     /**
@@ -42,6 +44,8 @@ abstract class Player(
     abstract fun chooseWorstCandidateForBarricade(): Card?
 
     abstract fun chooseWorstMovementCardForDynamite(): Card?
+
+    abstract fun decideToDrawNoCardsNextTurn()
 
     // Common logic
 
@@ -56,7 +60,13 @@ abstract class Player(
         }
     }
 
-    fun drawTopCard(): Card? = gameContext.playDeck.pickTopCard()
+    fun drawTopCard(): Card? =
+        if (doDrawCardThisTurn) {
+            gameContext.playDeck.pickTopCard()
+        } else {
+            doDrawCardThisTurn = true
+            null
+        }
 
     // todo think over joining this func with chasedbyzombie
     fun takeToHand(card: Card) = hand.addCard(card)

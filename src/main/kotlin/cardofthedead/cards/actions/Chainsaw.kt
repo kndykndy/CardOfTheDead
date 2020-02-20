@@ -6,6 +6,9 @@ import main.kotlin.cardofthedead.players.Player
 
 class Chainsaw : Action(1) {
 
+    /**
+     * Discard two zombie cards.
+     */
     override fun play(player: Player) {
         val zombiesAround = player.zombiesAround
         if (zombiesAround.isNotEmpty()) {

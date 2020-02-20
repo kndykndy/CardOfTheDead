@@ -5,6 +5,9 @@ import main.kotlin.cardofthedead.players.Player
 
 class Barricade : Action(1) {
 
+    /**
+     * Draw three cards. Choose one and put it on the bottom of the deck.
+     */
     override fun play(player: Player) {
         player.pickCards(3)
 
