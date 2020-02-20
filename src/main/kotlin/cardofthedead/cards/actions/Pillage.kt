@@ -5,7 +5,14 @@ import main.kotlin.cardofthedead.players.Player
 
 class Pillage : Action(2) {
 
+    /**
+     * Blindly draw a card from every other player.
+     */
     override fun play(player: Player) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        player.gameContext.players
+            .filterNot { it == player }
+            .forEach { cPlayer ->
+                player.hand.addCard(cPlayer.hand.pickRandomCard()!!)
+            }
     }
 }

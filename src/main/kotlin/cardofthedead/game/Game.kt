@@ -11,7 +11,7 @@ import main.kotlin.cardofthedead.players.Player
 import kotlin.random.Random
 
 class Game(
-    private val players: MutableList<Player>
+    internal val players: MutableList<Player>
 ) {
 
     private val deadPlayers: MutableList<Player> = mutableListOf()

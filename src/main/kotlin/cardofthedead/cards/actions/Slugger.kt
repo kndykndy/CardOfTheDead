@@ -5,7 +5,10 @@ import main.kotlin.cardofthedead.players.Player
 
 class Slugger : Action(1) {
 
+    /**
+     * Discard a zombie or take a card from another players hand.
+     */
     override fun play(player: Player) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 }
