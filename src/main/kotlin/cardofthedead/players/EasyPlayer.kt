@@ -150,4 +150,10 @@ class EasyPlayer(name: String) : Player(name) {
 
     override fun choosePlayerToTakeCardFromForSlugger(): Player =
         gameContext.getRandomPlayer(this)
+
+    override fun choosePlayerToDiscardMovementCardsFromForTripped(): Player =
+        gameContext.getRandomPlayer(this)
+
+    override fun decideHowManyMovementCardsToDiscardForTripped(): Int =
+        Random.nextInt(2)
 }

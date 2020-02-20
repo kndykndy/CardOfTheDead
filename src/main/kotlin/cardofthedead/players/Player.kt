@@ -26,7 +26,7 @@ abstract class Player(
      */
     internal val zombiesAround: Deck<Zombie> = Deck()
 
-    protected val escapeCards: Deck<Action> = Deck()
+    internal val escapeCards: Deck<Action> = Deck()
 
     private var survivalPoints: Int = 0
 
@@ -52,6 +52,10 @@ abstract class Player(
     abstract fun decideToDiscardZombieOrTakeCardForSlugger(): Boolean
 
     abstract fun choosePlayerToTakeCardFromForSlugger(): Player
+
+    abstract fun choosePlayerToDiscardMovementCardsFromForTripped(): Player
+
+    abstract fun decideHowManyMovementCardsToDiscardForTripped(): Int
 
     // Common logic
 
