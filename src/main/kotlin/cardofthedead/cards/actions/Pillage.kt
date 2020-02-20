@@ -11,8 +11,8 @@ class Pillage : Action(2) {
     override fun play(player: Player) {
         player.gameContext.players
             .filterNot { it == player }
-            .forEach { cPlayer ->
-                player.hand.addCard(cPlayer.hand.pickRandomCard()!!)
+            .forEach { itPlayer ->
+                player.hand.addCard(itPlayer.hand.pickRandomCard()!!)
             }
     }
 }

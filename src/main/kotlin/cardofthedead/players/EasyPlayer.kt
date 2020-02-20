@@ -132,4 +132,22 @@ class EasyPlayer(name: String) : Player(name) {
 
     override fun choosePlayerToGiveZombieToForLure(): Player =
         gameContext.getRandomPlayer(this)
+
+    /**
+     * Decide to discard a zombie ~ true, otherwise take player's card.
+     */
+    override fun decideToDiscardZombieOrTakeCardForSlugger(): Boolean {
+        val tooManyZombiesAround =
+            getZombiesAroundCount() >
+                    gameContext.playersToZombiesToBeSurrounded.getValue(
+                        gameContext.initialPlayersCount
+                    )
+
+        val hasZombieToDiscard = zombiesAround.getSingleZombieCards().isNotEmpty()
+
+        return tooManyZombiesAround && hasZombieToDiscard
+    }
+
+    override fun choosePlayerToTakeCardFromForSlugger(): Player =
+        gameContext.getRandomPlayer(this)
 }

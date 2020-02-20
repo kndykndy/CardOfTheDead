@@ -10,15 +10,15 @@ class `Nukes!` : Action(2) {
      * Discard all zombie cards and all cards in hand from all players (including yourself).
      */
     override fun play(player: Player) {
-        player.gameContext.players.forEach { cPlayer ->
-            val playerZombies = cPlayer.zombiesAround
+        player.gameContext.players.forEach { itPlayer ->
+            val playerZombies = itPlayer.zombiesAround
             playerZombies.cards.forEach {
-                cPlayer.discard(playerZombies.pickCard(it)!!)
+                itPlayer.discard(playerZombies.pickCard(it)!!)
             }
 
-            val playerHand = cPlayer.hand
+            val playerHand = itPlayer.hand
             playerHand.cards.forEach {
-                cPlayer.discard(playerHand.pickCard(it)!!)
+                itPlayer.discard(playerHand.pickCard(it)!!)
             }
         }
     }

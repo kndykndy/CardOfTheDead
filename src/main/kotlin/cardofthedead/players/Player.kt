@@ -49,6 +49,10 @@ abstract class Player(
 
     abstract fun choosePlayerToGiveZombieToForLure(): Player
 
+    abstract fun decideToDiscardZombieOrTakeCardForSlugger(): Boolean
+
+    abstract fun choosePlayerToTakeCardFromForSlugger(): Player
+
     // Common logic
 
     /**
