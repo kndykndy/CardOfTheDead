@@ -58,6 +58,7 @@ abstract class Player(
 
     fun drawTopCard(): Card? = gameContext.playDeck.pickTopCard()
 
+    // todo think over joining this func with chasedbyzombie
     fun takeToHand(card: Card) = hand.addCard(card)
 
     fun takeTopCandidateToHand() = candidatesToHand.pickTopCard()?.let { hand.addCard(it) }
@@ -112,7 +113,4 @@ abstract class Player(
     }
 }
 
-enum class Level {
-    EASY,
-    HARD
-}
+enum class Level { EASY, HARD }

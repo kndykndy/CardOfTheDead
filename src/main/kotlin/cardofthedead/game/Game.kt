@@ -117,7 +117,7 @@ class Game(
     private fun getFirstPlayer(): Player =
         winners[winners.size - 1].elementAt(Random.nextInt(winners.size))
 
-    private fun getNextPlayer(afterPlayer: Player): Player {
+    internal fun getNextPlayer(afterPlayer: Player): Player {
         val iterator = players.iterator()
         while (iterator.hasNext()) {
             if (iterator.next() == afterPlayer) {
@@ -127,6 +127,16 @@ class Game(
             }
         }
         return players.elementAt(0)
+    }
+
+    internal fun getRandomPlayer(exceptForPlayer: Player): Player {
+        val exceptForPlayerIdx = players.indexOf(exceptForPlayer)
+        while (true) {
+            val playerIdx = Random.nextInt(players.size)
+            if (playerIdx != exceptForPlayerIdx) {
+                return players[playerIdx]
+            }
+        }
     }
 
     private fun lastPlayerWentToShoppingMall(): Player =

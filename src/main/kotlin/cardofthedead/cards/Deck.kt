@@ -28,19 +28,19 @@ open class Deck<T : Card> {
 
     // Picking cards
 
-    fun pickCard(card: Card): Card? = if (cards.remove(card)) card else null
+    fun pickCard(card: T): T? = if (cards.remove(card)) card else null
 
-    fun pickTopCard(): Card? = if (isNotEmpty()) pickCard(cards[cards.size - 1]) else null
+    fun pickTopCard(): T? = if (isNotEmpty()) pickCard(cards[cards.size - 1]) else null
 
-    fun pickCardOfClass(cKlass: KClass<out Card>): Card? =
+    fun pickCardOfClass(cKlass: KClass<out T>): T? =
         pickCard(cards.first { it::class == cKlass })
 
-    private fun getCardsOfClass(cKlass: KClass<out Card>): List<Card> =
+    private fun getCardsOfClass(cKlass: KClass<out T>): List<T> =
         cards.filter { it::class == cKlass }
 
-    fun getActionCards(): List<Card> = getCardsOfClass(Action::class)
+    fun getActionCards(): List<T> = cards.filter { it::class == Action::class }
 
-    fun getSingleZombieCards(): List<Card> =
+    fun getSingleZombieCards(): List<T> =
         cards.filter { it::class == Zombie::class }
             .filter { (it as Zombie).zombiesOnCard == 1 }
 

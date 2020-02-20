@@ -5,7 +5,19 @@ import main.kotlin.cardofthedead.players.Player
 
 class Lure : Action(1) {
 
+    /**
+     * Give one of your zombie cards to any player.
+     */
     override fun play(player: Player) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val zombiesAround = player.zombiesAround
+        if (zombiesAround.isNotEmpty()) {
+            zombiesAround.pickCard(
+                zombiesAround.getSingleZombieCards().random()
+            )?.let {
+                player.gameContext
+                    .getRandomPlayer(player)
+                    .chasedByZombie(it)
+            }
+        }
     }
 }

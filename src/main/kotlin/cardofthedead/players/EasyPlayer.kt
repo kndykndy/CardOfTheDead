@@ -67,12 +67,12 @@ class EasyPlayer(name: String) : Player(name) {
             actionCards
                 .shuffled()
                 .take(n)
-                .map { candidatesToHand.pickCard(it) as Card }
-                .forEach { hand.addCard(it) }
+                .map { candidatesToHand.pickCard(it)  }
+                .forEach { hand.addCard(it!!) }
         } else {
             actionCards
-                .map { candidatesToHand.pickCard(it) as Card }
-                .forEach { hand.addCard(it) }
+                .map { candidatesToHand.pickCard(it)  }
+                .forEach { hand.addCard(it!!) }
         }
     }
 
