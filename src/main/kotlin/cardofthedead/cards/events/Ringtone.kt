@@ -6,6 +6,6 @@ import main.kotlin.cardofthedead.players.Player
 class Ringtone : Event() {
 
     override fun play(player: Player) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        println("${player.name}'s skipping ${this::class.simpleName}")
     }
 }

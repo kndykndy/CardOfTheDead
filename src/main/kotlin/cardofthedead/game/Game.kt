@@ -34,13 +34,26 @@ class Game(
     private constructor(builder: Builder) : this(builder.players)
 
     init {
-        players.forEach { it.gameContext = this }
-        winners.add(listOf(lastPlayerWentToShoppingMall()))
+        println("Starting a new Game of the Dead!")
+        println()
+
         playDeck.cards.forEach { it.gameContext = this }
+        println("${playDeck.cards.size} cards in deck.")
+        println()
+
+        players.forEach { it.gameContext = this }
+        println("Tonight we're having ${players.size} players: ${players.joinToString { it.name }}.")
+
+        winners.add(listOf(lastPlayerWentToShoppingMall()))
+
+        println()
     }
 
     fun play() {
-        repeat(3) { playRound() }
+        repeat(3) { i ->
+            println("Starting round #${i + 1}")
+            playRound()
+        }
     }
 
     private fun playRound() {
@@ -96,6 +109,8 @@ class Game(
     }
 
     private fun prepareForRound() {
+        println("Preparing for round...")
+
         players.addAll(deadPlayers)
         deadPlayers.clear()
 
@@ -114,8 +129,13 @@ class Game(
         playDeck.shuffle()
     }
 
-    private fun getFirstPlayer(): Player =
-        winners[winners.size - 1].elementAt(Random.nextInt(winners.size))
+    private fun getFirstPlayer(): Player {
+        val player = winners[winners.size - 1].elementAt(Random.nextInt(winners.size))
+
+        println("${player.name}'s starting!")
+
+        return player
+    }
 
     internal fun getNextPlayer(afterPlayer: Player): Player {
         val iterator = players.iterator()
@@ -139,8 +159,13 @@ class Game(
         }
     }
 
-    private fun lastPlayerWentToShoppingMall(): Player =
-        players.elementAt(Random.nextInt(players.size))
+    private fun lastPlayerWentToShoppingMall(): Player {
+        val player = players.elementAt(Random.nextInt(players.size))
+
+        println("${player.name} was the last who went to shopping mall!")
+
+        return player
+    }
 
     private fun isRoundRunning(): Boolean =
         !isRoundOverBecauseOneAlivePlayerLeft() &&
@@ -155,10 +180,10 @@ class Game(
     private fun isRoundOverBecauseOneAlivePlayerLeft(): Boolean =
         if (players.size == 1) {
             val winner = players[0]
-
             winner.addSurvivalPoints(5)
-
             winners.add(listOf(winner))
+
+            println("Oops... This round is over because ${winner.name} is the only player left alive!")
 
             true
         } else {
@@ -177,6 +202,8 @@ class Game(
             }
 
             winners.add(listOf(winner))
+
+            println("Oops... This round is over because ${winner.name} escaped!")
 
             true
         } else {
@@ -199,6 +226,11 @@ class Game(
             }
 
             winners.add(winnersList)
+
+            println(
+                "Oops... This round is over because there's no cards left in the deck! " +
+                        "Winners are: ${winnersList.joinToString { it.name }}."
+            )
 
             true
         } else {
