@@ -45,7 +45,9 @@ abstract class Player(
 
     abstract fun chooseWorstMovementCardForDynamite(): Card?
 
-    abstract fun decideToDrawNoCardsNextTurn()
+    abstract fun decideToDrawNoCardsNextTurnForHide()
+
+    abstract fun choosePlayerToGiveZombieToForLure(): Player
 
     // Common logic
 

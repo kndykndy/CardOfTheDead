@@ -14,8 +14,7 @@ class Lure : Action(1) {
             zombiesAround.pickCard(
                 zombiesAround.getSingleZombieCards().random()
             )?.let {
-                player.gameContext
-                    .getRandomPlayer(player)
+                player.choosePlayerToGiveZombieToForLure()
                     .chasedByZombie(it)
             }
         }

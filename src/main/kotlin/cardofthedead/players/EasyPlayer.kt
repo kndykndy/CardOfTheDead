@@ -126,7 +126,10 @@ class EasyPlayer(name: String) : Player(name) {
             null
         }
 
-    override fun decideToDrawNoCardsNextTurn() {
+    override fun decideToDrawNoCardsNextTurnForHide() {
         doDrawCardThisTurn = true
     }
+
+    override fun choosePlayerToGiveZombieToForLure(): Player =
+        gameContext.getRandomPlayer(this)
 }

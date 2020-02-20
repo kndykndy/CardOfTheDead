@@ -21,6 +21,6 @@ class Hide : Action(1) {
             }
         }
 
-        player.decideToDrawNoCardsNextTurn()
+        player.decideToDrawNoCardsNextTurnForHide()
     }
 }
