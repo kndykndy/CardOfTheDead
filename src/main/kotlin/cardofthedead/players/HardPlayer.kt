@@ -20,4 +20,28 @@ class HardPlayer(name: String) : Player(name) {
     override fun chooseWorstMovementCardForDynamite(): Card? {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+
+    override fun decideToDrawNoCardsNextTurnForHide() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun choosePlayerToGiveZombieToForLure(): Player {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun decideToDiscardZombieOrTakeCardForSlugger(): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun choosePlayerToTakeCardFromForSlugger(): Player {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun choosePlayerToDiscardMovementCardsFromForTripped(): Player {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun decideHowManyMovementCardsToDiscardForTripped(): Int {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 }
