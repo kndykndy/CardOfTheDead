@@ -15,13 +15,13 @@ class Dynamite : Action(2) {
         if (zombiesAround.isNotEmpty()) {
             var zombiesToDiscard = 3
 
-            zombiesAround.pickCardOfClass(`Zombies!!!`::class)?.let {
+            zombiesAround.pickCardOfClass(`Zombies!!!`::class.java)?.let {
                 player.discard(it)
                 zombiesToDiscard -= 3
             }
 
             if (zombiesToDiscard >= 2) {
-                zombiesAround.pickCardOfClass(Zombies::class)?.let {
+                zombiesAround.pickCardOfClass(Zombies::class.java)?.let {
                     player.discard(it)
                     zombiesToDiscard -= 2
                 }

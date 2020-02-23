@@ -35,18 +35,16 @@ class Game(
 
     init {
         println("Starting a new Game of the Dead!")
-        println()
 
         playDeck.cards.forEach { it.gameContext = this }
         println("${playDeck.cards.size} cards in deck.")
-        println()
 
         players.forEach { it.gameContext = this }
         println("Tonight we're having ${players.size} players: ${players.joinToString { it.name }}.")
 
-        winners.add(listOf(lastPlayerWentToShoppingMall()))
-
-        println()
+        val player = lastPlayerWentToShoppingMall()
+        println("${player.name} was the last who went to shopping mall!")
+        winners.add(listOf(player))
     }
 
     fun play() {
@@ -60,18 +58,24 @@ class Game(
         prepareForRound()
 
         var currentPlayer = getFirstPlayer()
+        println("${currentPlayer.name}'s starting!")
 
         while (isRoundRunning()) {
             repeat(cardsToPlay) { playTurn(currentPlayer) }
 
             currentPlayer = getNextPlayer(currentPlayer)
+            println("${currentPlayer.name}'s turn now!")
         }
     }
 
     private fun playTurn(currentPlayer: Player) {
         when (val drawnCard = currentPlayer.drawTopCard()) {
-            is Action -> currentPlayer.takeToHand(drawnCard)
+            is Action -> {
+                println("${currentPlayer.name} draws card to hand.")
+                currentPlayer.takeToHand(drawnCard)
+            }
             is Zombie -> {
+                println("${currentPlayer.name} draws ${drawnCard::class.simpleName}")
                 currentPlayer.chasedByZombie(drawnCard)
                 if (currentPlayer.getZombiesAroundCount() >=
                     playersToZombiesToBeEaten.getValue(initialPlayersCount)
@@ -83,6 +87,7 @@ class Game(
                 }
             }
             is Event -> {
+                println("${currentPlayer.name} draws ${drawnCard::class.simpleName}")
                 currentPlayer.play(drawnCard)
                 currentPlayer.discard(drawnCard)
             }
@@ -96,8 +101,13 @@ class Game(
             val actionCardFromHand: Card = decisionToPlayCardFromHand.card!!
 
             if (decisionToPlayCardFromHand.wayToPlayCard == WayToPlayCard.PLAY_AS_ACTION) {
+                println("${currentPlayer.name} decided to play ${actionCardFromHand::class.simpleName}.")
+
                 currentPlayer.play(actionCardFromHand)
+                currentPlayer.discard(actionCardFromHand)
             } else { // as movement points
+                println("${currentPlayer.name} decided to play card as movement points.")
+
                 currentPlayer.addMovementPoints(actionCardFromHand as Action)
                 if (currentPlayer.getMovementPointsCount() >=
                     playersToMovementPointsToEscape.getValue(initialPlayersCount)
@@ -105,6 +115,8 @@ class Game(
                     return
                 }
             }
+        } else {
+            println("${currentPlayer.name} decided not to play card from hand.")
         }
     }
 
@@ -129,14 +141,15 @@ class Game(
         playDeck.shuffle()
     }
 
-    private fun getFirstPlayer(): Player {
-        val player = winners[winners.size - 1].elementAt(Random.nextInt(winners.size))
+    /**
+     * No output!
+     */
+    private fun getFirstPlayer(): Player =
+        winners[winners.size - 1].elementAt(Random.nextInt(winners.size))
 
-        println("${player.name}'s starting!")
-
-        return player
-    }
-
+    /**
+     * No output!
+     */
     internal fun getNextPlayer(afterPlayer: Player): Player {
         val iterator = players.iterator()
         while (iterator.hasNext()) {
@@ -149,6 +162,9 @@ class Game(
         return players.elementAt(0)
     }
 
+    /**
+     * No output!
+     */
     internal fun getRandomPlayer(exceptForPlayer: Player): Player {
         val exceptForPlayerIdx = players.indexOf(exceptForPlayer)
         while (true) {
@@ -159,13 +175,8 @@ class Game(
         }
     }
 
-    private fun lastPlayerWentToShoppingMall(): Player {
-        val player = players.elementAt(Random.nextInt(players.size))
-
-        println("${player.name} was the last who went to shopping mall!")
-
-        return player
-    }
+    private fun lastPlayerWentToShoppingMall(): Player =
+        players.elementAt(Random.nextInt(players.size))
 
     private fun isRoundRunning(): Boolean =
         !isRoundOverBecauseOneAlivePlayerLeft() &&

@@ -72,8 +72,13 @@ abstract class Player(
 
     fun drawTopCard(): Card? =
         if (doDrawCardThisTurn) {
-            gameContext.playDeck.pickTopCard()
+            val drawnCard = gameContext.playDeck.pickTopCard()
+            if (drawnCard == null) {
+                println("The deck is empty. ${this.name} can't draw a card.")
+            }
+            drawnCard
         } else {
+            println("${this.name} uses their chance not to draw a card this turn.")
             doDrawCardThisTurn = true
             null
         }
@@ -87,7 +92,11 @@ abstract class Player(
 
     fun play(card: Card) = card.play(this)
 
-    fun chasedByZombie(zombieCard: Zombie) = zombiesAround.addCard(zombieCard)
+    fun chasedByZombie(zombieCard: Zombie) {
+        zombiesAround.addCard(zombieCard)
+
+        println("${this.name} is chased by ${getZombiesAroundCount()} zombies now.")
+    }
 
     fun addMovementPoints(actionCard: Action) = escapeCards.addCard(actionCard)
 
@@ -120,6 +129,8 @@ abstract class Player(
      */
     fun die() {
         discardAllCards()
+
+        println("Oops... ${this.name} was eaten by zombies.")
     }
 
     companion object {

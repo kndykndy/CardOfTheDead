@@ -93,12 +93,12 @@ class EasyPlayer(name: String) : Player(name) {
                 if (notSurrounded && Random.nextBoolean()) {
                     PlayCardDecision(
                         WayToPlayCard.PLAY_AS_MOVEMENT_POINTS,
-                        actionCards.random()
+                        hand.pickCard(actionCards.random())
                     )
                 } else {
                     PlayCardDecision(
                         WayToPlayCard.PLAY_AS_ACTION,
-                        actionCards.random()
+                        hand.pickCard(actionCards.random())
                     )
                 }
             } else {

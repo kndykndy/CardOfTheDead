@@ -12,7 +12,7 @@ class Chainsaw : Action(1) {
     override fun play(player: Player) {
         val zombiesAround = player.zombiesAround
         if (zombiesAround.isNotEmpty()) {
-            zombiesAround.pickCardOfClass(Zombies::class)?.let {
+            zombiesAround.pickCardOfClass(Zombies::class.java)?.let {
                 player.discard(it)
                 return
             }

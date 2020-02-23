@@ -1,7 +1,5 @@
 package main.kotlin.cardofthedead.cards
 
-import kotlin.reflect.KClass
-
 open class Deck<T : Card> {
 
     internal val cards: MutableList<T> = mutableListOf()
@@ -32,19 +30,21 @@ open class Deck<T : Card> {
 
     fun pickTopCard(): T? = if (isNotEmpty()) pickCard(cards[cards.size - 1]) else null
 
-    fun pickCardOfClass(cKlass: KClass<out T>): T? =
-        pickCard(cards.first { it::class == cKlass })
-
-    private fun getCardsOfClass(cKlass: KClass<out T>): List<T> =
-        cards.filter { it::class == cKlass }
-
-    fun getActionCards(): List<T> = cards.filter { it::class == Action::class }
-
-    fun getSingleZombieCards(): List<T> =
-        cards.filter { it::class == Zombie::class }
-            .filter { (it as Zombie).zombiesOnCard == 1 }
+    fun pickCardOfClass(cKlass: Class<out T>): T? {
+        return cards.filterIsInstance(cKlass)
+            .firstOrNull()
+            ?.let { pickCard(it) }
+    }
 
     fun pickRandomCard(): Card? = pickCard(cards.shuffled().first())
+
+    // Getting subsets
+
+    fun getActionCards(): List<Action> = cards.filterIsInstance(Action::class.java)
+
+    fun getSingleZombieCards(): List<Zombie> =
+        cards.filterIsInstance(Zombie::class.java)
+            .filter { it.zombiesOnCard == 1 }
 
     // Points relates funcs
 
