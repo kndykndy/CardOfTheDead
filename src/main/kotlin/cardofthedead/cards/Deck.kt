@@ -39,7 +39,7 @@ open class Deck<T : Card> {
     fun pickRandomCard(): Card? = pickCard(cards.random())
 }
 
-fun Deck<Card>.getActionCards() = this.cards.filterIsInstance<Action>()
+fun Deck<Card>.getActions() = this.cards.filterIsInstance<Action>()
 
 fun Deck<Action>.getMovementPoints(): Int = this.cards.sumBy { it.movementPoints }
 

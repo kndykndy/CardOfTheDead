@@ -19,7 +19,7 @@ import main.kotlin.cardofthedead.cards.events.Fog
 import main.kotlin.cardofthedead.cards.events.Horde
 import main.kotlin.cardofthedead.cards.events.Mobs
 import main.kotlin.cardofthedead.cards.events.Ringtone
-import main.kotlin.cardofthedead.cards.getActionCards
+import main.kotlin.cardofthedead.cards.getActions
 import main.kotlin.cardofthedead.cards.getSingleZombies
 import main.kotlin.cardofthedead.cards.getZombiesCount
 import main.kotlin.cardofthedead.cards.zombies.BrideZombie
@@ -65,7 +65,7 @@ class EasyPlayer(name: String) : Player(name) {
      * Picks random N cards from the candidates deck.
      */
     override fun chooseSinglePointCards(n: Int) {
-        val actionCards = candidatesToHand.getActionCards()
+        val actionCards = candidatesToHand.getActions()
         if (actionCards.size > n) {
             actionCards
                 .shuffled()
@@ -90,7 +90,7 @@ class EasyPlayer(name: String) : Player(name) {
 
         val notSurrounded = zombiesAround.getZombiesCount() < zombiesToSurround
 
-        val actionCards = hand.getActionCards()
+        val actionCards = hand.getActions()
         return if (actionCards.isNotEmpty()) {
             if (Random.nextBoolean()) {
                 if (notSurrounded && Random.nextBoolean()) {
