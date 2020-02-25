@@ -1,4 +1,4 @@
-package main.kotlin.cardofthedead.cards
+package cardofthedead.cards
 
 abstract class Action(
     val movementPoints: Int

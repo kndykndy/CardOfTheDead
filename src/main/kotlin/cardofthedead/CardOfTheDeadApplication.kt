@@ -1,8 +1,8 @@
 package cardofthedead
 
-import main.kotlin.cardofthedead.game.Game
-import main.kotlin.cardofthedead.players.Level
-import main.kotlin.cardofthedead.players.Player
+import cardofthedead.game.Game
+import cardofthedead.players.Level
+import cardofthedead.players.Player
 
 fun main() {
     Game.Builder()

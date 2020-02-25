@@ -1,8 +1,8 @@
-package main.kotlin.cardofthedead.cards.actions
+package cardofthedead.cards.actions
 
-import main.kotlin.cardofthedead.cards.Action
-import main.kotlin.cardofthedead.cards.getSingleZombies
-import main.kotlin.cardofthedead.players.Player
+import cardofthedead.cards.Action
+import cardofthedead.cards.getSingleZombies
+import cardofthedead.players.Player
 
 class Slugger : Action(1) {
 

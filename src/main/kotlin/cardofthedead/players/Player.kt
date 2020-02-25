@@ -1,12 +1,12 @@
-package main.kotlin.cardofthedead.players
+package cardofthedead.players
 
-import main.kotlin.cardofthedead.cards.Action
-import main.kotlin.cardofthedead.cards.Card
-import main.kotlin.cardofthedead.cards.Deck
-import main.kotlin.cardofthedead.cards.PlayCardDecision
-import main.kotlin.cardofthedead.cards.Zombie
-import main.kotlin.cardofthedead.cards.getMovementPoints
-import main.kotlin.cardofthedead.game.Game
+import cardofthedead.cards.Action
+import cardofthedead.cards.Card
+import cardofthedead.cards.Deck
+import cardofthedead.cards.PlayCardDecision
+import cardofthedead.cards.Zombie
+import cardofthedead.cards.getMovementPoints
+import cardofthedead.game.Game
 import kotlin.random.Random
 
 abstract class Player(

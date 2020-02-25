@@ -1,7 +1,7 @@
-package main.kotlin.cardofthedead.cards.events
+package cardofthedead.cards.events
 
-import main.kotlin.cardofthedead.cards.Event
-import main.kotlin.cardofthedead.players.Player
+import cardofthedead.cards.Event
+import cardofthedead.players.Player
 
 class Horde : Event() {
 

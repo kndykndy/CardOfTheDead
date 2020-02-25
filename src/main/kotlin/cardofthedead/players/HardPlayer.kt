@@ -1,7 +1,7 @@
-package main.kotlin.cardofthedead.players
+package cardofthedead.players
 
-import main.kotlin.cardofthedead.cards.Card
-import main.kotlin.cardofthedead.cards.PlayCardDecision
+import cardofthedead.cards.Card
+import cardofthedead.cards.PlayCardDecision
 
 class HardPlayer(name: String) : Player(name) {
 

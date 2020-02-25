@@ -1,7 +1,7 @@
-package main.kotlin.cardofthedead.cards.actions
+package cardofthedead.cards.actions
 
-import main.kotlin.cardofthedead.cards.Action
-import main.kotlin.cardofthedead.players.Player
+import cardofthedead.cards.Action
+import cardofthedead.players.Player
 
 class Pillage : Action(2) {
 

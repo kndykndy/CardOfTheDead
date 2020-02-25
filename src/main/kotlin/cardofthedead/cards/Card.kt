@@ -1,7 +1,7 @@
-package main.kotlin.cardofthedead.cards
+package cardofthedead.cards
 
-import main.kotlin.cardofthedead.game.Game
-import main.kotlin.cardofthedead.players.Player
+import cardofthedead.game.Game
+import cardofthedead.players.Player
 
 abstract class Card {
 

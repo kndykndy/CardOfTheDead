@@ -1,6 +1,6 @@
-package main.kotlin.cardofthedead.cards.actions
+package cardofthedead.cards.actions
 
-import main.kotlin.cardofthedead.cards.Action
+import cardofthedead.cards.Action
 
 /**
  * You're not getting survival points if this card's in your hand by the end of the round.
