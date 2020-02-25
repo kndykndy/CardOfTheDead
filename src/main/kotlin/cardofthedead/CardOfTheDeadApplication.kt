@@ -1,4 +1,4 @@
-package main.kotlin.cardofthedead
+package cardofthedead
 
 import main.kotlin.cardofthedead.game.Game
 import main.kotlin.cardofthedead.players.Level
