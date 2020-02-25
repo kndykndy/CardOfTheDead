@@ -36,23 +36,12 @@ open class Deck<T : Card> {
             ?.let { pickCard(it) }
     }
 
-    fun pickRandomCard(): Card? = pickCard(cards.shuffled().first())
-
-    // Getting subsets
-
-    fun getActionCards(): List<Action> = cards.filterIsInstance(Action::class.java)
-
-    fun getSingleZombieCards(): List<Zombie> =
-        cards.filterIsInstance(Zombie::class.java)
-            .filter { it.zombiesOnCard == 1 }
-
-    // Points relates funcs
-
-    fun getMovementPointsSum(): Int =
-        cards.filterIsInstance<Action>()
-            .sumBy { it.movementPoints }
-
-    fun getZombiesCount(): Int =
-        cards.filterIsInstance<Zombie>()
-            .sumBy { it.zombiesOnCard }
+    fun pickRandomCard(): Card? = pickCard(cards.random())
 }
+
+fun Deck<Card>.getActionCards() = this.cards.filterIsInstance<Action>()
+
+fun Deck<Action>.getMovementPoints(): Int = this.cards.sumBy { it.movementPoints }
+
+fun Deck<Zombie>.getZombiesCount(): Int = this.cards.sumBy { it.zombiesOnCard }
+fun Deck<Zombie>.getSingleZombies(): List<Zombie> = this.cards.filter { it.zombiesOnCard == 1 }

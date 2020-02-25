@@ -5,6 +5,7 @@ import main.kotlin.cardofthedead.cards.Card
 import main.kotlin.cardofthedead.cards.Deck
 import main.kotlin.cardofthedead.cards.PlayCardDecision
 import main.kotlin.cardofthedead.cards.Zombie
+import main.kotlin.cardofthedead.cards.getMovementPoints
 import main.kotlin.cardofthedead.game.Game
 import kotlin.random.Random
 
@@ -98,9 +99,13 @@ abstract class Player(
         println("${this.name} is chased by ${getZombiesAroundCount()} zombies now.")
     }
 
-    fun addMovementPoints(actionCard: Action) = escapeCards.addCard(actionCard)
+    fun addMovementPoints(actionCard: Action) {
+        escapeCards.addCard(actionCard)
 
-    fun getMovementPointsCount(): Int = escapeCards.getMovementPointsSum()
+        println("${this.name} has ${getMovementPointsCount()} movement points now.")
+    }
+
+    fun getMovementPointsCount(): Int = escapeCards.getMovementPoints()
 
     fun addSurvivalPoints(pointsCount: Int) {
         survivalPoints += pointsCount

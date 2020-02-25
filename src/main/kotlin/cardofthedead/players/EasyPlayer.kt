@@ -19,6 +19,9 @@ import main.kotlin.cardofthedead.cards.events.Fog
 import main.kotlin.cardofthedead.cards.events.Horde
 import main.kotlin.cardofthedead.cards.events.Mobs
 import main.kotlin.cardofthedead.cards.events.Ringtone
+import main.kotlin.cardofthedead.cards.getActionCards
+import main.kotlin.cardofthedead.cards.getSingleZombies
+import main.kotlin.cardofthedead.cards.getZombiesCount
 import main.kotlin.cardofthedead.cards.zombies.BrideZombie
 import main.kotlin.cardofthedead.cards.zombies.GrannyZombie
 import main.kotlin.cardofthedead.cards.zombies.LadZombie
@@ -143,7 +146,7 @@ class EasyPlayer(name: String) : Player(name) {
                         gameContext.initialPlayersCount
                     )
 
-        val hasZombieToDiscard = zombiesAround.getSingleZombieCards().isNotEmpty()
+        val hasZombieToDiscard = zombiesAround.getSingleZombies().isNotEmpty()
 
         return tooManyZombiesAround && hasZombieToDiscard
     }

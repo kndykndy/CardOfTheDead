@@ -1,6 +1,7 @@
 package main.kotlin.cardofthedead.cards.actions
 
 import main.kotlin.cardofthedead.cards.Action
+import main.kotlin.cardofthedead.cards.getSingleZombies
 import main.kotlin.cardofthedead.players.Player
 
 class Hide : Action(1) {
@@ -13,7 +14,7 @@ class Hide : Action(1) {
         val zombiesAround = player.zombiesAround
         if (zombiesAround.isNotEmpty()) {
             zombiesAround.pickCard(
-                zombiesAround.getSingleZombieCards().random()
+                zombiesAround.getSingleZombies().random()
             )?.let {
                 player.gameContext
                     .getNextPlayer(player)

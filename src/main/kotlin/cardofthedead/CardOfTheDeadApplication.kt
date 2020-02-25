@@ -5,10 +5,10 @@ import main.kotlin.cardofthedead.players.Level
 import main.kotlin.cardofthedead.players.Player
 
 fun main() {
-    val game = Game.Builder()
+    Game.Builder()
         .withPlayer(Player.of("Dimitry", Level.EASY))
         .withPlayer(Player.of("Eugene", Level.EASY))
         .withPlayer(Player.of("Stacey", Level.EASY))
         .build()
-    game.play()
+        .play()
 }

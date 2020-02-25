@@ -1,6 +1,7 @@
 package main.kotlin.cardofthedead.cards.actions
 
 import main.kotlin.cardofthedead.cards.Action
+import main.kotlin.cardofthedead.cards.getSingleZombies
 import main.kotlin.cardofthedead.players.Player
 
 class Lure : Action(1) {
@@ -12,7 +13,7 @@ class Lure : Action(1) {
         val zombiesAround = player.zombiesAround
         if (zombiesAround.isNotEmpty()) {
             zombiesAround.pickCard(
-                zombiesAround.getSingleZombieCards().random()
+                zombiesAround.getSingleZombies().random()
             )?.let {
                 player.choosePlayerToGiveZombieToForLure()
                     .chasedByZombie(it)

@@ -106,7 +106,7 @@ class Game(
                 currentPlayer.play(actionCardFromHand)
                 currentPlayer.discard(actionCardFromHand)
             } else { // as movement points
-                println("${currentPlayer.name} decided to play card as movement points.")
+                println("${currentPlayer.name} decided to play ${actionCardFromHand::class.simpleName} as movement points.")
 
                 currentPlayer.addMovementPoints(actionCardFromHand as Action)
                 if (currentPlayer.getMovementPointsCount() >=

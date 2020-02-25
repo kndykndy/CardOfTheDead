@@ -1,6 +1,7 @@
 package main.kotlin.cardofthedead.cards.actions
 
 import main.kotlin.cardofthedead.cards.Action
+import main.kotlin.cardofthedead.cards.getSingleZombies
 import main.kotlin.cardofthedead.cards.zombies.Zombies
 import main.kotlin.cardofthedead.cards.zombies.`Zombies!!!`
 import main.kotlin.cardofthedead.players.Player
@@ -28,7 +29,7 @@ class Dynamite : Action(2) {
             }
 
             if (zombiesToDiscard != 0) {
-                zombiesAround.getSingleZombieCards()
+                zombiesAround.getSingleZombies()
                     .takeLast(zombiesToDiscard)
                     .forEach { player.discard(it) }
             }

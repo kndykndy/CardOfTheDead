@@ -1,6 +1,7 @@
 package main.kotlin.cardofthedead.cards.actions
 
 import main.kotlin.cardofthedead.cards.Action
+import main.kotlin.cardofthedead.cards.getSingleZombies
 import main.kotlin.cardofthedead.cards.zombies.Zombies
 import main.kotlin.cardofthedead.players.Player
 
@@ -17,7 +18,7 @@ class Chainsaw : Action(1) {
                 return
             }
 
-            zombiesAround.getSingleZombieCards()
+            zombiesAround.getSingleZombies()
                 .takeLast(2)
                 .forEach { player.discard(it) }
         }

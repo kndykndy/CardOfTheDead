@@ -1,6 +1,7 @@
 package main.kotlin.cardofthedead.cards.actions
 
 import main.kotlin.cardofthedead.cards.Action
+import main.kotlin.cardofthedead.cards.getSingleZombies
 import main.kotlin.cardofthedead.players.Player
 
 class Slugger : Action(1) {
@@ -14,7 +15,7 @@ class Slugger : Action(1) {
 
             val zombiesAround = player.zombiesAround
             val zombieCard = zombiesAround.pickCard(
-                zombiesAround.getSingleZombieCards().random()
+                zombiesAround.getSingleZombies().random()
             )
             player.discard(zombieCard!!)
         } else {
