@@ -11,6 +11,11 @@ import cardofthedead.cards.actions.Pillage
 import cardofthedead.cards.actions.Slugger
 import cardofthedead.cards.actions.Tripped
 import cardofthedead.cards.actions.`Nukes!`
+import cardofthedead.cards.events.Fog
+import cardofthedead.cards.zombies.GrannyZombie
+import cardofthedead.cards.zombies.LadZombie
+import cardofthedead.cards.zombies.Zombies
+import cardofthedead.cards.zombies.`Zombies!!!`
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -258,6 +263,136 @@ class DeckTest {
 
         // then
         assertNull(pickedRandomCard)
+    }
+
+    @Test
+    fun `should get list of action cards from deck keeping them in deck`() {
+        // given
+        val nukes = `Nukes!`()
+        val pillage = Pillage()
+        val deck = Deck<Card>().apply {
+            addCard(nukes)
+            addCard(pillage)
+            addCard(GrannyZombie())
+        }
+
+        // when
+        val actions = deck.getActions()
+
+        // then
+        assertEquals(2, actions.size)
+        assertTrue(actions.containsAll(listOf(nukes, pillage)))
+        assertEquals(3, deck.size())
+    }
+
+    @Test
+    fun `should get empty list of action cards if no actions in deck`() {
+        // given
+        val deck = Deck<Card>().apply {
+            addCard(Fog())
+            addCard(`Zombies!!!`())
+        }
+
+        // when
+        val actions = deck.getActions()
+
+        // then
+        assertTrue(actions.isEmpty())
+        assertEquals(2, deck.size())
+    }
+
+    @Test
+    fun `should get total movement points`() {
+        // given
+        val deck = Deck<Action>().apply {
+            addCard(Slugger())
+            addCard(Dynamite())
+            addCard(Pillage())
+        }
+
+        // when
+        val movementPoints = deck.getMovementPoints()
+
+        // then
+        assertEquals(5, movementPoints)
+        assertEquals(3, deck.size())
+    }
+
+    @Test
+    fun `should get 0 movement points if deck is empty`() {
+        // given
+        val deck = Deck<Action>()
+
+        // when
+        val movementPoints = deck.getMovementPoints()
+
+        // then
+        assertEquals(0, movementPoints)
+        assertTrue(deck.isEmpty())
+    }
+
+    @Test
+    fun `should get total zombie count`() {
+        // given
+        val deck = Deck<Zombie>().apply {
+            addCard(GrannyZombie())
+            addCard(Zombies())
+            addCard(`Zombies!!!`())
+        }
+
+        // when
+        val zombiesCount = deck.getZombiesCount()
+
+        // then
+        assertEquals(6, zombiesCount)
+        assertEquals(3, deck.size())
+    }
+
+    @Test
+    fun `should get 0 zombies points if zombie deck is empty`() {
+        // given
+        val deck = Deck<Zombie>()
+
+        // when
+        val zombiesCount = deck.getZombiesCount()
+
+        // then
+        assertEquals(0, zombiesCount)
+        assertTrue(deck.isEmpty())
+    }
+
+    @Test
+    fun `should get single zombies`() {
+        // given
+        val granny = GrannyZombie()
+        val lad = LadZombie()
+        val deck = Deck<Zombie>().apply {
+            addCard(granny)
+            addCard(lad)
+            addCard(Zombies())
+            addCard(`Zombies!!!`())
+        }
+
+        // when
+        val singleZombies = deck.getSingleZombies()
+
+        // then
+        assertEquals(2, singleZombies.size)
+        assertTrue(singleZombies.containsAll(listOf(granny, lad)))
+        assertEquals(4, deck.size())
+    }
+
+    @Test
+    fun `should get 0 single zombies if no such in deck`() {
+        // given
+        val deck = Deck<Zombie>()
+
+        // when
+        val singleZombies = deck.getSingleZombies()
+
+        // then
+        assertTrue(singleZombies.isEmpty())
+        assertTrue(deck.isEmpty())
     }
 
     @Test
