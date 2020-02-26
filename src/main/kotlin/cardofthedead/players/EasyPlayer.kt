@@ -92,7 +92,7 @@ class EasyPlayer(name: String) : Player(name) {
 
         val actionCards = hand.getActions()
         return if (actionCards.isNotEmpty()) {
-            if (Random.nextBoolean()) {
+            if (Random.nextInt(10) < 5) {
                 if (notSurrounded && Random.nextBoolean()) {
                     PlayCardDecision(
                         WayToPlayCard.PLAY_AS_MOVEMENT_POINTS,

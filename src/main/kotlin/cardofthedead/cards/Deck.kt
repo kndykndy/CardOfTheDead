@@ -2,6 +2,7 @@ package cardofthedead.cards
 
 open class Deck<T : Card> {
 
+    // todo think over removing internal modifier
     internal val cards: MutableList<T> = mutableListOf()
 
     // Service funcs
@@ -15,7 +16,9 @@ open class Deck<T : Card> {
 
     // Adding cards
 
-    fun addCard(card: T) = cards.add(card)
+    fun addCard(card: T) {
+        if (!cards.contains(card)) cards.add(card)
+    }
 
     fun addCardOnBottom(card: T) = cards.add(0, card)
 
@@ -36,7 +39,7 @@ open class Deck<T : Card> {
             ?.let { pickCard(it) }
     }
 
-    fun pickRandomCard(): Card? = pickCard(cards.random())
+    fun pickRandomCard(): Card? = if (isNotEmpty()) pickCard(cards.random()) else null
 }
 
 fun Deck<Card>.getActions() = this.cards.filterIsInstance<Action>()
