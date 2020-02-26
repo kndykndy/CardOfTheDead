@@ -1,5 +1,6 @@
 package cardofthedead.players
 
+import cardofthedead.cards.Action
 import cardofthedead.cards.Card
 import cardofthedead.cards.PlayCardDecision
 import cardofthedead.cards.WayToPlayCard
@@ -90,18 +91,18 @@ class EasyPlayer(name: String) : Player(name) {
 
         val notSurrounded = zombiesAround.getZombiesCount() < zombiesToSurround
 
-        val actionCards = hand.getActions()
-        return if (actionCards.isNotEmpty()) {
+        val playableActionCards = getPlayableActionCards()
+        return if (playableActionCards.isNotEmpty()) {
             if (Random.nextInt(10) < 5) {
                 if (notSurrounded && Random.nextBoolean()) {
                     PlayCardDecision(
                         WayToPlayCard.PLAY_AS_MOVEMENT_POINTS,
-                        hand.pickCard(actionCards.random())
+                        hand.pickCard(playableActionCards.random())
                     )
                 } else {
                     PlayCardDecision(
                         WayToPlayCard.PLAY_AS_ACTION,
-                        hand.pickCard(actionCards.random())
+                        hand.pickCard(playableActionCards.random())
                     )
                 }
             } else {
@@ -159,4 +160,7 @@ class EasyPlayer(name: String) : Player(name) {
 
     override fun decideHowManyMovementCardsToDiscardForTripped(): Int =
         Random.nextInt(2)
+
+    private fun getPlayableActionCards(): List<Action> =
+        hand.getActions().filterNot { it is Bitten }
 }
