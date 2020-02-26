@@ -140,7 +140,7 @@ abstract class Player(
 
     companion object {
 
-        fun of(name: String, level: Level?): Player =
+        fun of(name: String, level: Level? = null): Player =
             if (level != null) {
                 if (level == Level.HARD) HardPlayer(name) else EasyPlayer(name)
             } else {

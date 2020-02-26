@@ -249,6 +249,7 @@ class Game(
         }
 
     class Builder {
+        
         val players: MutableList<Player> = mutableListOf()
 
         fun withPlayer(player: Player) = apply { players.add(player) }
