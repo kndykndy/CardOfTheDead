@@ -20,7 +20,7 @@ abstract class Player(
     /**
      * Temporary cards deck.
      */
-    protected val candidatesToHand: Deck<Card> = Deck()
+    internal val candidatesToHand: Deck<Card> = Deck()
 
     /**
      * Zombies that chase a player.
@@ -140,7 +140,7 @@ abstract class Player(
 
     companion object {
 
-        fun of(name: String, level: Level? = null): Player =
+        fun of(name: String, level: Level? = Level.EASY): Player =
             if (level != null) {
                 if (level == Level.HARD) HardPlayer(name) else EasyPlayer(name)
             } else {

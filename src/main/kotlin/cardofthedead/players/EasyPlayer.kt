@@ -113,11 +113,17 @@ class EasyPlayer(name: String) : Player(name) {
         }
     }
 
-    override fun chooseWorstCandidateForBarricade(): Card =
-        candidatesToHand.cards
+    override fun chooseWorstCandidateForBarricade(): Card? {
+        val worstCandidate = candidatesToHand.cards
             .map { Pair(it, cardTypeToRating[it::class]) }
             .minBy { it.second!! }
-            ?.first!!
+            ?.first
+        
+        return when {
+            worstCandidate != null -> candidatesToHand.pickCard(worstCandidate)
+            else -> null
+        }
+    }
 
     override fun chooseWorstMovementCardForDynamite(): Card? =
         if (escapeCards.isNotEmpty()) {

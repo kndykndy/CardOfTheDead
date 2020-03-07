@@ -3,6 +3,7 @@ package cardofthedead.actions
 import cardofthedead.cards.actions.Armored
 import cardofthedead.cards.actions.Bitten
 import cardofthedead.game.Game
+import cardofthedead.players.Level
 import cardofthedead.players.Player
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -15,6 +16,7 @@ class ArmoredTest {
     fun `should play Armored if Bitten is on hand`() {
         // given
         val armored = Armored()
+
         val bitten = Bitten()
         val player = Player.of("John Doe")
         val game = Game.Builder().withPlayer(player).build()
@@ -37,6 +39,7 @@ class ArmoredTest {
     fun `should play Armored if Bitten is not on hand`() {
         // given
         val armored = Armored()
+
         val player = Player.of("John Doe")
         val game = Game.Builder().withPlayer(player).build()
 
