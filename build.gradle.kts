@@ -10,14 +10,24 @@ repositories {
     mavenCentral()
 }
 
+tasks.withType<Test> {
+    useJUnitPlatform()
+    filter {
+        isFailOnNoMatchingTests = false
+    }
+}
+
 dependencies {
     // Align versions of all Kotlin components
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
-    testImplementation("io.mockk:mockk")
+    implementation(kotlin("bom"))
+    implementation(kotlin("reflect"))
+    implementation(kotlin("stdlib-jdk8"))
+
+    testImplementation("io.kotest:kotest-core:4.0.0-BETA1")
+    testImplementation("io.kotest:kotest-assertions:4.0.0-BETA1")
+    testImplementation("io.kotest:kotest-runner-junit5:4.0.0-BETA1")
+    testImplementation("io.kotest:kotest-runner-junit5-jvm:4.0.0-BETA1")
+    testImplementation("io.mockk:mockk:1.9.3")
 }
 
 application {

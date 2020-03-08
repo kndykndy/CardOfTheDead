@@ -7,15 +7,13 @@ import cardofthedead.cards.actions.Bitten
 import cardofthedead.cards.actions.`Nukes!`
 import cardofthedead.game.Game
 import cardofthedead.players.Player
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 
-class BarricadeTest {
+class BarricadeTest : StringSpec({
 
-    @Test
-    fun `should play Barricade`() {
+    "should play Barricade" {
         // given
 
         val bitten = Bitten()
@@ -33,20 +31,15 @@ class BarricadeTest {
         val handSize = player.hand.size()
 
         // when
-        barricade.play(player)
+        player.play(barricade)
 
         // then
-        assertEquals(handSize + 2, player.hand.size())
-        listOf(armored, nukes).forEach { assertNotNull(player.hand.pickCard(it)) }
-        assertNull(player.hand.pickCard(bitten))
-        assertEquals(gameDeckSize - 2, game.playDeck.size())
-        assertEquals(bitten, game.playDeck.cards[0])
-    }
 
-    @Test
-    fun `should `() {
-        // given
-        // when
-        // then
+        player.hand.size() shouldBe handSize + 2
+        listOf(armored, nukes).forEach { player.hand.pickCard(it) shouldNotBe null }
+        player.hand.pickCard(bitten) shouldBe null
+
+        game.playDeck.size() shouldBe gameDeckSize - 2
+        game.playDeck.cards[0] shouldBe bitten
     }
-}
+})

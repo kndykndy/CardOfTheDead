@@ -16,15 +16,16 @@ import cardofthedead.cards.zombies.GrannyZombie
 import cardofthedead.cards.zombies.LadZombie
 import cardofthedead.cards.zombies.Zombies
 import cardofthedead.cards.zombies.`Zombies!!!`
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldBeOneOf
+import io.kotest.matchers.collections.shouldContainAll
+import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.shouldBe
 
-class DeckTest {
+class DeckTest : StringSpec({
 
-    @Test
-    fun `should add unique cards to deck`() {
+    "should add unique cards to deck" {
         // given
         val armored = Armored()
         val barricade = Barricade()
@@ -37,11 +38,10 @@ class DeckTest {
         deck.addCard(armored)
 
         // then
-        assertEquals(2, deck.size())
+        deck.size() shouldBe 2
     }
 
-    @Test
-    fun `should add cards on deck' bottom for empty deck`() {
+    "should add cards on deck' bottom for empty deck" {
         // given
         val dynamite = Dynamite()
         val deck = Deck<Card>()
@@ -50,11 +50,10 @@ class DeckTest {
         deck.addCardOnBottom(dynamite)
 
         // then
-        assertEquals(dynamite, deck.pickTopCard())
+        deck.pickTopCard() shouldBe dynamite
     }
 
-    @Test
-    fun `should add cards on deck' bottom`() {
+    "should add cards on deck' bottom" {
         // given
         val bitten = Bitten()
         val chainsaw = Chainsaw()
@@ -68,13 +67,13 @@ class DeckTest {
         deck.addCardOnBottom(bitten)
 
         // then
-        assertEquals(dynamite, deck.pickTopCard())
-        assertEquals(chainsaw, deck.pickTopCard())
-        assertEquals(bitten, deck.pickTopCard())
+        deck.pickTopCard() shouldBe dynamite
+        deck.pickTopCard() shouldBe chainsaw
+        deck.pickTopCard() shouldBe bitten
     }
 
-    @Test
-    fun `should merge two empty decks`() {
+
+    "should merge two empty decks" {
         // given
         val deck1 = Deck<Card>()
         val deck2 = Deck<Card>()
@@ -83,12 +82,11 @@ class DeckTest {
         deck1.merge(deck2)
 
         // then
-        assertTrue(deck1.isEmpty())
-        assertTrue(deck2.isEmpty())
+        deck1.isEmpty() shouldBe true
+        deck2.isEmpty() shouldBe true
     }
 
-    @Test
-    fun `should merge empty deck to non-empty deck`() {
+    "should merge empty deck to non-empty deck" {
         // given
         val deck1 = Deck<Card>().apply { addCard(Hide()) }
         val deck2 = Deck<Card>()
@@ -97,12 +95,11 @@ class DeckTest {
         deck1.merge(deck2)
 
         // then
-        assertEquals(1, deck1.size())
-        assertTrue(deck2.isEmpty())
+        deck1.size() shouldBe 1
+        deck2.isEmpty() shouldBe true
     }
 
-    @Test
-    fun `should merge non-empty deck to empty deck`() {
+    "should merge non-empty deck to empty deck" {
         // given
         val deck1 = Deck<Card>()
         val deck2 = Deck<Card>().apply { addCard(Lure()) }
@@ -111,12 +108,11 @@ class DeckTest {
         deck1.merge(deck2)
 
         // then
-        assertEquals(1, deck1.size())
-        assertTrue(deck2.isEmpty())
+        deck1.size() shouldBe 1
+        deck2.isEmpty() shouldBe true
     }
 
-    @Test
-    fun `should merge to non-empty decks`() {
+    "should merge to non-empty decks" {
         // given
         val deck1 = Deck<Card>().apply { addCard(Hide()) }
         val deck2 = Deck<Card>().apply { addCard(Lure()) }
@@ -125,12 +121,11 @@ class DeckTest {
         deck1.merge(deck2)
 
         // then
-        assertEquals(2, deck1.size())
-        assertTrue(deck2.isEmpty())
+        deck1.size() shouldBe 2
+        deck2.isEmpty() shouldBe true
     }
 
-    @Test
-    fun `should pick top card from non-empty deck`() {
+    "should pick top card from non-empty deck" {
         // given
         val nukes = `Nukes!`()
         val pillage = Pillage()
@@ -144,13 +139,12 @@ class DeckTest {
         val pickedCard2 = deck.pickTopCard()
 
         // then
-        assertEquals(pillage, pickedCard1)
-        assertEquals(nukes, pickedCard2)
-        assertTrue(deck.isEmpty())
+        pickedCard1 shouldBe pillage
+        pickedCard2 shouldBe nukes
+        deck.isEmpty() shouldBe true
     }
 
-    @Test
-    fun `should not pick card from empty deck`() {
+    "should not pick card from empty deck" {
         // given
         val deck = Deck<Card>()
 
@@ -158,11 +152,10 @@ class DeckTest {
         val pickedCard = deck.pickTopCard()
 
         // then
-        assertNull(pickedCard)
+        pickedCard shouldBe null
     }
 
-    @Test
-    fun `should pick card if it exists in deck`() {
+    "should pick card if it exists in deck" {
         // given
         val slugger = Slugger()
         val deck = Deck<Card>().apply { addCard(slugger) }
@@ -171,12 +164,11 @@ class DeckTest {
         val pickedCard = deck.pickCard(slugger)
 
         // then
-        assertEquals(slugger, pickedCard)
-        assertTrue(deck.isEmpty())
+        pickedCard shouldBe slugger
+        deck.isEmpty() shouldBe true
     }
 
-    @Test
-    fun `should not pick card if does not exist in deck`() {
+    "should not pick card if does not exist in deck" {
         // given
         val slugger = Slugger()
         val tripped = Tripped()
@@ -186,12 +178,11 @@ class DeckTest {
         val pickedCard = deck.pickCard(slugger)
 
         // then
-        assertNull(pickedCard)
-        assertEquals(1, deck.size())
+        pickedCard shouldBe null
+        deck.size() shouldBe 1
     }
 
-    @Test
-    fun `should pick card of class if it exists in deck`() {
+    "should pick card of class if it exists in deck" {
         // given
         val armored = Armored()
         val deck = Deck<Card>().apply {
@@ -203,12 +194,11 @@ class DeckTest {
         val pickedCardOfClass = deck.pickCardOfClass(Action::class.java)
 
         // then
-        assertEquals(armored, pickedCardOfClass)
-        assertEquals(1, deck.size())
+        pickedCardOfClass shouldBe armored
+        deck.size() shouldBe 1
     }
 
-    @Test
-    fun `should not pick card of class from empty deck`() {
+    "should not pick card of class from empty deck" {
         // given
         val deck = Deck<Card>()
 
@@ -216,11 +206,10 @@ class DeckTest {
         val pickedCardOfClass = deck.pickCardOfClass(Action::class.java)
 
         // then
-        assertNull(pickedCardOfClass)
+        pickedCardOfClass shouldBe null
     }
 
-    @Test
-    fun `should not pick card of class if it does not exist in deck`() {
+    "should not pick card of class if it does not exist in deck" {
         // given
         val deck = Deck<Card>().apply {
             addCard(Armored())
@@ -231,12 +220,11 @@ class DeckTest {
         val pickedCardOfClass = deck.pickCardOfClass(Zombie::class.java)
 
         // then
-        assertNull(pickedCardOfClass)
-        assertEquals(2, deck.size())
+        pickedCardOfClass shouldBe null
+        deck.size() shouldBe 2
     }
 
-    @Test
-    fun `should pick random card from deck`() {
+    "should pick random card from deck" {
         // given
         val hide = Hide()
         val lure = Lure()
@@ -249,12 +237,11 @@ class DeckTest {
         val pickedRandomCard = deck.pickRandomCard()
 
         // then
-        assertTrue(pickedRandomCard == hide || pickedRandomCard == lure)
-        assertEquals(1, deck.size())
+        pickedRandomCard shouldBeOneOf listOf(hide, lure)
+        deck.size() shouldBe 1
     }
 
-    @Test
-    fun `should not pick random card if deck is empty`() {
+    "should not pick random card if deck is empty" {
         // given
         val deck = Deck<Card>()
 
@@ -262,11 +249,10 @@ class DeckTest {
         val pickedRandomCard = deck.pickRandomCard()
 
         // then
-        assertNull(pickedRandomCard)
+        pickedRandomCard shouldBe null
     }
 
-    @Test
-    fun `should get list of action cards from deck keeping them in deck`() {
+    "should get list of action cards from deck keeping them in deck" {
         // given
         val nukes = `Nukes!`()
         val pillage = Pillage()
@@ -280,13 +266,12 @@ class DeckTest {
         val actions = deck.getActions()
 
         // then
-        assertEquals(2, actions.size)
-        assertTrue(actions.containsAll(listOf(nukes, pillage)))
-        assertEquals(3, deck.size())
+        actions shouldHaveSize 2
+        actions shouldContainAll listOf(nukes, pillage)
+        deck.size() shouldBe 3
     }
 
-    @Test
-    fun `should get empty list of action cards if no actions in deck`() {
+    "should get empty list of action cards if no actions in deck" {
         // given
         val deck = Deck<Card>().apply {
             addCard(Fog())
@@ -297,12 +282,11 @@ class DeckTest {
         val actions = deck.getActions()
 
         // then
-        assertTrue(actions.isEmpty())
-        assertEquals(2, deck.size())
+        actions.shouldBeEmpty()
+        deck.size() shouldBe 2
     }
 
-    @Test
-    fun `should get total movement points`() {
+    "should get total movement points" {
         // given
         val deck = Deck<Action>().apply {
             addCard(Slugger())
@@ -314,12 +298,11 @@ class DeckTest {
         val movementPoints = deck.getMovementPoints()
 
         // then
-        assertEquals(5, movementPoints)
-        assertEquals(3, deck.size())
+        movementPoints shouldBe 5
+        deck.size() shouldBe 3
     }
 
-    @Test
-    fun `should get 0 movement points if deck is empty`() {
+    "should get 0 movement points if deck is empty" {
         // given
         val deck = Deck<Action>()
 
@@ -327,12 +310,11 @@ class DeckTest {
         val movementPoints = deck.getMovementPoints()
 
         // then
-        assertEquals(0, movementPoints)
-        assertTrue(deck.isEmpty())
+        movementPoints shouldBe 0
+        deck.isEmpty() shouldBe true
     }
 
-    @Test
-    fun `should get total zombie count`() {
+    "should get total zombie count" {
         // given
         val deck = Deck<Zombie>().apply {
             addCard(GrannyZombie())
@@ -344,12 +326,11 @@ class DeckTest {
         val zombiesCount = deck.getZombiesCount()
 
         // then
-        assertEquals(6, zombiesCount)
-        assertEquals(3, deck.size())
+        zombiesCount shouldBe 6
+        deck.size() shouldBe 3
     }
 
-    @Test
-    fun `should get 0 zombies points if zombie deck is empty`() {
+    "should get 0 zombies points if zombie deck is empty" {
         // given
         val deck = Deck<Zombie>()
 
@@ -357,12 +338,11 @@ class DeckTest {
         val zombiesCount = deck.getZombiesCount()
 
         // then
-        assertEquals(0, zombiesCount)
-        assertTrue(deck.isEmpty())
+        zombiesCount shouldBe 0
+        deck.isEmpty() shouldBe true
     }
 
-    @Test
-    fun `should get single zombies`() {
+    "should get single zombies" {
         // given
         val granny = GrannyZombie()
         val lad = LadZombie()
@@ -377,13 +357,12 @@ class DeckTest {
         val singleZombies = deck.getSingleZombies()
 
         // then
-        assertEquals(2, singleZombies.size)
-        assertTrue(singleZombies.containsAll(listOf(granny, lad)))
-        assertEquals(4, deck.size())
+        singleZombies shouldHaveSize 2
+        singleZombies shouldContainAll listOf(granny, lad)
+        deck.size() shouldBe 4
     }
 
-    @Test
-    fun `should get 0 single zombies if no such in deck`() {
+    "should get 0 single zombies if no such in deck" {
         // given
         val deck = Deck<Zombie>()
 
@@ -391,14 +370,7 @@ class DeckTest {
         val singleZombies = deck.getSingleZombies()
 
         // then
-        assertTrue(singleZombies.isEmpty())
-        assertTrue(deck.isEmpty())
+        singleZombies.shouldBeEmpty()
+        deck.isEmpty() shouldBe true
     }
-
-    @Test
-    fun `should `() {
-        // given
-        // when
-        // then
-    }
-}
+})

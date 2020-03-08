@@ -3,17 +3,14 @@ package cardofthedead.actions
 import cardofthedead.cards.actions.Armored
 import cardofthedead.cards.actions.Bitten
 import cardofthedead.game.Game
-import cardofthedead.players.Level
 import cardofthedead.players.Player
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNull
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldNotContain
+import io.kotest.matchers.shouldBe
 
-class ArmoredTest {
+class ArmoredTest : StringSpec({
 
-    @Test
-    fun `should play Armored if Bitten is on hand`() {
+    "should play Armored if Bitten is on hand" {
         // given
         val armored = Armored()
 
@@ -26,17 +23,16 @@ class ArmoredTest {
         val handSize = player.hand.size()
 
         // when
-        armored.play(player)
+        player.play(armored)
 
         // then
-        assertEquals(handSize - 1, player.hand.size())
-        assertFalse(player.hand.cards.contains(bitten))
-        assertEquals(gameDeckSize + 1, game.playDeck.size())
-        assertEquals(bitten, game.playDeck.cards[0])
+        player.hand.size() shouldBe handSize - 1
+        player.hand.cards shouldNotContain bitten
+        game.playDeck.size() shouldBe gameDeckSize + 1
+        game.playDeck.cards[0] shouldBe bitten
     }
 
-    @Test
-    fun `should play Armored if Bitten is not on hand`() {
+    "should play Armored if Bitten is not on hand" {
         // given
         val armored = Armored()
 
@@ -47,18 +43,11 @@ class ArmoredTest {
         val handSize = player.hand.size()
 
         // when
-        armored.play(player)
+        player.play(armored)
 
         // then
-        assertEquals(handSize, player.hand.size())
-        assertNull(player.hand.pickCardOfClass(Bitten::class.java))
-        assertEquals(gameDeckSize, game.playDeck.size())
+        player.hand.size() shouldBe handSize
+        player.hand.pickCardOfClass(Bitten::class.java) shouldBe null
+        game.playDeck.size() shouldBe gameDeckSize
     }
-
-    @Test
-    fun `should `() {
-        // given
-        // when
-        // then
-    }
-}
+})
