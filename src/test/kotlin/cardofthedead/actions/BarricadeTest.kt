@@ -5,8 +5,9 @@ import cardofthedead.cards.actions.Armored
 import cardofthedead.cards.actions.Barricade
 import cardofthedead.cards.actions.Bitten
 import cardofthedead.cards.actions.`Nukes!`
-import cardofthedead.game.Game
-import cardofthedead.players.Player
+import cardofthedead.dummyPlayer
+import cardofthedead.gameWithEmptyDeck
+import cardofthedead.gameWithStandardDeck
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -20,26 +21,94 @@ class BarricadeTest : StringSpec({
         val armored = Armored()
         val nukes = `Nukes!`()
 
-        val player = Player.of("John Doe")
-        val game = Game.Builder().withPlayer(player).build().also {
-            it.playDeck.addCards(listOf(bitten, armored, nukes))
-        }
+        val player = dummyPlayer()
 
-        val barricade = Barricade().also { it.gameContext = game }
+        val game = gameWithStandardDeck(player).apply { playDeck.addCards(bitten, armored, nukes) }
 
-        val gameDeckSize = game.playDeck.size()
-        val handSize = player.hand.size()
+        val playDeck = game.playDeck
+        val playerHand = player.hand
+
+        val gameDeckSize = playDeck.size()
+        val handSize = playerHand.size()
 
         // when
-        player.play(barricade)
+        player.play(Barricade().also { it.gameContext = game })
 
         // then
 
-        player.hand.size() shouldBe handSize + 2
-        listOf(armored, nukes).forEach { player.hand.pickCard(it) shouldNotBe null }
-        player.hand.pickCard(bitten) shouldBe null
+        playerHand.size() shouldBe handSize + 2
+        listOf(armored, nukes).forEach { playerHand.pickCard(it) shouldNotBe null }
+        playerHand.pickCard(bitten) shouldBe null
 
-        game.playDeck.size() shouldBe gameDeckSize - 2
+        playDeck.size() shouldBe gameDeckSize - 2
+        playDeck.cards[0] shouldBe bitten
+    }
+
+    "should play Barricade if three cards left" {
+        // given
+
+        val bitten = Bitten()
+        val armored = Armored()
+        val nukes = `Nukes!`()
+
+        val player = dummyPlayer()
+
+        val game = gameWithEmptyDeck(player).apply { playDeck.addCards(bitten, armored, nukes) }
+
+        val playerHand = player.hand
+
+        // when
+        player.play(Barricade().also { it.gameContext = game })
+
+        // then
+
+        playerHand.size() shouldBe 2
+        listOf(armored, nukes).forEach { playerHand.pickCard(it) shouldNotBe null }
+        playerHand.pickCard(bitten) shouldBe null
+
+        game.playDeck.size() shouldBe 1
         game.playDeck.cards[0] shouldBe bitten
+    }
+
+    "should play Barricade if two cards left" {
+        // given
+
+        val armored = Armored()
+        val nukes = `Nukes!`()
+
+        val player = dummyPlayer()
+
+        val game = gameWithEmptyDeck(player).apply { playDeck.addCards(armored, nukes) }
+
+        // when
+        player.play(Barricade().also { it.gameContext = game })
+
+        // then
+
+        player.hand.size() shouldBe 1
+        player.hand.pickCard(nukes) shouldNotBe null
+
+        game.playDeck.size() shouldBe 1
+        game.playDeck.cards[0] shouldBe armored
+    }
+
+    "should play Barricade if one card left" {
+        // given
+
+        val nukes = `Nukes!`()
+
+        val player = dummyPlayer()
+
+        val game = gameWithEmptyDeck(player).apply { playDeck.addCard(nukes) }
+
+        // when
+        player.play(Barricade().also { it.gameContext = game })
+
+        // then
+
+        player.hand.size() shouldBe 0
+
+        game.playDeck.size() shouldBe 1
+        game.playDeck.cards[0] shouldBe nukes
     }
 })

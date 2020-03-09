@@ -42,6 +42,8 @@ open class Deck<T : Card> {
     fun pickRandomCard(): Card? = if (isNotEmpty()) pickCard(cards.random()) else null
 }
 
+class EmptyDeck : Deck<Card>()
+
 fun Deck<Card>.getActions() = this.cards.filterIsInstance<Action>()
 
 fun Deck<Action>.getMovementPoints(): Int = this.cards.sumBy { it.movementPoints }

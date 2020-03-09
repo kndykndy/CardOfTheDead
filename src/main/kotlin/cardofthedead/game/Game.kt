@@ -4,7 +4,6 @@ import cardofthedead.cards.Action
 import cardofthedead.cards.Card
 import cardofthedead.cards.Deck
 import cardofthedead.cards.Event
-import cardofthedead.cards.StandardDeck
 import cardofthedead.cards.WayToPlayCard
 import cardofthedead.cards.Zombie
 import cardofthedead.players.Player
@@ -19,7 +18,7 @@ class Game(
 
     internal val initialPlayersCount: Int = players.size
 
-    internal val playDeck: Deck<Card> = StandardDeck()
+    lateinit var playDeck: Deck<Card>
     internal val discardDeck: Deck<Card> = Deck()
 
     /**
@@ -31,9 +30,9 @@ class Game(
     private val playersToZombiesToBeEaten = mapOf(2 to 7, 3 to 6, 4 to 6, 5 to 5)
     private val playersToMovementPointsToEscape = mapOf(2 to 7, 3 to 6, 4 to 6, 5 to 5)
 
-    private constructor(builder: Builder) : this(builder.players)
+    private constructor(builder: Builder) : this(builder.players) {
+        this.playDeck = builder.deck
 
-    init {
         println("Starting a new Game of the Dead!")
 
         playDeck.cards.forEach { it.gameContext = this }
@@ -248,9 +247,20 @@ class Game(
             false
         }
 
-    class Builder {
-        
+    class Builder(
+        player1: Player,
+        player2: Player,
+        deck: Deck<Card>
+    ) {
+
         val players: MutableList<Player> = mutableListOf()
+         var deck: Deck<Card>
+
+        init {
+            withPlayer(player1)
+            withPlayer(player2)
+            this.deck = deck
+        }
 
         fun withPlayer(player: Player) = apply { players.add(player) }
 
