@@ -1,12 +1,11 @@
 package cardofthedead.actions
 
+import cardofthedead.TestUtils.dummyPlayer
+import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.cards.actions.Bitten
-import cardofthedead.dummyPlayer
-import cardofthedead.gameWithEmptyDeck
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
-import java.lang.IllegalStateException
 
 class BittenTest : StringSpec({
 

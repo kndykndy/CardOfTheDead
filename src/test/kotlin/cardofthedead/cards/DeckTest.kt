@@ -1,6 +1,6 @@
 package cardofthedead.cards
 
-import cardofthedead.addCards
+import cardofthedead.TestUtils.addCards
 import cardofthedead.cards.actions.Armored
 import cardofthedead.cards.actions.Barricade
 import cardofthedead.cards.actions.Bitten

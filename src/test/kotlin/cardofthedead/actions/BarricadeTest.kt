@@ -1,13 +1,13 @@
 package cardofthedead.actions
 
-import cardofthedead.addCards
+import cardofthedead.TestUtils.addCards
+import cardofthedead.TestUtils.dummyPlayer
+import cardofthedead.TestUtils.gameWithEmptyDeck
+import cardofthedead.TestUtils.gameWithStandardDeck
 import cardofthedead.cards.actions.Armored
 import cardofthedead.cards.actions.Barricade
 import cardofthedead.cards.actions.Bitten
 import cardofthedead.cards.actions.`Nukes!`
-import cardofthedead.dummyPlayer
-import cardofthedead.gameWithEmptyDeck
-import cardofthedead.gameWithStandardDeck
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
