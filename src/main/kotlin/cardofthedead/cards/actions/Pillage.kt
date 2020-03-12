@@ -8,11 +8,11 @@ class Pillage : Action(2) {
     /**
      * Blindly draw a card from every other player.
      */
-    override fun play(player: Player) {
-        player.gameContext.players
-            .filterNot { it == player }
+    override fun play(playedBy: Player) {
+        gameContext.players
+            .filterNot { it == playedBy }
             .forEach { itPlayer ->
-                player.hand.addCard(itPlayer.hand.pickRandomCard()!!)
+                playedBy.hand.addCard(itPlayer.hand.pickRandomCard()!!)
             }
     }
 }

@@ -118,15 +118,23 @@ abstract class Player(
      */
     fun discard(card: Card) = gameContext.discardDeck.addCard(card)
 
-    fun discardAllCards() {
+    fun discardHand() {
         gameContext.discardDeck.merge(hand)
-        gameContext.discardDeck.merge(candidatesToHand)
-        gameContext.discardDeck.merge(zombiesAround)
-        gameContext.discardDeck.merge(escapeCards)
     }
 
     fun discardCandidatesCards() {
         gameContext.discardDeck.merge(candidatesToHand)
+    }
+
+    fun discardZombiesAround() {
+        gameContext.discardDeck.merge(zombiesAround)
+    }
+
+    fun discardAllCards() {
+        discardHand()
+        discardCandidatesCards()
+        discardZombiesAround()
+        gameContext.discardDeck.merge(escapeCards)
     }
 
     /**

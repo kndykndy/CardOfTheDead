@@ -9,20 +9,20 @@ class Slugger : Action(1) {
     /**
      * Discard a zombie or take a card from another players hand.
      */
-    override fun play(player: Player) {
-        if (player.decideToDiscardZombieOrTakeCardForSlugger()) {
+    override fun play(playedBy: Player) {
+        if (playedBy.decideToDiscardZombieOrTakeCardForSlugger()) {
             // discard a zombie
 
-            val zombiesAround = player.zombiesAround
+            val zombiesAround = playedBy.zombiesAround
             val zombieCard = zombiesAround.pickCard(
                 zombiesAround.getSingleZombies().random()
             )
-            player.discard(zombieCard!!)
+            playedBy.discard(zombieCard!!)
         } else {
             // take a card from player
 
-            player.hand.addCard(
-                player.choosePlayerToTakeCardFromForSlugger().hand.pickRandomCard()!!
+            playedBy.hand.addCard(
+                playedBy.choosePlayerToTakeCardFromForSlugger().hand.pickRandomCard()!!
             )
         }
     }

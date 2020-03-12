@@ -10,18 +10,18 @@ class Hide : Action(1) {
      * Give one of your zombie cards to the next player.
      * You may choose to draw no cards on your next turn.
      */
-    override fun play(player: Player) {
-        val zombiesAround = player.zombiesAround
+    override fun play(playedBy: Player) {
+        val zombiesAround = playedBy.zombiesAround
         if (zombiesAround.isNotEmpty()) {
             zombiesAround.pickCard(
                 zombiesAround.getSingleZombies().random()
             )?.let {
-                player.gameContext
-                    .getNextPlayer(player)
+                gameContext
+                    .getNextPlayer(playedBy)
                     .chasedByZombie(it)
             }
         }
 
-        player.decideToDrawNoCardsNextTurnForHide()
+        playedBy.decideToDrawNoCardsNextTurnForHide()
     }
 }

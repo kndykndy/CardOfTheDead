@@ -16,8 +16,9 @@ open class Deck<T : Card> {
 
     // Adding cards
 
-    fun addCard(card: T) {
+    fun addCard(card: T): T {
         if (!cards.contains(card)) cards.add(card)
+        return card
     }
 
     fun addCardOnBottom(card: T) = cards.add(0, card)

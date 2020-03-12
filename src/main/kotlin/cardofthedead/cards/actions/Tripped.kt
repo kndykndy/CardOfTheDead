@@ -8,11 +8,11 @@ class Tripped : Action(1) {
     /**
      * Discard up to two of another player's newest movement cards.
      */
-    override fun play(player: Player) {
+    override fun play(playedBy: Player) {
         val playerToDiscardMovingCardsFrom =
-            player.choosePlayerToDiscardMovementCardsFromForTripped()
+            playedBy.choosePlayerToDiscardMovementCardsFromForTripped()
 
-        repeat(player.decideHowManyMovementCardsToDiscardForTripped()) {
+        repeat(playedBy.decideHowManyMovementCardsToDiscardForTripped()) {
             playerToDiscardMovingCardsFrom.discard(
                 playerToDiscardMovingCardsFrom.escapeCards.pickTopCard()!!
             )

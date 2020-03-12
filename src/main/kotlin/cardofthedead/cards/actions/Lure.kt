@@ -9,13 +9,13 @@ class Lure : Action(1) {
     /**
      * Give one of your zombie cards to any player.
      */
-    override fun play(player: Player) {
-        val zombiesAround = player.zombiesAround
+    override fun play(playedBy: Player) {
+        val zombiesAround = playedBy.zombiesAround
         if (zombiesAround.isNotEmpty()) {
             zombiesAround.pickCard(
                 zombiesAround.getSingleZombies().random()
             )?.let {
-                player.choosePlayerToGiveZombieToForLure()
+                playedBy.choosePlayerToGiveZombieToForLure()
                     .chasedByZombie(it)
             }
         }

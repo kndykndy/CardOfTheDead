@@ -11,19 +11,19 @@ class Dynamite : Action(2) {
     /**
      * Discard three zombie cards & one of your movement cards.
      */
-    override fun play(player: Player) {
-        val zombiesAround = player.zombiesAround
+    override fun play(playedBy: Player) {
+        val zombiesAround = playedBy.zombiesAround
         if (zombiesAround.isNotEmpty()) {
             var zombiesToDiscard = 3
 
             zombiesAround.pickCardOfClass(`Zombies!!!`::class.java)?.let {
-                player.discard(it)
+                playedBy.discard(it)
                 zombiesToDiscard = 0
             }
 
             if (zombiesToDiscard != 0) {
                 zombiesAround.pickCardOfClass(Zombies::class.java)?.let {
-                    player.discard(it)
+                    playedBy.discard(it)
                     zombiesToDiscard -= 2
                 }
             }
@@ -31,10 +31,10 @@ class Dynamite : Action(2) {
             if (zombiesToDiscard != 0) {
                 zombiesAround.getSingleZombies()
                     .takeLast(zombiesToDiscard)
-                    .forEach { player.discard(it) }
+                    .forEach { playedBy.discard(it) }
             }
 
-            player.chooseWorstMovementCardForDynamite()?.let { player.discard(it) }
+            playedBy.chooseWorstMovementCardForDynamite()?.let { playedBy.discard(it) }
         }
     }
 }

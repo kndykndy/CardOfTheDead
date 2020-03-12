@@ -4,12 +4,13 @@ import cardofthedead.cards.Card
 import cardofthedead.cards.Deck
 import cardofthedead.cards.EmptyDeck
 import cardofthedead.cards.StandardDeck
+import cardofthedead.cards.Zombie
 import cardofthedead.game.Game
 import cardofthedead.players.Player
 
 object TestUtils {
 
-    private fun gameWithDeck(player: Player, deck: Deck<Card>) =
+    fun gameWithDeck(player: Player, deck: Deck<Card>) =
         Game.Builder(Player.of("John Doe"), Player.of("Jane Doe"), deck)
             .withPlayer(player)
             .build()
@@ -24,6 +25,9 @@ object TestUtils {
 
     fun Player.addCardsToCandidates(vararg listOfCards: Card) =
         listOfCards.forEach { this.candidatesToHand.addCard(it) }
+
+    fun Player.chasedByZombies(vararg listOfZombies: Zombie) =
+        listOfZombies.forEach { this.chasedByZombie(it) }
 
     fun <T : Card> Deck<T>.addCards(vararg listOfCards: T) =
         listOfCards.forEach { this.addCard(it) }

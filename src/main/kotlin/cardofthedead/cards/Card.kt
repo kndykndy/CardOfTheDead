@@ -7,8 +7,10 @@ abstract class Card {
 
     internal lateinit var gameContext: Game
 
-    open fun play(player: Player) {
-        throw IllegalStateException("${this::class.simpleName} cannot be played directly.")
+    open fun play(playedBy: Player) {
+        throw java.lang.IllegalStateException(
+            "${this::class.simpleName} cannot be played directly."
+        )
     }
 }
 
