@@ -111,7 +111,7 @@ abstract class Player(
         survivalPoints += pointsCount
     }
 
-    fun getZombiesAroundCount(): Int = zombiesAround.size()
+    fun getZombiesAroundCount(): Int = zombiesAround.cards.sumBy { it.zombiesOnCard }
 
     /**
      * Put a card, not belonging to any deck, to a discard deck.

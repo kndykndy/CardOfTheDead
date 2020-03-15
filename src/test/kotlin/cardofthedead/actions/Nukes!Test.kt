@@ -51,5 +51,6 @@ class `Nukes!Test` : StringSpec({
             player.hand.isEmpty() shouldBe true
             player.getZombiesAroundCount() shouldBe 0
         }
+        game.discardDeck.size() shouldBe 7 // all cards from hands and all zombie cards
     }
 })

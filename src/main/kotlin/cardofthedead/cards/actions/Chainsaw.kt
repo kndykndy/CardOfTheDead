@@ -20,7 +20,7 @@ class Chainsaw : Action(1) {
 
             zombiesAround.getSingleZombies()
                 .takeLast(2)
-                .forEach { playedBy.discard(it) }
+                .forEach { playedBy.discard(zombiesAround.pickCard(it)!!) }
         }
     }
 }

@@ -25,23 +25,20 @@ class BarricadeTest : StringSpec({
 
         val game = gameWithStandardDeck(player).apply { playDeck.addCards(bitten, armored, nukes) }
 
-        val playDeck = game.playDeck
-        val playerHand = player.hand
-
-        val gameDeckSize = playDeck.size()
-        val handSize = playerHand.size()
+        val gameDeckSize = game.playDeck.size()
+        val handSize = player.hand.size()
 
         // when
         player.play(Barricade().also { it.gameContext = game })
 
         // then
 
-        playerHand.size() shouldBe handSize + 2
-        listOf(armored, nukes).forEach { playerHand.pickCard(it) shouldNotBe null }
-        playerHand.pickCard(bitten) shouldBe null
+        player.hand.size() shouldBe handSize + 2
+        listOf(armored, nukes).forEach { player.hand.pickCard(it) shouldNotBe null }
+        player.hand.pickCard(bitten) shouldBe null
 
-        playDeck.size() shouldBe gameDeckSize - 2
-        playDeck.cards[0] shouldBe bitten
+        game.playDeck.size() shouldBe gameDeckSize - 2
+        game.playDeck.cards[0] shouldBe bitten
     }
 
     "should play Barricade if three cards left" {
@@ -55,16 +52,14 @@ class BarricadeTest : StringSpec({
 
         val game = gameWithEmptyDeck(player).apply { playDeck.addCards(bitten, armored, nukes) }
 
-        val playerHand = player.hand
-
         // when
         player.play(Barricade().also { it.gameContext = game })
 
         // then
 
-        playerHand.size() shouldBe 2
-        listOf(armored, nukes).forEach { playerHand.pickCard(it) shouldNotBe null }
-        playerHand.pickCard(bitten) shouldBe null
+        player.hand.size() shouldBe 2
+        listOf(armored, nukes).forEach { player.hand.pickCard(it) shouldNotBe null }
+        player.hand.pickCard(bitten) shouldBe null
 
         game.playDeck.size() shouldBe 1
         game.playDeck.cards[0] shouldBe bitten

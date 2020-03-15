@@ -21,21 +21,18 @@ class ArmoredTest : StringSpec({
 
         player.takeToHand(bitten)
 
-        val playDeck = game.playDeck
-        val playerHand = player.hand
-
-        val gameDeckSize = playDeck.size()
-        val handSize = playerHand.size()
+        val gameDeckSize = game.playDeck.size()
+        val handSize = player.hand.size()
 
         // when
         player.play(Armored())
 
         // then
 
-        playerHand.size() shouldBe handSize - 1
-        playerHand.cards shouldNotContain bitten
-        playDeck.size() shouldBe gameDeckSize + 1
-        playDeck.cards[0] shouldBe bitten
+        player.hand.size() shouldBe handSize - 1
+        player.hand.cards shouldNotContain bitten
+        game.playDeck.size() shouldBe gameDeckSize + 1
+        game.playDeck.cards[0] shouldBe bitten
     }
 
     "should play Armored if Bitten is not on hand" {
@@ -45,19 +42,16 @@ class ArmoredTest : StringSpec({
 
         val game = gameWithEmptyDeck(player)
 
-        val playDeck = game.playDeck
-        val playerHand = player.hand
-
-        val gameDeckSize = playDeck.size()
-        val handSize = playerHand.size()
+        val gameDeckSize = game.playDeck.size()
+        val handSize = player.hand.size()
 
         // when
         player.play(Armored())
 
         // then
 
-        playerHand.size() shouldBe handSize
-        playerHand.pickCardOfClass(Bitten::class.java) shouldBe null
-        playDeck.size() shouldBe gameDeckSize
+        player.hand.size() shouldBe handSize
+        player.hand.pickCardOfClass(Bitten::class.java) shouldBe null
+        game.playDeck.size() shouldBe gameDeckSize
     }
 })
