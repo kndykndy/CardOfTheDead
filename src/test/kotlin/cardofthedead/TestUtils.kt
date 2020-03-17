@@ -1,5 +1,6 @@
 package cardofthedead
 
+import cardofthedead.cards.Action
 import cardofthedead.cards.Card
 import cardofthedead.cards.Deck
 import cardofthedead.cards.EmptyDeck
@@ -28,6 +29,9 @@ object TestUtils {
 
     fun Player.chasedByZombies(vararg listOfZombies: Zombie) =
         listOfZombies.forEach { this.chasedByZombie(it) }
+
+    fun Player.addMovementPoints(vararg listOfActions: Action) =
+        listOfActions.forEach { this.addMovementPoints(it) }
 
     fun <T : Card> Deck<T>.addCards(vararg listOfCards: T) =
         listOfCards.forEach { this.addCard(it) }

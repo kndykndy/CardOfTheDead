@@ -2,6 +2,7 @@ package cardofthedead.actions
 
 import cardofthedead.TestUtils.chasedByZombies
 import cardofthedead.TestUtils.dummyPlayer
+import cardofthedead.TestUtils.gameWithDeck
 import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.cards.EmptyDeck
 import cardofthedead.cards.Zombie
@@ -29,7 +30,7 @@ class ChainsawTest : StringSpec({
             )
         }
 
-        val game = gameWithEmptyDeck(player)
+        val game = gameWithDeck(player, deck)
 
         val gameDiscardDeckSize = game.discardDeck.size()
 
@@ -71,7 +72,7 @@ class ChainsawTest : StringSpec({
             )
         }
 
-        val game = gameWithEmptyDeck(player)
+        val game = gameWithDeck(player, deck)
 
         val gameDiscardDeckSize = game.discardDeck.size()
 
@@ -96,7 +97,7 @@ class ChainsawTest : StringSpec({
             )
         }
 
-        val game = gameWithEmptyDeck(player)
+        val game = gameWithDeck(player, deck)
 
         val gameDiscardDeckSize = game.discardDeck.size()
 
@@ -120,7 +121,7 @@ class ChainsawTest : StringSpec({
             )
         }
 
-        val game = gameWithEmptyDeck(player)
+        val game = gameWithDeck(player, deck)
 
         val gameDiscardDeckSize = game.discardDeck.size()
 

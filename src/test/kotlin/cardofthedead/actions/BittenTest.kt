@@ -9,7 +9,7 @@ import io.kotest.matchers.shouldBe
 
 class BittenTest : StringSpec({
 
-    "should throw exception if playing Bitten" {
+    "should throw exception if played" {
         // given
 
         val player = dummyPlayer()

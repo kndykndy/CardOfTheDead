@@ -41,7 +41,7 @@ class BarricadeTest : StringSpec({
         game.playDeck.cards[0] shouldBe bitten
     }
 
-    "should play Barricade if three cards left" {
+    "should discard 1 card and take 2 cards if 3 cards left" {
         // given
 
         val bitten = Bitten()
@@ -65,7 +65,7 @@ class BarricadeTest : StringSpec({
         game.playDeck.cards[0] shouldBe bitten
     }
 
-    "should play Barricade if two cards left" {
+    "should discard 1 card and take 1 card if 2 cards left" {
         // given
 
         val armored = Armored()
@@ -87,7 +87,7 @@ class BarricadeTest : StringSpec({
         game.playDeck.cards[0] shouldBe armored
     }
 
-    "should play Barricade if one card left" {
+    "should discard 1 card and take no cards if 1 card left" {
         // given
 
         val nukes = `Nukes!`()

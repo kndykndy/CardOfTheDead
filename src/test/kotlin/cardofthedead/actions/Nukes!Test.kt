@@ -19,7 +19,7 @@ import io.kotest.matchers.shouldBe
 @Suppress("ClassName")
 class `Nukes!Test` : StringSpec({
 
-    "should play Nukes!" {
+    "should discard all cards from hands and all zombies" {
         // given
 
         val deck = EmptyDeck()

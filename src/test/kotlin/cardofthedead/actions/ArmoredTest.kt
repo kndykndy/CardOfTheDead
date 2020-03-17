@@ -10,7 +10,7 @@ import io.kotest.matchers.shouldBe
 
 class ArmoredTest : StringSpec({
 
-    "should play Armored if Bitten is on hand" {
+    "should put Bitten at bottom of deck" {
         // given
 
         val bitten = Bitten()
@@ -35,7 +35,7 @@ class ArmoredTest : StringSpec({
         game.playDeck.cards[0] shouldBe bitten
     }
 
-    "should play Armored if Bitten is not on hand" {
+    "should do nothing if no Bitten on hand" {
         // given
 
         val player = dummyPlayer()
