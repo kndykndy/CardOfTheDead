@@ -24,7 +24,7 @@ class Game(
     /**
      * Because of Horde cards per round taken by each turn will be two.
      */
-    private var cardsToPlay: Int = 1
+    internal var cardsToPlay: Int = 1
 
     val playersToZombiesToBeSurrounded = mapOf(2 to 5, 3 to 4, 4 to 4, 5 to 3)
     private val playersToZombiesToBeEaten = mapOf(2 to 7, 3 to 6, 4 to 6, 5 to 5)
@@ -149,6 +149,25 @@ class Game(
     /**
      * No output!
      */
+    internal fun getPrevPlayer(player: Player): Player {
+        var result = players.elementAt(players.size - 1)
+
+        val iterator = players.iterator()
+        while (iterator.hasNext()) {
+            val next = iterator.next()
+            if (next == player) {
+                return result
+            } else {
+                result = next
+            }
+        }
+
+        return players.elementAt(players.size - 1)
+    }
+
+    /**
+     * No output!
+     */
     internal fun getNextPlayer(afterPlayer: Player): Player {
         val iterator = players.iterator()
         while (iterator.hasNext()) {
@@ -254,7 +273,7 @@ class Game(
     ) {
 
         val players: MutableList<Player> = mutableListOf()
-         var deck: Deck<Card>
+        var deck: Deck<Card>
 
         init {
             withPlayer(player1)

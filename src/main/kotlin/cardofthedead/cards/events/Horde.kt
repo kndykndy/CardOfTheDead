@@ -5,7 +5,10 @@ import cardofthedead.players.Player
 
 class Horde : Event() {
 
+    /**
+     * Every survivor draws two cards in their turn till the end of a round.
+     */
     override fun play(playedBy: Player) {
-        println("${playedBy.name}'s skipping ${this::class.simpleName}")
+        gameContext.cardsToPlay = 2
     }
 }

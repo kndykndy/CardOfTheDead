@@ -5,7 +5,10 @@ import cardofthedead.players.Player
 
 class Cornered : Event() {
 
+    /**
+     * Discard all your movement cards.
+     */
     override fun play(playedBy: Player) {
-        println("${playedBy.name}'s skipping ${this::class.simpleName}")
+        playedBy.escapeCards.cards.forEach { playedBy.discard(it) }
     }
 }
