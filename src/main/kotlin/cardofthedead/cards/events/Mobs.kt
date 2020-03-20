@@ -11,11 +11,16 @@ class Mobs : Event() {
      * Otherwise put all your hand on the bottom of the deck.
      */
     override fun play(playedBy: Player) {
-        val pickCardOfClass = playedBy.hand.pickCardOfClass(Slugger::class.java)
-        if(pickCardOfClass!=null){
+        var currentPlayer = playedBy
+        do {
+            val pickCardOfClass = currentPlayer.hand.pickCardOfClass(Slugger::class.java)
+            if (pickCardOfClass == null) {
+                currentPlayer.hand.cards.forEach {
+                    gameContext.playDeck.addCardOnBottom(currentPlayer.hand.pickCard(it)!!)
+                }
+            }
 
-        } else {
-
-        }
+            currentPlayer = gameContext.getNextPlayer(currentPlayer)
+        } while (currentPlayer != playedBy)
     }
 }
