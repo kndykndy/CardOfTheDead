@@ -16,11 +16,7 @@ class Hide : Action(1) {
             val singleZombies = zombiesAround.getSingleZombies()
             if (singleZombies.isNotEmpty()) {
                 zombiesAround.pickCard(singleZombies.random())
-                    ?.let {
-                        gameContext
-                            .getNextPlayer(playedBy)
-                            .chasedByZombie(it)
-                    }
+                    ?.let(gameContext.getNextPlayer(playedBy)::chasedByZombie)
             }
         }
 

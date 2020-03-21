@@ -13,11 +13,8 @@ class Lure : Action(1) {
         val zombiesAround = playedBy.zombiesAround
         if (zombiesAround.isNotEmpty()) {
             zombiesAround.pickCard(
-                zombiesAround.getSingleZombies().random()
-            )?.let {
-                playedBy.choosePlayerToGiveZombieToForLure()
-                    .chasedByZombie(it)
-            }
+                zombiesAround.getSingleZombies().random() // todo will fail if empty
+            )?.let(playedBy.choosePlayerToGiveZombieToForLure()::chasedByZombie)
         }
     }
 }

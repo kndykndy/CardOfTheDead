@@ -67,12 +67,11 @@ class EasyPlayer(name: String) : Player(name) {
      */
     override fun chooseSinglePointCards(n: Int) {
         val actionCards = candidatesToHand.getActions()
-        val actionCardsSubset = if (actionCards.size > n) {
+        if (actionCards.size > n) {
             actionCards.shuffled().take(n)
         } else {
             actionCards
-        }
-        actionCardsSubset.forEach { candidatesToHand.pickCard(it)?.let(hand::addCard) }
+        }.forEach { candidatesToHand.pickCard(it)?.let(hand::addCard) }
     }
 
     /**

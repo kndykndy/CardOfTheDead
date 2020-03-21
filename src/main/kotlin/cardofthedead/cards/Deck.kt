@@ -45,7 +45,7 @@ open class Deck<T : Card> {
     fun pickCardOfClass(cKlass: Class<out T>): T? {
         return cards.filterIsInstance(cKlass)
             .firstOrNull()
-            ?.let { pickCard(it) }
+            ?.let(::pickCard)
     }
 
     fun pickRandomCard(): Card? = if (isNotEmpty()) pickCard(cards.random()) else null

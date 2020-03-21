@@ -9,8 +9,7 @@ class Armored : Action(1) {
      * Put bitten on the bottom of the deck from your hand.
      */
     override fun play(playedBy: Player) {
-        playedBy.hand.pickCardOfClass(Bitten::class.java)?.let {
-            playedBy.putOnBottom(it)
-        }
+        playedBy.hand.pickCardOfClass(Bitten::class.java)
+            ?.let(playedBy::putOnBottom)
     }
 }

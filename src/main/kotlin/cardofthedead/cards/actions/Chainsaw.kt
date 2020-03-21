@@ -13,14 +13,11 @@ class Chainsaw : Action(1) {
     override fun play(playedBy: Player) {
         val zombiesAround = playedBy.zombiesAround
         if (zombiesAround.isNotEmpty()) {
-            zombiesAround.pickCardOfClass(Zombies::class.java)?.let {
-                playedBy.discard(it)
-                return
-            }
-
-            zombiesAround.getSingleZombies()
-                .takeLast(2)
-                .forEach { zombiesAround.pickCard(it)?.let(playedBy::discard) }
+            zombiesAround.pickCardOfClass(Zombies::class.java)
+                ?.let(playedBy::discard)
+                ?: zombiesAround.getSingleZombies()
+                    .takeLast(2)
+                    .forEach { zombiesAround.pickCard(it)?.let(playedBy::discard) }
         }
     }
 }

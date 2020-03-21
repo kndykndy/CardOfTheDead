@@ -11,9 +11,6 @@ class Pillage : Action(2) {
     override fun play(playedBy: Player) {
         gameContext.players
             .filterNot { it == playedBy }
-            .forEach {
-                it.hand.pickRandomCard()
-                    ?.let(playedBy::takeToHand)
-            }
+            .forEach { it.hand.pickRandomCard()?.let(playedBy::takeToHand) }
     }
 }

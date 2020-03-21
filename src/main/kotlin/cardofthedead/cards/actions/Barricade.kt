@@ -11,9 +11,8 @@ class Barricade : Action(1) {
     override fun play(playedBy: Player) {
         playedBy.pickCards(3)
 
-        playedBy.chooseWorstCandidateForBarricade()?.let {
-            gameContext.playDeck.addCardOnBottom(it)
-        }
+        playedBy.chooseWorstCandidateForBarricade()
+            ?.let(gameContext.playDeck::addCardOnBottom)
 
         repeat(2) {
             playedBy.takeTopCandidateToHand()
