@@ -36,7 +36,7 @@ class Game(
         println("Starting a new Game of the Dead!")
 
         playDeck.cards.forEach { it.gameContext = this }
-        println("${playDeck.cards.size} cards in deck.")
+        println("${playDeck.size()} cards in deck.")
 
         players.forEach { it.gameContext = this }
         println("Tonight we're having ${players.size} players: ${players.joinToString { it.name }}.")

@@ -130,11 +130,15 @@ abstract class Player(
         gameContext.discardDeck.merge(zombiesAround)
     }
 
+    fun discardEscapeCards() {
+        gameContext.discardDeck.merge(escapeCards)
+    }
+
     fun discardAllCards() {
         discardHand()
         discardCandidatesCards()
         discardZombiesAround()
-        gameContext.discardDeck.merge(escapeCards)
+        discardEscapeCards()
     }
 
     /**

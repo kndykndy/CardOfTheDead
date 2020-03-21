@@ -32,7 +32,6 @@ class Dynamite : Action(2) {
                 zombiesAround.getSingleZombies()
                     .takeLast(zombiesToDiscard)
                     .forEach { playedBy.discard(zombiesAround.pickCard(it)!!) }
-
             }
         }
 

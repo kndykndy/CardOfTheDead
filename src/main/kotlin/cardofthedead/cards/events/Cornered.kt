@@ -9,6 +9,6 @@ class Cornered : Event() {
      * Discard all your movement cards.
      */
     override fun play(playedBy: Player) {
-        playedBy.escapeCards.cards.forEach { playedBy.discard(it) }
+        playedBy.discardEscapeCards()
     }
 }

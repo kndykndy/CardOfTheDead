@@ -50,7 +50,7 @@ class StandardDeck : Deck<Card>() {
         ),
         Hide::class to CardDescriptor(
             4,
-            "give one of your zombie cards to the next player. " +
+            "give one of your Zombie cards to the next player. " +
                     "you may choose to draw no cards on your next turn."
         ),
         Lure::class to CardDescriptor(4, "give one of your zombie cards to any player"),
