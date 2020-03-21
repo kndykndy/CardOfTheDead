@@ -97,7 +97,7 @@ class Game(
 
         val decisionToPlayCardFromHand = currentPlayer.decideToPlayCardFromHand()
         if (decisionToPlayCardFromHand.isGonnaPlay()) {
-            val actionCardFromHand: Card = decisionToPlayCardFromHand.card!!
+            val actionCardFromHand: Card = decisionToPlayCardFromHand.card ?: return
 
             if (decisionToPlayCardFromHand.wayToPlayCard == WayToPlayCard.PLAY_AS_ACTION) {
                 println("${currentPlayer.name} decided to play ${actionCardFromHand::class.simpleName}.")
@@ -243,9 +243,8 @@ class Game(
     private fun isRoundOverBecauseOfEmptyDeck(): Boolean =
         if (playDeck.isEmpty()) {
             val maxMovementPoints =
-                players.maxBy { player ->
-                    player.getMovementPointsCount()
-                }!!.getMovementPointsCount()
+                players.maxBy { it.getMovementPointsCount() }
+                    ?.getMovementPointsCount()
             val winnersList = mutableListOf<Player>()
             players.forEach { player ->
                 player.addSurvivalPoints(player.getMovementPointsCount())

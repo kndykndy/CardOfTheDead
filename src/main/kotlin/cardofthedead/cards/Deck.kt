@@ -28,6 +28,14 @@ open class Deck<T : Card> {
         deck.cards.clear()
     }
 
+    // Checking cards
+
+    fun hasCard(card: T): Boolean = cards.contains(card)
+
+    fun hasCardOfClass(cKlass: Class<out T>): Boolean {
+        return cards.filterIsInstance(cKlass).firstOrNull() != null
+    }
+
     // Picking cards
 
     fun pickCard(card: T): T? = if (cards.remove(card)) card else null

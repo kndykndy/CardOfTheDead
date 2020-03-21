@@ -10,7 +10,6 @@ import cardofthedead.cards.actions.Bitten
 import cardofthedead.cards.actions.`Nukes!`
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 
 class BarricadeTest : StringSpec({
 
@@ -34,8 +33,8 @@ class BarricadeTest : StringSpec({
         // then
 
         player.hand.size() shouldBe handSize + 2
-        listOf(armored, nukes).forEach { player.hand.pickCard(it) shouldNotBe null }
-        player.hand.pickCard(bitten) shouldBe null
+        listOf(armored, nukes).forEach { player.hand.hasCard(it) shouldBe true }
+        player.hand.hasCard(bitten) shouldBe false
 
         game.playDeck.size() shouldBe gameDeckSize - 2
         game.playDeck.cards[0] shouldBe bitten
@@ -58,8 +57,8 @@ class BarricadeTest : StringSpec({
         // then
 
         player.hand.size() shouldBe 2
-        listOf(armored, nukes).forEach { player.hand.pickCard(it) shouldNotBe null }
-        player.hand.pickCard(bitten) shouldBe null
+        listOf(armored, nukes).forEach { player.hand.hasCard(it) shouldBe true }
+        player.hand.hasCard(bitten) shouldBe false
 
         game.playDeck.size() shouldBe 1
         game.playDeck.cards[0] shouldBe bitten
@@ -81,7 +80,7 @@ class BarricadeTest : StringSpec({
         // then
 
         player.hand.size() shouldBe 1
-        player.hand.pickCard(nukes) shouldNotBe null
+        player.hand.hasCard(nukes) shouldBe true
 
         game.playDeck.size() shouldBe 1
         game.playDeck.cards[0] shouldBe armored

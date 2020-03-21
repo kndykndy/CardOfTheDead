@@ -13,10 +13,10 @@ class Mobs : Event() {
     override fun play(playedBy: Player) {
         var currentPlayer = playedBy
         do {
-            val pickCardOfClass = currentPlayer.hand.pickCardOfClass(Slugger::class.java)
-            if (pickCardOfClass == null) {
-                currentPlayer.hand.cards.forEach {
-                    gameContext.playDeck.addCardOnBottom(currentPlayer.hand.pickCard(it)!!)
+            val hand = currentPlayer.hand
+            if (hand.hasCardOfClass(Slugger::class.java)) {
+                hand.cards.forEach {
+                    hand.pickCard(it)?.let { card -> gameContext.playDeck.addCardOnBottom(card) }
                 }
             }
 

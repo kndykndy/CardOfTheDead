@@ -67,17 +67,12 @@ class EasyPlayer(name: String) : Player(name) {
      */
     override fun chooseSinglePointCards(n: Int) {
         val actionCards = candidatesToHand.getActions()
-        if (actionCards.size > n) {
-            actionCards
-                .shuffled()
-                .take(n)
-                .map { candidatesToHand.pickCard(it) }
-                .forEach { hand.addCard(it!!) }
+        val actionCardsSubset = if (actionCards.size > n) {
+            actionCards.shuffled().take(n)
         } else {
             actionCards
-                .map { candidatesToHand.pickCard(it) }
-                .forEach { hand.addCard(it!!) }
         }
+        actionCardsSubset.forEach { candidatesToHand.pickCard(it)?.let(hand::addCard) }
     }
 
     /**
@@ -115,10 +110,10 @@ class EasyPlayer(name: String) : Player(name) {
 
     override fun chooseWorstCandidateForBarricade(): Card? {
         val worstCandidate = candidatesToHand.cards
-            .map { Pair(it, cardTypeToRating[it::class]) }
-            .minBy { it.second!! }
+            .map { Pair(it, cardTypeToRating.getValue(it::class)) }
+            .minBy { it.second }
             ?.first
-        
+
         return when {
             worstCandidate != null -> candidatesToHand.pickCard(worstCandidate)
             else -> null

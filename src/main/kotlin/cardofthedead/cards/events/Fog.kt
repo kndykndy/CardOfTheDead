@@ -2,7 +2,6 @@ package cardofthedead.cards.events
 
 import cardofthedead.cards.Event
 import cardofthedead.cards.Zombie
-import cardofthedead.cards.zombies.Zombies
 import cardofthedead.players.Player
 
 class Fog : Event() {
@@ -20,15 +19,15 @@ class Fog : Event() {
             var currentPlayer = playedBy
             do {
                 val prevPlayer = gameContext.getPrevPlayer(currentPlayer)
-                prevPlayer.hand.pickRandomCard()?.let { currentPlayer.hand.addCard(it) }
+                prevPlayer.hand.pickRandomCard()?.let(currentPlayer::takeToHand)
 
                 currentPlayer = gameContext.getNextPlayer(currentPlayer)
             } while (currentPlayer != playedBy)
         }
 
         gameContext.players.forEach { player ->
-            player.hand.pickCardOfClass(Zombies::class.java)?.let {
-                player.chasedByZombie(playedBy.discard(it) as Zombie)
+            while (player.hand.hasCardOfClass(Zombie::class.java)) {
+                player.chasedByZombie(player.hand.pickCardOfClass(Zombie::class.java) as Zombie)
             }
         }
     }

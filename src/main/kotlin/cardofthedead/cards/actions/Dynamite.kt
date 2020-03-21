@@ -31,10 +31,11 @@ class Dynamite : Action(2) {
             if (zombiesToDiscard != 0) {
                 zombiesAround.getSingleZombies()
                     .takeLast(zombiesToDiscard)
-                    .forEach { playedBy.discard(zombiesAround.pickCard(it)!!) }
+                    .forEach { zombiesAround.pickCard(it)?.let(playedBy::discard) }
             }
         }
 
-        playedBy.chooseWorstMovementCardForDynamite()?.let { playedBy.discard(it) }
+        playedBy.chooseWorstMovementCardForDynamite()
+            ?.let(playedBy::discard)
     }
 }

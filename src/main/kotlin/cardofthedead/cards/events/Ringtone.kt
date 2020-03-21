@@ -15,7 +15,7 @@ class Ringtone : Event() {
                 val zombiesAround = player.zombiesAround
                 zombiesAround.getSingleZombies()
                     .random()
-                    .also { playedBy.chasedByZombie(zombiesAround.pickCard(it)!!) }
+                    .also { zombiesAround.pickCard(it)?.let(playedBy::chasedByZombie) }
             }
         }
     }

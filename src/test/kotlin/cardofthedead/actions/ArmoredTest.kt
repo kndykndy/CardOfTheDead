@@ -51,7 +51,7 @@ class ArmoredTest : StringSpec({
         // then
 
         player.hand.size() shouldBe handSize
-        player.hand.pickCardOfClass(Bitten::class.java) shouldBe null
+        player.hand.hasCardOfClass(Bitten::class.java) shouldBe false
         game.playDeck.size() shouldBe gameDeckSize
     }
 })

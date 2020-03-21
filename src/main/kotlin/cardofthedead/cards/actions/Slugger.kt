@@ -14,16 +14,16 @@ class Slugger : Action(1) {
             // discard a zombie
 
             val zombiesAround = playedBy.zombiesAround
-            val zombieCard = zombiesAround.pickCard(
+            zombiesAround.pickCard(
                 zombiesAround.getSingleZombies().random()
-            )
-            playedBy.discard(zombieCard!!)
+            )?.let(playedBy::discard)
         } else {
             // take a card from player
 
-            playedBy.hand.addCard(
-                playedBy.choosePlayerToTakeCardFromForSlugger().hand.pickRandomCard()!!
-            )
+            playedBy
+                .choosePlayerToTakeCardFromForSlugger()
+                .hand.pickRandomCard()
+                ?.let(playedBy::takeToHand)
         }
     }
 }
