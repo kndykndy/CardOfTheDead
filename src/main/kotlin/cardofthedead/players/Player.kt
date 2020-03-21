@@ -82,7 +82,9 @@ abstract class Player(
             null
         }
 
-    // todo think over joining this func with chasedbyzombie
+    /**
+     * Do not combine with chasedByZombie cause they have different semantics.
+     */
     fun takeToHand(card: Card) = hand.addCard(card)
 
     fun takeTopCandidateToHand() = candidatesToHand.pickTopCard()?.let(hand::addCard)
