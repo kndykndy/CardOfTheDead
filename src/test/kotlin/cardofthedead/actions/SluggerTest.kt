@@ -1,7 +1,8 @@
 package cardofthedead.actions
 
-import cardofthedead.TestUtils
 import cardofthedead.TestUtils.chasedByZombies
+import cardofthedead.TestUtils.dummyPlayer
+import cardofthedead.TestUtils.gameWithDeck
 import cardofthedead.TestUtils.takeToHand
 import cardofthedead.cards.EmptyDeck
 import cardofthedead.cards.Zombie
@@ -23,7 +24,7 @@ class SluggerTest : StringSpec({
 
         val deck = EmptyDeck()
 
-        val player1 = spyk(TestUtils.dummyPlayer()).apply {
+        val player1 = spyk(dummyPlayer()).apply {
             chasedByZombies(
                 deck.addCard(LadZombie()) as Zombie,
                 deck.addCard(BrideZombie()) as Zombie,
@@ -32,7 +33,7 @@ class SluggerTest : StringSpec({
         }
         every { player1.decideToDiscardZombieOrTakeCardForSlugger() } returns true
 
-        val game = TestUtils.gameWithDeck(player1, deck)
+        val game = gameWithDeck(player1, deck)
 
         // when
         player1.play(Slugger().apply { gameContext = game })
@@ -49,10 +50,10 @@ class SluggerTest : StringSpec({
 
         val deck = EmptyDeck()
 
-        val player1 = spyk(TestUtils.dummyPlayer())
+        val player1 = spyk(dummyPlayer())
         every { player1.decideToDiscardZombieOrTakeCardForSlugger() } returns true
 
-        val game = TestUtils.gameWithDeck(player1, deck)
+        val game = gameWithDeck(player1, deck)
 
         // when
         player1.play(Slugger().apply { gameContext = game })
@@ -69,10 +70,10 @@ class SluggerTest : StringSpec({
 
         val deck = EmptyDeck()
 
-        val player1 = spyk(TestUtils.dummyPlayer())
+        val player1 = spyk(dummyPlayer())
         every { player1.decideToDiscardZombieOrTakeCardForSlugger() } returns false
 
-        val game = TestUtils.gameWithDeck(player1, deck)
+        val game = gameWithDeck(player1, deck)
 
         val player2 = game.getNextPlayer(player1).apply {
             takeToHand(deck.addCard(Chainsaw()), deck.addCard(Dynamite()))
@@ -94,10 +95,10 @@ class SluggerTest : StringSpec({
 
         val deck = EmptyDeck()
 
-        val player1 = spyk(TestUtils.dummyPlayer())
+        val player1 = spyk(dummyPlayer())
         every { player1.decideToDiscardZombieOrTakeCardForSlugger() } returns false
 
-        val game = TestUtils.gameWithDeck(player1, deck)
+        val game = gameWithDeck(player1, deck)
 
         val player2 = game.getNextPlayer(player1)
 

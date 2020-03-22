@@ -18,19 +18,32 @@ abstract class Player(
     internal val hand: Deck<Card> = Deck()
 
     /**
-     * Temporary cards deck.
+     * Temporary cards that may transition to hand eventually.
+     * For certain actions.
      */
     internal val candidatesToHand: Deck<Card> = Deck()
 
     /**
      * Zombies that chase a player.
+     * For this round.
      */
     internal val zombiesAround: Deck<Zombie> = Deck()
 
+    /**
+     * Action cards if gathered enough let player to escape from a round.
+     * For this round.
+     */
     internal val escapeCards: Deck<Action> = Deck()
 
+    /**
+     * Sum of all movement points from all escape cards played today for the player.
+     * For the whole game.
+     */
     private var survivalPoints: Int = 0
 
+    /**
+     * Amount of draws for player for a turn.
+     */
     protected var doDrawCardThisTurn: Boolean = true
 
     // Decision funcs
@@ -97,12 +110,18 @@ abstract class Player(
         println("${this.name} is chased by ${getZombiesAroundCount()} zombies now.")
     }
 
+    /**
+     * Add action card as an escape card.
+     */
     fun addMovementPoints(actionCard: Action) {
         escapeCards.addCard(actionCard)
 
         println("${this.name} has ${getMovementPointsCount()} movement points now.")
     }
 
+    /**
+     * Calculates sum of movement points for each escape card.
+     */
     fun getMovementPointsCount(): Int = escapeCards.getMovementPoints()
 
     fun addSurvivalPoints(pointsCount: Int) {

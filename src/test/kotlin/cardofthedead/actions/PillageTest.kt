@@ -1,6 +1,8 @@
 package cardofthedead.actions
 
 import cardofthedead.TestUtils
+import cardofthedead.TestUtils.dummyPlayer
+import cardofthedead.TestUtils.gameWithDeck
 import cardofthedead.TestUtils.takeToHand
 import cardofthedead.cards.EmptyDeck
 import cardofthedead.cards.actions.Bitten
@@ -20,11 +22,11 @@ class PillageTest : StringSpec({
 
         val deck = EmptyDeck()
 
-        val player1 = TestUtils.dummyPlayer().apply {
+        val player1 = dummyPlayer().apply {
             takeToHand(deck.addCard(Slugger()), deck.addCard(Hide()), deck.addCard(Lure()))
         }
 
-        val game = TestUtils.gameWithDeck(player1, deck)
+        val game = gameWithDeck(player1, deck)
 
         val player2 = game.getNextPlayer(player1).apply {
             takeToHand(deck.addCard(Chainsaw()), deck.addCard(Dynamite()))
