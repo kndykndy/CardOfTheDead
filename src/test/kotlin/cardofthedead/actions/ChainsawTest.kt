@@ -32,15 +32,13 @@ class ChainsawTest : StringSpec({
 
         val game = gameWithDeck(player, deck)
 
-        val gameDiscardDeckSize = game.discardDeck.size()
-
         // when
         player.play(Chainsaw())
 
         // then
 
-        game.discardDeck.size() shouldBe gameDiscardDeckSize + 2
-        player.getZombiesAroundCount() shouldBe 1
+        game.discardDeck.size() shouldBe 2 // Any 2 Zombie
+        player.getZombiesAroundCount() shouldBe 1 // Any Zombie
     }
 
     "should do nothing when no zombies around" {
@@ -50,14 +48,12 @@ class ChainsawTest : StringSpec({
 
         val game = gameWithEmptyDeck(player)
 
-        val gameDiscardDeckSize = game.discardDeck.size()
-
         // when
         player.play(Chainsaw())
 
         // then
 
-        game.discardDeck.size() shouldBe gameDiscardDeckSize
+        game.discardDeck.size() shouldBe 0
         player.getZombiesAroundCount() shouldBe 0
     }
 
@@ -74,14 +70,12 @@ class ChainsawTest : StringSpec({
 
         val game = gameWithDeck(player, deck)
 
-        val gameDiscardDeckSize = game.discardDeck.size()
-
         // when
         player.play(Chainsaw())
 
         // then
 
-        game.discardDeck.size() shouldBe gameDiscardDeckSize + 1
+        game.discardDeck.size() shouldBe 1 // RedneckZombie
         player.getZombiesAroundCount() shouldBe 0
     }
 
@@ -99,15 +93,13 @@ class ChainsawTest : StringSpec({
 
         val game = gameWithDeck(player, deck)
 
-        val gameDiscardDeckSize = game.discardDeck.size()
-
         // when
         player.play(Chainsaw())
 
         // then
 
-        game.discardDeck.size() shouldBe gameDiscardDeckSize + 1
-        player.getZombiesAroundCount() shouldBe 1
+        game.discardDeck.size() shouldBe 1 // Zombies
+        player.getZombiesAroundCount() shouldBe 1 // RedneckZombie
     }
 
     "should do nothing when only Zombies!!! around" {
@@ -123,14 +115,12 @@ class ChainsawTest : StringSpec({
 
         val game = gameWithDeck(player, deck)
 
-        val gameDiscardDeckSize = game.discardDeck.size()
-
         // when
         player.play(Chainsaw())
 
         // then
 
-        game.discardDeck.size() shouldBe gameDiscardDeckSize
-        player.getZombiesAroundCount() shouldBe 3
+        game.discardDeck.size() shouldBe 0
+        player.getZombiesAroundCount() shouldBe 3 // Zombies!!!
     }
 })

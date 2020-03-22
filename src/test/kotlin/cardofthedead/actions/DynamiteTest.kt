@@ -27,14 +27,12 @@ class DynamiteTest : StringSpec({
 
         val game = gameWithEmptyDeck(player)
 
-        val gameDiscardDeckSize = game.discardDeck.size()
-
         // when
         player.play(Dynamite().apply { gameContext = game })
 
         // then
 
-        game.discardDeck.size() shouldBe gameDiscardDeckSize + 4 // 3 zombies, 1 Armored
+        game.discardDeck.size() shouldBe 4 // 3 zombies, 1 Armored
         player.getZombiesAroundCount() shouldBe 1
 
         player.getMovementPointsCount() shouldBe 1
@@ -49,14 +47,12 @@ class DynamiteTest : StringSpec({
 
         val game = gameWithEmptyDeck(player)
 
-        val gameDiscardDeckSize = game.discardDeck.size()
-
         // when
         player.play(Dynamite().apply { gameContext = game })
 
         // then
 
-        game.discardDeck.size() shouldBe gameDiscardDeckSize + 1
+        game.discardDeck.size() shouldBe 1
         player.getZombiesAroundCount() shouldBe 0
 
         player.getMovementPointsCount() shouldBe 0
@@ -71,14 +67,12 @@ class DynamiteTest : StringSpec({
 
         val game = gameWithEmptyDeck(player)
 
-        val gameDiscardDeckSize = game.discardDeck.size()
-
         // when
         player.play(Dynamite().apply { gameContext = game })
 
         // then
 
-        game.discardDeck.size() shouldBe gameDiscardDeckSize + 1 // 1 zombie
+        game.discardDeck.size() shouldBe 1 // 1 zombie
         player.getZombiesAroundCount() shouldBe 0
 
         player.getMovementPointsCount() shouldBe 0
@@ -94,14 +88,12 @@ class DynamiteTest : StringSpec({
 
         val game = gameWithEmptyDeck(player)
 
-        val gameDiscardDeckSize = game.discardDeck.size()
-
         // when
         player.play(Dynamite().apply { gameContext = game })
 
         // then
 
-        game.discardDeck.size() shouldBe gameDiscardDeckSize + 2 // Zombies!!!, Armored
+        game.discardDeck.size() shouldBe 2 // Zombies!!!, Armored
         player.getZombiesAroundCount() shouldBe 0
 
         player.getMovementPointsCount() shouldBe 0
@@ -117,14 +109,12 @@ class DynamiteTest : StringSpec({
 
         val game = gameWithEmptyDeck(player)
 
-        val gameDiscardDeckSize = game.discardDeck.size()
-
         // when
         player.play(Dynamite().apply { gameContext = game })
 
         // then
 
-        game.discardDeck.size() shouldBe gameDiscardDeckSize + 3 // Zombies, LadZombie, Armored
+        game.discardDeck.size() shouldBe 3 // Zombies, LadZombie, Armored
         player.getZombiesAroundCount() shouldBe 0
 
         player.getMovementPointsCount() shouldBe 0

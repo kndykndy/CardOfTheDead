@@ -63,7 +63,7 @@ abstract class Player(
     /**
      * Picks N top cards from the play deck to the candidates deck.
      */
-    fun pickCards(n: Int) {
+    fun pickCandidateCards(n: Int) {
         repeat(n) {
             gameContext.playDeck.pickTopCard()?.let(candidatesToHand::addCard)
         }
@@ -86,8 +86,6 @@ abstract class Player(
      * Do not combine with chasedByZombie cause they have different semantics.
      */
     fun takeToHand(card: Card) = hand.addCard(card)
-
-    fun takeTopCandidateToHand() = candidatesToHand.pickTopCard()?.let(hand::addCard)
 
     fun putOnBottom(card: Card) = gameContext.playDeck.addCardOnBottom(card)
 

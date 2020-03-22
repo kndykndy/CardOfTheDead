@@ -47,6 +47,7 @@ class `Nukes!Test` : StringSpec({
         player1.play(`Nukes!`().apply { gameContext = game })
 
         // then
+
         setOf(player1, player2, player3).forEach { player ->
             player.hand.isEmpty() shouldBe true
             player.getZombiesAroundCount() shouldBe 0

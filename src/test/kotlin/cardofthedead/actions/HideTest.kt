@@ -38,8 +38,8 @@ class HideTest : StringSpec({
 
         // then
 
-        player1.getZombiesAroundCount() shouldBe 2
-        player2.getZombiesAroundCount() shouldBe 1
+        player1.getZombiesAroundCount() shouldBe 2 // Any 2 Zombies
+        player2.getZombiesAroundCount() shouldBe 1 // Any Zombie
     }
 
     "should not give zombie cards if no Zombie cards" {
@@ -63,7 +63,7 @@ class HideTest : StringSpec({
 
         // then
 
-        player1.getZombiesAroundCount() shouldBe 5
+        player1.getZombiesAroundCount() shouldBe 5 // Zombies, Zombies!!!
         player2.getZombiesAroundCount() shouldBe 0
     }
 })

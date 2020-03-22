@@ -132,7 +132,7 @@ class Game(
 
         // initial dealing
         players.forEach {
-            it.pickCards(10)
+            it.pickCandidateCards(10)
             it.chooseSinglePointCards(3)
         }
         players.forEach { it.discardCandidatesCards() }
