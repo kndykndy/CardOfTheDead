@@ -10,7 +10,8 @@ import cardofthedead.game.Game
 import kotlin.random.Random
 
 abstract class Player(
-    val name: String
+    val name: String,
+    val sex: Sex?
 ) {
 
     internal lateinit var gameContext: Game
@@ -167,15 +168,25 @@ abstract class Player(
         println("Oops... ${this.name} was eaten by zombies.")
     }
 
+    override fun toString(): String {
+        return "$name: " +
+                "hnd=$hand, " +
+                "cnddts=$candidatesToHand, " +
+                "zmbs=$zombiesAround (${getZombiesAroundCount()}), " +
+                "escp=$escapeCards (${getMovementPointsCount()}), " +
+                "srvvl=$survivalPoints"
+    }
+
     companion object {
 
-        fun of(name: String, level: Level? = Level.EASY): Player =
+        fun of(name: String, level: Level? = Level.EASY, sex: Sex? = Sex.MALE): Player =
             if (level != null) {
-                if (level == Level.HARD) HardPlayer(name) else EasyPlayer(name)
+                if (level == Level.HARD) HardPlayer(name, sex) else EasyPlayer(name, sex)
             } else {
-                if (Random.nextBoolean()) HardPlayer(name) else EasyPlayer(name)
+                if (Random.nextBoolean()) HardPlayer(name, sex) else EasyPlayer(name, sex)
             }
     }
 }
 
 enum class Level { EASY, HARD }
+enum class Sex { MALE, FEMALE }

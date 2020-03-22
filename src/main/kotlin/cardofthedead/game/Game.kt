@@ -10,7 +10,7 @@ import cardofthedead.players.Player
 import kotlin.random.Random
 
 class Game(
-    internal val players: MutableList<Player>
+    internal val players: MutableList<Player> // tod think over using queue
 ) {
 
     private val deadPlayers: MutableList<Player> = mutableListOf()
@@ -42,7 +42,7 @@ class Game(
         println("Tonight we're having ${players.size} players: ${players.joinToString { it.name }}.")
 
         val player = lastPlayerWentToShoppingMall()
-        println("${player.name} was the last who went to shopping mall!")
+        println("${player.name} was the last who went to shopping mall, he's starting!")
         winners.add(listOf(player))
     }
 
@@ -60,7 +60,8 @@ class Game(
         println("${currentPlayer.name}'s starting!")
 
         while (isRoundRunning()) {
-            repeat(cardsToPlay) { playTurn(currentPlayer) }
+            repeat(cardsToPlay) { playTurn(currentPlayer) } // todo rework!!!
+            // as playing from hand is possible not for every draw but at the end
 
             currentPlayer = getNextPlayer(currentPlayer)
             println("${currentPlayer.name}'s turn now!")
@@ -70,7 +71,8 @@ class Game(
     private fun playTurn(currentPlayer: Player) {
         when (val drawnCard = currentPlayer.drawTopCard()) {
             is Action -> {
-                println("${currentPlayer.name} draws card to hand.")
+//                println("${currentPlayer.name} draws card to hand.")
+                println("DEBUG: ${currentPlayer.name} draws ${drawnCard::class.simpleName} to hand.")
                 currentPlayer.takeToHand(drawnCard)
             }
             is Zombie -> {
@@ -117,10 +119,14 @@ class Game(
         } else {
             println("${currentPlayer.name} decided not to play card from hand.")
         }
+
+        println("DEBUG: $currentPlayer")
     }
 
     private fun prepareForRound() {
         println("Preparing for round...")
+
+        cardsToPlay = 1
 
         players.addAll(deadPlayers)
         deadPlayers.clear()
@@ -131,11 +137,13 @@ class Game(
         playDeck.shuffle() // before initial dealing
 
         // initial dealing
-        players.forEach {
-            it.pickCandidateCards(10)
-            it.chooseSinglePointCards(3)
+        players.forEach { player ->
+            player.pickCandidateCards(10)
+            player.chooseSinglePointCards(3)
+            println("DEBUG: ${player.name} starts with ${player.hand}")
         }
         players.forEach { it.discardCandidatesCards() }
+        playDeck.merge(discardDeck)
 
         playDeck.shuffle()
     }
@@ -143,14 +151,13 @@ class Game(
     /**
      * No output!
      */
-    private fun getFirstPlayer(): Player =
-        winners[winners.size - 1].elementAt(Random.nextInt(winners.size))
+    private fun getFirstPlayer(): Player = winners.last().random()
 
     /**
      * No output!
      */
     internal fun getPrevPlayer(player: Player): Player {
-        var result = players.elementAt(players.size - 1)
+        var result = players.last()
 
         val iterator = players.iterator()
         while (iterator.hasNext()) {
@@ -162,7 +169,7 @@ class Game(
             }
         }
 
-        return players.elementAt(players.size - 1)
+        return players.last()
     }
 
     /**
@@ -173,11 +180,14 @@ class Game(
         while (iterator.hasNext()) {
             if (iterator.next() == afterPlayer) {
                 if (iterator.hasNext()) {
-                    return iterator.next()
+                    val nextPlayer = iterator.next()
+                    println("DEBUG: Next player after ${afterPlayer.name} is ${nextPlayer.name}")
+                    return nextPlayer
                 }
             }
         }
-        return players.elementAt(0)
+        println("DEBUG: Next player after ${afterPlayer.name} is ${players.first().name}")
+        return players.first()
     }
 
     /**

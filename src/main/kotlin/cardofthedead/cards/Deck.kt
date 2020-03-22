@@ -49,6 +49,9 @@ open class Deck<T : Card> {
     }
 
     fun pickRandomCard(): Card? = if (isNotEmpty()) pickCard(cards.random()) else null
+
+    override fun toString(): String =
+        "[${cards.map { it::class.simpleName }.joinToString(",")}]"
 }
 
 class EmptyDeck : Deck<Card>()

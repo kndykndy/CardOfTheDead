@@ -31,7 +31,10 @@ import cardofthedead.cards.zombies.Zombies
 import cardofthedead.cards.zombies.`Zombies!!!`
 import kotlin.random.Random
 
-class EasyPlayer(name: String) : Player(name) {
+class EasyPlayer(
+    name: String,
+    sex: Sex?
+) : Player(name, sex) {
 
     /**
      * Worst cards rating. The bigger the better.
@@ -66,7 +69,7 @@ class EasyPlayer(name: String) : Player(name) {
      * Picks random N cards from the candidates deck.
      */
     override fun chooseSinglePointCards(n: Int) {
-        val actionCards = candidatesToHand.getActions()
+        val actionCards = candidatesToHand.getActions().filter { it.movementPoints == 1 }
         if (actionCards.size > n) {
             actionCards.shuffled().take(n)
         } else {

@@ -3,7 +3,10 @@ package cardofthedead.players
 import cardofthedead.cards.Card
 import cardofthedead.cards.PlayCardDecision
 
-class HardPlayer(name: String) : Player(name) {
+class HardPlayer(
+    name: String,
+    sex: Sex?
+) : Player(name, sex) {
 
     override fun chooseSinglePointCards(n: Int) {
         TODO("not implemented")
