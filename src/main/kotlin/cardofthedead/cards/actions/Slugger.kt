@@ -14,9 +14,11 @@ class Slugger : Action(1) {
             // discard a zombie
 
             val zombiesAround = playedBy.zombiesAround
-            zombiesAround.pickCard(
-                zombiesAround.getSingleZombies().random() // todo will fail if empty
-            )?.let(playedBy::discard)
+            val singleZombies = zombiesAround.getSingleZombies()
+            if (singleZombies.isNotEmpty()) {
+                zombiesAround.pickCard(singleZombies.random())
+                    ?.let(playedBy::discard)
+            }
         } else {
             // take a card from player
 
