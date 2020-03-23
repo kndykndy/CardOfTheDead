@@ -31,7 +31,7 @@ class ArmoredTest : StringSpec({
         player.hand.size() shouldBe 0
         player.hand.hasCard(bitten) shouldBe false
         game.playDeck.size() shouldBe 3 // Bitten, Armored, Nukes!
-        game.playDeck.cards[0] shouldBe bitten
+        game.playDeck.cards.first() shouldBe bitten
     }
 
     "should do nothing if no Bitten on hand" {
@@ -48,7 +48,7 @@ class ArmoredTest : StringSpec({
 
         // then
 
-        player.hand.size() shouldBe 2
+        player.hand.size() shouldBe 2 // Armored, Nukes!
         player.hand.hasCardOfClass(Bitten::class.java) shouldBe false
         game.playDeck.size() shouldBe 0
     }

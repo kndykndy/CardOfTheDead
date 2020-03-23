@@ -40,7 +40,7 @@ open class Deck<T : Card> {
 
     fun pickCard(card: T): T? = if (cards.remove(card)) card else null
 
-    fun pickTopCard(): T? = if (isNotEmpty()) pickCard(cards[cards.size - 1]) else null
+    fun pickTopCard(): T? = if (isNotEmpty()) pickCard(cards.last()) else null
 
     fun pickCardOfClass(cKlass: Class<out T>): T? {
         return cards.filterIsInstance(cKlass)

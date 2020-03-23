@@ -39,7 +39,7 @@ class BarricadeTest : StringSpec({
         player.hand.hasCard(bitten) shouldBe false
 
         game.playDeck.size() shouldBe gameDeckSize - 2 // Armored, Nukes!
-        game.playDeck.cards[0] shouldBe bitten
+        game.playDeck.cards.first() shouldBe bitten
     }
 
     "should discard 1 card and take 2 cards even if those are Zombies" {
@@ -66,7 +66,7 @@ class BarricadeTest : StringSpec({
         player.getZombiesAroundCount() shouldBe 3 // Zombies, RedneckZombie
 
         game.playDeck.size() shouldBe gameDeckSize - 2 // Zombies, RedneckZombie
-        game.playDeck.cards[0] shouldBe zombiesExcl
+        game.playDeck.cards.first() shouldBe zombiesExcl
     }
 
     "should discard 1 card and take 2 cards if 3 cards left in deck" {
@@ -90,7 +90,7 @@ class BarricadeTest : StringSpec({
         player.hand.hasCard(bitten) shouldBe false
 
         game.playDeck.size() shouldBe 1 // Bitten
-        game.playDeck.cards[0] shouldBe bitten
+        game.playDeck.cards.first() shouldBe bitten
     }
 
     "should discard 1 card and take no cards if 1 card left in deck" {
@@ -110,6 +110,6 @@ class BarricadeTest : StringSpec({
         player.hand.size() shouldBe 0
 
         game.playDeck.size() shouldBe 1 // Bitten
-        game.playDeck.cards[0] shouldBe nukes
+        game.playDeck.cards.first() shouldBe nukes
     }
 })

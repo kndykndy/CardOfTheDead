@@ -13,9 +13,11 @@ class Ringtone : Event() {
         gameContext.players.forEach { player ->
             if (player != playedBy) {
                 val zombiesAround = player.zombiesAround
-                zombiesAround.getSingleZombies()
-                    .random() // todo will fail if empty
-                    .also { zombiesAround.pickCard(it)?.let(playedBy::chasedByZombie) }
+                val singleZombies = zombiesAround.getSingleZombies()
+                if (singleZombies.isNotEmpty()) {
+                    zombiesAround.pickCard(singleZombies.random())
+                        ?.let(playedBy::chasedByZombie)
+                }
             }
         }
     }

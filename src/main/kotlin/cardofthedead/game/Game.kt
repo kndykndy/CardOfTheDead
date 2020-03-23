@@ -194,11 +194,10 @@ class Game(
      * No output!
      */
     internal fun getRandomPlayer(exceptForPlayer: Player): Player {
-        val exceptForPlayerIdx = players.indexOf(exceptForPlayer)
         while (true) {
-            val playerIdx = Random.nextInt(players.size)
-            if (playerIdx != exceptForPlayerIdx) {
-                return players[playerIdx]
+            val randomPlayer = players.random()
+            if (randomPlayer != exceptForPlayer) {
+                return randomPlayer
             }
         }
     }
@@ -218,7 +217,7 @@ class Game(
 
     private fun isRoundOverBecauseOneAlivePlayerLeft(): Boolean =
         if (players.size == 1) {
-            val winner = players[0]
+            val winner = players.first()
             winner.addSurvivalPoints(5)
             winners.add(listOf(winner))
 

@@ -15,7 +15,8 @@ class Mobs : Event() {
         do {
             val hand = currentPlayer.hand
             if (hand.hasCardOfClass(Slugger::class.java)) {
-                hand.cards.forEach { // todo fix CME
+                val cards = hand.cards.toList()
+                cards.forEach {
                     hand.pickCard(it)?.let(gameContext.playDeck::addCardOnBottom)
                 }
             }
