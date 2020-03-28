@@ -2,8 +2,7 @@ package cardofthedead.events
 
 import cardofthedead.TestUtils.addMovementPoints
 import cardofthedead.TestUtils.dummyPlayer
-import cardofthedead.TestUtils.gameWithDeck
-import cardofthedead.cards.EmptyDeck
+import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.cards.actions.Armored
 import cardofthedead.cards.actions.Dynamite
 import cardofthedead.cards.events.Cornered
@@ -19,7 +18,7 @@ class CorneredTest : StringSpec({
             addMovementPoints(Armored(), Dynamite())
         }
 
-        val game = gameWithDeck(player, EmptyDeck())
+        val game = gameWithEmptyDeck(player)
 
         // when
         player.play(Cornered().apply { gameContext = game })
@@ -36,7 +35,7 @@ class CorneredTest : StringSpec({
 
         val player = dummyPlayer()
 
-        val game = gameWithDeck(player, EmptyDeck())
+        val game = gameWithEmptyDeck(player)
 
         // when
         player.play(Cornered().apply { gameContext = game })

@@ -2,10 +2,7 @@ package cardofthedead.actions
 
 import cardofthedead.TestUtils.chasedByZombies
 import cardofthedead.TestUtils.dummyPlayer
-import cardofthedead.TestUtils.gameWithDeck
 import cardofthedead.TestUtils.gameWithEmptyDeck
-import cardofthedead.cards.EmptyDeck
-import cardofthedead.cards.Zombie
 import cardofthedead.cards.actions.Chainsaw
 import cardofthedead.cards.zombies.BrideZombie
 import cardofthedead.cards.zombies.LadZombie
@@ -20,17 +17,11 @@ class ChainsawTest : StringSpec({
     "should discard 2 of 3 single zombies" {
         // given
 
-        val deck = EmptyDeck()
-
         val player = dummyPlayer().apply {
-            chasedByZombies(
-                deck.addCard(RedneckZombie()) as Zombie,
-                deck.addCard(LadZombie()) as Zombie,
-                deck.addCard(BrideZombie()) as Zombie
-            )
+            chasedByZombies(RedneckZombie(), LadZombie(), BrideZombie())
         }
 
-        val game = gameWithDeck(player, deck)
+        val game = gameWithEmptyDeck(player)
 
         // when
         player.play(Chainsaw())
@@ -60,15 +51,11 @@ class ChainsawTest : StringSpec({
     "should discard 1 of 1 zombies" {
         // given
 
-        val deck = EmptyDeck()
-
         val player = dummyPlayer().apply {
-            chasedByZombies(
-                deck.addCard(RedneckZombie()) as Zombie
-            )
+            chasedByZombies(RedneckZombie())
         }
 
-        val game = gameWithDeck(player, deck)
+        val game = gameWithEmptyDeck(player)
 
         // when
         player.play(Chainsaw())
@@ -82,16 +69,11 @@ class ChainsawTest : StringSpec({
     "should discard Zombies card when Zombies plus single zombie around" {
         // given
 
-        val deck = EmptyDeck()
-
         val player = dummyPlayer().apply {
-            chasedByZombies(
-                deck.addCard(Zombies()) as Zombie,
-                deck.addCard(RedneckZombie()) as Zombie
-            )
+            chasedByZombies(Zombies(), RedneckZombie())
         }
 
-        val game = gameWithDeck(player, deck)
+        val game = gameWithEmptyDeck(player)
 
         // when
         player.play(Chainsaw())
@@ -105,15 +87,11 @@ class ChainsawTest : StringSpec({
     "should do nothing when only Zombies!!! around" {
         // given
 
-        val deck = EmptyDeck()
-
         val player = dummyPlayer().apply {
-            chasedByZombies(
-                deck.addCard(`Zombies!!!`()) as Zombie
-            )
+            chasedByZombies(`Zombies!!!`())
         }
 
-        val game = gameWithDeck(player, deck)
+        val game = gameWithEmptyDeck(player)
 
         // when
         player.play(Chainsaw())

@@ -11,7 +11,7 @@ import cardofthedead.players.Player
 
 object TestUtils {
 
-    fun gameWithDeck(player: Player, deck: Deck<Card>) =
+    private fun gameWithDeck(player: Player, deck: Deck<Card>) =
         Game.Builder(Player.of("John Doe"), Player.of("Jane Doe"), deck)
             .withPlayer(player)
             .build()

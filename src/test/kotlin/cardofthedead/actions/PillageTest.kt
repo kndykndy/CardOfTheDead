@@ -1,10 +1,8 @@
 package cardofthedead.actions
 
-import cardofthedead.TestUtils
 import cardofthedead.TestUtils.dummyPlayer
-import cardofthedead.TestUtils.gameWithDeck
+import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.TestUtils.takeToHand
-import cardofthedead.cards.EmptyDeck
 import cardofthedead.cards.actions.Bitten
 import cardofthedead.cards.actions.Chainsaw
 import cardofthedead.cards.actions.Dynamite
@@ -20,19 +18,17 @@ class PillageTest : StringSpec({
     "should take one card from every other player" {
         // given
 
-        val deck = EmptyDeck()
-
         val player1 = dummyPlayer().apply {
-            takeToHand(deck.addCard(Slugger()), deck.addCard(Hide()), deck.addCard(Lure()))
+            takeToHand(Slugger(), Hide(), Lure())
         }
 
-        val game = gameWithDeck(player1, deck)
+        val game = gameWithEmptyDeck(player1)
 
         val player2 = game.getNextPlayer(player1).apply {
-            takeToHand(deck.addCard(Chainsaw()), deck.addCard(Dynamite()))
+            takeToHand(Chainsaw(), Dynamite())
         }
         val player3 = game.getNextPlayer(player2).apply {
-            takeToHand(deck.addCard(Bitten()))
+            takeToHand(Bitten())
         }
 
         // when

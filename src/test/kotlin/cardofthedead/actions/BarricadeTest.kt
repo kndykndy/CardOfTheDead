@@ -25,7 +25,9 @@ class BarricadeTest : StringSpec({
 
         val player = dummyPlayer()
 
-        val game = gameWithStandardDeck(player).apply { playDeck.addCards(bitten, armored, nukes) }
+        val game = gameWithStandardDeck(player).apply {
+            playDeck.addCards(bitten, armored, nukes)
+        }
 
         val gameDeckSize = game.playDeck.size()
 
@@ -78,7 +80,9 @@ class BarricadeTest : StringSpec({
 
         val player = dummyPlayer()
 
-        val game = gameWithEmptyDeck(player).apply { playDeck.addCards(bitten, armored, nukes) }
+        val game = gameWithEmptyDeck(player).apply {
+            playDeck.addCards(bitten, armored, nukes)
+        }
 
         // when
         player.play(Barricade().also { it.gameContext = game })
@@ -100,7 +104,9 @@ class BarricadeTest : StringSpec({
 
         val player = dummyPlayer()
 
-        val game = gameWithEmptyDeck(player).apply { playDeck.addCard(nukes) }
+        val game = gameWithEmptyDeck(player).apply {
+            playDeck.addCard(nukes)
+        }
 
         // when
         player.play(Barricade().also { it.gameContext = game })

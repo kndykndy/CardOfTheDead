@@ -21,7 +21,9 @@ class ArmoredTest : StringSpec({
             takeToHand(bitten)
         }
 
-        val game = gameWithEmptyDeck(player).apply { playDeck.addCards(Armored(), `Nukes!`()) }
+        val game = gameWithEmptyDeck(player).apply {
+            playDeck.addCards(Armored(), `Nukes!`())
+        }
 
         // when
         player.play(Armored())

@@ -1,10 +1,8 @@
 package cardofthedead.actions
 
-import cardofthedead.TestUtils
 import cardofthedead.TestUtils.addMovementPoints
 import cardofthedead.TestUtils.dummyPlayer
-import cardofthedead.TestUtils.gameWithDeck
-import cardofthedead.cards.EmptyDeck
+import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.cards.actions.Armored
 import cardofthedead.cards.actions.Dynamite
 import cardofthedead.cards.actions.Tripped
@@ -18,12 +16,10 @@ class TrippedTest : StringSpec({
     "should discard 2 escape cards" {
         // given
 
-        val deck = EmptyDeck()
-
         val player1 = spyk(dummyPlayer())
         every { player1.decideHowManyMovementCardsToDiscardForTripped() } returns 2
 
-        val game = gameWithDeck(player1, deck)
+        val game = gameWithEmptyDeck(player1)
 
         val player2 = game.getNextPlayer(player1).apply {
             addMovementPoints(Armored(), Dynamite())
@@ -43,12 +39,10 @@ class TrippedTest : StringSpec({
     "should not discard any cards if no escape cards" {
         // given
 
-        val deck = EmptyDeck()
-
         val player1 = spyk(dummyPlayer())
         every { player1.decideHowManyMovementCardsToDiscardForTripped() } returns 2
 
-        val game = gameWithDeck(player1, deck)
+        val game = gameWithEmptyDeck(player1)
 
         val player2 = game.getNextPlayer(player1)
         every { player1.choosePlayerToDiscardMovementCardsFromForTripped() } returns player2

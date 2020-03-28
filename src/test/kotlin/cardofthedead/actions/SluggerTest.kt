@@ -2,10 +2,8 @@ package cardofthedead.actions
 
 import cardofthedead.TestUtils.chasedByZombies
 import cardofthedead.TestUtils.dummyPlayer
-import cardofthedead.TestUtils.gameWithDeck
+import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.TestUtils.takeToHand
-import cardofthedead.cards.EmptyDeck
-import cardofthedead.cards.Zombie
 import cardofthedead.cards.actions.Chainsaw
 import cardofthedead.cards.actions.Dynamite
 import cardofthedead.cards.actions.Slugger
@@ -22,18 +20,12 @@ class SluggerTest : StringSpec({
     "should discard 1 Zombie" {
         // given
 
-        val deck = EmptyDeck()
-
         val player1 = spyk(dummyPlayer()).apply {
-            chasedByZombies(
-                deck.addCard(LadZombie()) as Zombie,
-                deck.addCard(BrideZombie()) as Zombie,
-                deck.addCard(GrannyZombie()) as Zombie
-            )
+            chasedByZombies(LadZombie(), BrideZombie(), GrannyZombie())
         }
         every { player1.decideToDiscardZombieOrTakeCardForSlugger() } returns true
 
-        val game = gameWithDeck(player1, deck)
+        val game = gameWithEmptyDeck(player1)
 
         // when
         player1.play(Slugger().apply { gameContext = game })
@@ -48,12 +40,10 @@ class SluggerTest : StringSpec({
     "should discard no Zombies if no zombies at hand" {
         // given
 
-        val deck = EmptyDeck()
-
         val player1 = spyk(dummyPlayer())
         every { player1.decideToDiscardZombieOrTakeCardForSlugger() } returns true
 
-        val game = gameWithDeck(player1, deck)
+        val game = gameWithEmptyDeck(player1)
 
         // when
         player1.play(Slugger().apply { gameContext = game })
@@ -68,15 +58,13 @@ class SluggerTest : StringSpec({
     "should pick random card from another player" {
         // given
 
-        val deck = EmptyDeck()
-
         val player1 = spyk(dummyPlayer())
         every { player1.decideToDiscardZombieOrTakeCardForSlugger() } returns false
 
-        val game = gameWithDeck(player1, deck)
+        val game = gameWithEmptyDeck(player1)
 
         val player2 = game.getNextPlayer(player1).apply {
-            takeToHand(deck.addCard(Chainsaw()), deck.addCard(Dynamite()))
+            takeToHand(Chainsaw(), Dynamite())
         }
 
         every { player1.choosePlayerToTakeCardFromForSlugger() } returns player2
@@ -93,12 +81,10 @@ class SluggerTest : StringSpec({
     "should pick random card from another player if no card on hand" {
         // given
 
-        val deck = EmptyDeck()
-
         val player1 = spyk(dummyPlayer())
         every { player1.decideToDiscardZombieOrTakeCardForSlugger() } returns false
 
-        val game = gameWithDeck(player1, deck)
+        val game = gameWithEmptyDeck(player1)
 
         val player2 = game.getNextPlayer(player1)
 

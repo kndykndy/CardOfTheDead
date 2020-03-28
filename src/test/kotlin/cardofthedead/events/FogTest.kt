@@ -1,4 +1,4 @@
-package cardofthedead.actions
+package cardofthedead.events
 
 import cardofthedead.TestUtils.chasedByZombies
 import cardofthedead.TestUtils.dummyPlayer
@@ -7,41 +7,37 @@ import cardofthedead.TestUtils.takeToHand
 import cardofthedead.cards.actions.Chainsaw
 import cardofthedead.cards.actions.Hide
 import cardofthedead.cards.actions.Slugger
-import cardofthedead.cards.actions.`Nukes!`
+import cardofthedead.cards.events.Fog
 import cardofthedead.cards.zombies.BrideZombie
 import cardofthedead.cards.zombies.LadZombie
+import cardofthedead.cards.zombies.Zombies
 import cardofthedead.cards.zombies.`Zombies!!!`
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
+import io.mockk.spyk
 
-@Suppress("ClassName")
-class `Nukes!Test` : StringSpec({
+class FogTest : StringSpec({
 
-    "should discard all cards from hands and all zombies" {
+    "should play Fog" {
         // given
 
-        val player1 = dummyPlayer().apply {
+        val player1 = spyk(dummyPlayer()).apply {
             takeToHand(Slugger(), Hide())
-            chasedByZombies(LadZombie(), BrideZombie(), `Zombies!!!`())
+            chasedByZombies(LadZombie(), BrideZombie(), Zombies())
         }
 
         val game = gameWithEmptyDeck(player1)
-
-        val player2 = game.getNextPlayer(player1).apply {
+        game.getNextPlayer(player1).apply {
             takeToHand(Chainsaw())
             chasedByZombies(`Zombies!!!`())
         }
-        val player3 = game.getNextPlayer(player2)
 
         // when
-        player1.play(`Nukes!`().apply { gameContext = game })
+        player1.play(Fog().apply { gameContext = game })
 
         // then
 
-        setOf(player1, player2, player3).forEach { player ->
-            player.hand.isEmpty() shouldBe true
-            player.getZombiesAroundCount() shouldBe 0
-        }
-        game.discardDeck.size() shouldBe 7 // all cards from hands and all zombie cards
+        game.players.sumBy { it.getZombiesAroundCount() } shouldBe 7 // all zombies in the game
+        game.players.sumBy { it.hand.size() } shouldBe 3 // Slugger, Hide, Chainsaw
     }
 })
