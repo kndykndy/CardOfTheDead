@@ -14,14 +14,13 @@ import cardofthedead.cards.zombies.Zombies
 import cardofthedead.cards.zombies.`Zombies!!!`
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
-import io.mockk.spyk
 
 class FogTest : StringSpec({
 
     "should play Fog" {
         // given
 
-        val player1 = spyk(dummyPlayer()).apply {
+        val player1 = dummyPlayer().apply {
             takeToHand(Slugger(), Hide())
             chasedByZombies(LadZombie(), BrideZombie(), Zombies())
         }
