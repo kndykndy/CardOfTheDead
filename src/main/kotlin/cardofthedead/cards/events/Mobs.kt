@@ -14,11 +14,13 @@ class Mobs : Event() {
         var currentPlayer = playedBy
         do {
             val hand = currentPlayer.hand
-            if (hand.hasCardOfClass(Slugger::class.java)) {
+            if (!hand.hasCardOfClass(Slugger::class.java)) {
                 val cards = hand.cards.toList()
                 cards.forEach {
                     hand.pickCard(it)?.let(gameContext.playDeck::addCardOnBottom)
                 }
+
+                return
             }
 
             currentPlayer = gameContext.getNextPlayer(currentPlayer)
