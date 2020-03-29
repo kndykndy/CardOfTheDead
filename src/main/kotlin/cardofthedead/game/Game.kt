@@ -51,6 +51,16 @@ class Game(
             println("Starting round #${i + 1}")
             playRound()
         }
+
+        val lastWinners = winners.last()
+        if (lastWinners.size == 1) {
+            val winner = lastWinners.first()
+            println("The winner is ${winner.name + " (${winner.getSurvivalPoints()})"}")
+        } else {
+            println("The winners are " +
+                    lastWinners.joinToString { it.name + " (${it.getSurvivalPoints()})" }
+            )
+        }
     }
 
     private fun playRound() {
@@ -60,8 +70,7 @@ class Game(
         println("${currentPlayer.name}'s starting!")
 
         while (isRoundRunning()) {
-            repeat(cardsToPlay) { playTurn(currentPlayer) } // todo rework!!!
-            // as playing from hand is possible not for every draw but at the end
+            playTurn(currentPlayer)
 
             currentPlayer = getNextPlayer(currentPlayer)
             println("${currentPlayer.name}'s turn now!")
@@ -69,31 +78,33 @@ class Game(
     }
 
     private fun playTurn(currentPlayer: Player) {
-        when (val drawnCard = currentPlayer.drawTopCard()) {
-            is Action -> {
+        repeat(cardsToPlay) {
+            when (val drawnCard = currentPlayer.drawTopCard()) {
+                is Action -> {
 //                println("${currentPlayer.name} draws card to hand.")
-                println("DEBUG: ${currentPlayer.name} draws ${drawnCard::class.simpleName} to hand.")
-                currentPlayer.takeToHand(drawnCard)
-            }
-            is Zombie -> {
-                println("${currentPlayer.name} draws ${drawnCard::class.simpleName}")
-                currentPlayer.chasedByZombie(drawnCard)
-                if (currentPlayer.getZombiesAroundCount() >=
-                    playersToZombiesToBeEaten.getValue(initialPlayersCount)
-                ) {
-                    currentPlayer.die()
-                    removePlayer(currentPlayer)
+                    println("DEBUG: ${currentPlayer.name} draws ${drawnCard::class.simpleName} to hand.")
+                    currentPlayer.takeToHand(drawnCard)
+                }
+                is Zombie -> {
+                    println("${currentPlayer.name} draws ${drawnCard::class.simpleName}")
+                    currentPlayer.chasedByZombie(drawnCard)
+                    if (currentPlayer.getZombiesAroundCount() >=
+                        playersToZombiesToBeEaten.getValue(initialPlayersCount)
+                    ) {
+                        currentPlayer.die()
+                        removePlayer(currentPlayer)
 
+                        return
+                    }
+                }
+                is Event -> {
+                    println("${currentPlayer.name} draws ${drawnCard::class.simpleName}")
+                    currentPlayer.play(drawnCard)
+                    currentPlayer.discard(drawnCard)
+                }
+                null -> {
                     return
                 }
-            }
-            is Event -> {
-                println("${currentPlayer.name} draws ${drawnCard::class.simpleName}")
-                currentPlayer.play(drawnCard)
-                currentPlayer.discard(drawnCard)
-            }
-            null -> {
-                return
             }
         }
 
@@ -180,13 +191,12 @@ class Game(
         while (iterator.hasNext()) {
             if (iterator.next() == afterPlayer) {
                 if (iterator.hasNext()) {
-                    val nextPlayer = iterator.next()
-                    println("DEBUG: Next player after ${afterPlayer.name} is ${nextPlayer.name}")
-                    return nextPlayer
+                    // println("DEBUG: Next player after ${afterPlayer.name} is ${nextPlayer.name}")
+                    return iterator.next()
                 }
             }
         }
-        println("DEBUG: Next player after ${afterPlayer.name} is ${players.first().name}")
+//        println("DEBUG: Next player after ${afterPlayer.name} is ${players.first().name}")
         return players.first()
     }
 

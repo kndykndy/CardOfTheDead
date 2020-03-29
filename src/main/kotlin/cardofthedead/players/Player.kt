@@ -41,6 +41,7 @@ abstract class Player(
      * For the whole game.
      */
     private var survivalPoints: Int = 0
+        get
 
     /**
      * Amount of draws for player for a turn.
@@ -128,6 +129,8 @@ abstract class Player(
     fun addSurvivalPoints(pointsCount: Int) {
         survivalPoints += pointsCount
     }
+
+    fun getSurvivalPoints(): Int = survivalPoints
 
     fun getZombiesAroundCount(): Int = zombiesAround.cards.sumBy { it.zombiesOnCard }
 

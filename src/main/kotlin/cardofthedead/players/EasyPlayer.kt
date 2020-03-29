@@ -40,7 +40,6 @@ class EasyPlayer(
      * Worst cards rating. The bigger the better.
      */
     private val cardTypeToRating = mapOf(
-
         Bitten::class to 0,
         `Zombies!!!`::class to 1,
         Zombies::class to 2,
@@ -86,12 +85,14 @@ class EasyPlayer(
         val zombiesToSurround =
             gameContext.playersToZombiesToBeSurrounded.getValue(gameContext.initialPlayersCount)
 
-        val notSurrounded = zombiesAround.getZombiesCount() < zombiesToSurround
-
         val playableActionCards = getPlayableActionCards()
+
         return if (playableActionCards.isNotEmpty()) {
-            if (Random.nextInt(10) < 5) {
-                if (notSurrounded && Random.nextBoolean()) {
+            if (Random.nextBoolean()) {
+                val notSurrounded = zombiesAround.getZombiesCount() < zombiesToSurround
+                val lotsOfCards = this.hand.size() > 3
+
+                if ((notSurrounded && Random.nextBoolean()) || lotsOfCards) {
                     PlayCardDecision(
                         WayToPlayCard.PLAY_AS_MOVEMENT_POINTS,
                         hand.pickCard(playableActionCards.random())
@@ -141,7 +142,7 @@ class EasyPlayer(
         gameContext.getRandomPlayer(this)
 
     /**
-     * Decide to discard a zombie ~ true, otherwise take player's card.
+     * @return true if decided to discard a zombie, false if take player's card.
      */
     override fun decideToDiscardZombieOrTakeCardForSlugger(): Boolean {
         val tooManyZombiesAround =
