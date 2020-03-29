@@ -2,9 +2,10 @@ package cardofthedead.cards.events
 
 import cardofthedead.cards.Event
 import cardofthedead.cards.actions.Slugger
+import cardofthedead.game.Game
 import cardofthedead.players.Player
 
-class Mobs : Event() {
+class Mobs(gameContext: Game) : Event(gameContext) {
 
     /**
      * If you have a slugger at hand, ignore the event and pass it to the next player to the left.

@@ -1,3 +1,5 @@
 package cardofthedead.cards
 
-abstract class Event : Card()
+import cardofthedead.game.Game
+
+abstract class Event(gameContext: Game) : Card(gameContext)

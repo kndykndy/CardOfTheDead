@@ -3,23 +3,30 @@ package cardofthedead.game
 import cardofthedead.cards.Action
 import cardofthedead.cards.Card
 import cardofthedead.cards.Deck
+import cardofthedead.cards.DeckType
+import cardofthedead.cards.EmptyDeck
 import cardofthedead.cards.Event
+import cardofthedead.cards.StandardDeck
 import cardofthedead.cards.WayToPlayCard
 import cardofthedead.cards.Zombie
+import cardofthedead.players.EasyPlayer
+import cardofthedead.players.HardPlayer
+import cardofthedead.players.Level
 import cardofthedead.players.Player
+import cardofthedead.players.PlayerDescriptor
 import kotlin.random.Random
 
-class Game(
-    internal val players: MutableList<Player> // tod think over using queue
-) {
+class Game() {
+
+    internal val players: MutableList<Player> = mutableListOf()
 
     private val deadPlayers: MutableList<Player> = mutableListOf()
     private val winners: MutableList<List<Player>> = mutableListOf()
 
-    internal val initialPlayersCount: Int = players.size
+    internal var initialPlayersCount: Int = 0
 
-    lateinit var playDeck: Deck<Card>
-    internal val discardDeck: Deck<Card> = Deck()
+    internal val playDeck: Deck<Card> = EmptyDeck(this)
+    internal val discardDeck: Deck<Card> = EmptyDeck(this)
 
     /**
      * Because of Horde cards per round taken by each turn will be two.
@@ -30,15 +37,23 @@ class Game(
     private val playersToZombiesToBeEaten = mapOf(2 to 7, 3 to 6, 4 to 6, 5 to 5)
     private val playersToMovementPointsToEscape = mapOf(2 to 7, 3 to 6, 4 to 6, 5 to 5)
 
-    private constructor(builder: Builder) : this(builder.players) {
-        this.playDeck = builder.deck
+    private constructor(builder: Builder) : this() {
+        builder.playerDescriptors
+            .map { player ->
+                when (player.level) {
+                    Level.HARD -> HardPlayer(this, player.name, player.sex)
+                    else -> EasyPlayer(this, player.name, player.sex)
+                }
+            }
+            .forEach { players.add(it) }
+        initialPlayersCount = players.size
+
+        if (DeckType.STANDARD == builder.deckType) {
+            playDeck.merge(StandardDeck(this))
+        }
 
         println("Starting a new Game of the Dead!")
-
-        playDeck.cards.forEach { it.gameContext = this }
         println("${playDeck.size()} cards in deck.")
-
-        players.forEach { it.gameContext = this }
         println("Tonight we're having ${players.size} players: ${players.joinToString { it.name }}.")
 
         val player = lastPlayerWentToShoppingMall()
@@ -54,6 +69,7 @@ class Game(
 
         val lastWinners = winners.last()
         if (lastWinners.size == 1) {
+            // todo redo -- now last is taken, which is not true -- it should be calculated by srvvl
             val winner = lastWinners.first()
             println("The winner is ${winner.name + " (${winner.getSurvivalPoints()})"}")
         } else {
@@ -82,11 +98,17 @@ class Game(
             when (val drawnCard = currentPlayer.drawTopCard()) {
                 is Action -> {
 //                println("${currentPlayer.name} draws card to hand.")
-                    println("DEBUG: ${currentPlayer.name} draws ${drawnCard::class.simpleName} to hand.")
+                    println(
+                        "DEBUG: ${currentPlayer.name} draws " +
+                                "${drawnCard::class.simpleName + drawnCard.hashCode()} to hand."
+                    )
                     currentPlayer.takeToHand(drawnCard)
                 }
                 is Zombie -> {
-                    println("${currentPlayer.name} draws ${drawnCard::class.simpleName}")
+                    println(
+                        "DEBUG: ${currentPlayer.name} draws " +
+                                (drawnCard::class.simpleName + drawnCard.hashCode())
+                    )
                     currentPlayer.chasedByZombie(drawnCard)
                     if (currentPlayer.getZombiesAroundCount() >=
                         playersToZombiesToBeEaten.getValue(initialPlayersCount)
@@ -98,7 +120,10 @@ class Game(
                     }
                 }
                 is Event -> {
-                    println("${currentPlayer.name} draws ${drawnCard::class.simpleName}")
+                    println(
+                        "DEBUG: ${currentPlayer.name} draws " +
+                                (drawnCard::class.simpleName + drawnCard.hashCode())
+                    )
                     currentPlayer.play(drawnCard)
                     currentPlayer.discard(drawnCard)
                 }
@@ -284,22 +309,20 @@ class Game(
             false
         }
 
-    class Builder(
-        player1: Player,
-        player2: Player,
-        deck: Deck<Card>
+    data class Builder(
+        val player1: PlayerDescriptor,
+        val player2: PlayerDescriptor,
+        val deckType: DeckType = DeckType.STANDARD
     ) {
 
-        val players: MutableList<Player> = mutableListOf()
-        var deck: Deck<Card>
+        val playerDescriptors: MutableList<PlayerDescriptor> = mutableListOf()
 
         init {
             withPlayer(player1)
             withPlayer(player2)
-            this.deck = deck
         }
 
-        fun withPlayer(player: Player) = apply { players.add(player) }
+        fun withPlayer(player: PlayerDescriptor) = apply { playerDescriptors.add(player) }
 
         fun build() = Game(this)
     }

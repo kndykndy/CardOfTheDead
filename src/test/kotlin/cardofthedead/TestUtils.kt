@@ -3,23 +3,32 @@ package cardofthedead
 import cardofthedead.cards.Action
 import cardofthedead.cards.Card
 import cardofthedead.cards.Deck
-import cardofthedead.cards.EmptyDeck
-import cardofthedead.cards.StandardDeck
+import cardofthedead.cards.DeckType
 import cardofthedead.cards.Zombie
 import cardofthedead.game.Game
 import cardofthedead.players.Player
+import cardofthedead.players.PlayerDescriptor
 
 object TestUtils {
 
-    private fun gameWithDeck(player: Player, deck: Deck<Card>) =
-        Game.Builder(Player.of("John Doe"), Player.of("Jane Doe"), deck)
-            .withPlayer(player)
+    private fun gameWithDeck(
+        playerDescriptor: PlayerDescriptor,
+        deckType: DeckType
+    ) =
+        Game.Builder(
+            PlayerDescriptor("John Doe"),
+            PlayerDescriptor("Jane Doe"),
+            deckType
+        )
+            .withPlayer(playerDescriptor)
             .build()
 
-    fun gameWithEmptyDeck(player: Player) = gameWithDeck(player, EmptyDeck())
-    fun gameWithStandardDeck(player: Player) = gameWithDeck(player, StandardDeck())
+    fun gameWithEmptyDeck() = gameWithDeck(dummyPlayer(), DeckType.EMPTY)
+    fun gameWithStandardDeck() = gameWithDeck(dummyPlayer(), DeckType.STANDARD)
 
-    fun dummyPlayer() = Player.of("Donald Trump")
+    private fun dummyPlayer() = PlayerDescriptor("Donald Trump")
+
+    fun Game.getDummy() = this.players.last()
 
     fun Player.takeToHand(vararg listOfCards: Card) =
         listOfCards.forEach { this.takeToHand(it) }

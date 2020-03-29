@@ -1,12 +1,16 @@
 package cardofthedead
 
-import cardofthedead.cards.StandardDeck
 import cardofthedead.game.Game
-import cardofthedead.players.Player
+import cardofthedead.players.Level
+import cardofthedead.players.PlayerDescriptor
+import cardofthedead.players.Sex
 
 fun main() {
-    Game.Builder(Player.of("Dimitry"), Player.of("Eugene"), StandardDeck())
-        .withPlayer(Player.of("Stacey"))
+    Game.Builder(
+        PlayerDescriptor("Dimitry"),
+        PlayerDescriptor("Eugene")
+    )
+        .withPlayer(PlayerDescriptor("Stacey", Level.EASY, Sex.FEMALE))
         .build()
         .play()
 }

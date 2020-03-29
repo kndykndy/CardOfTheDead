@@ -1,9 +1,10 @@
 package cardofthedead.cards.actions
 
 import cardofthedead.cards.Action
+import cardofthedead.game.Game
 import cardofthedead.players.Player
 
-class Pillage : Action(2) {
+class Pillage(gameContext: Game) : Action(gameContext, 2) {
 
     /**
      * Blindly draw a card from every other player.

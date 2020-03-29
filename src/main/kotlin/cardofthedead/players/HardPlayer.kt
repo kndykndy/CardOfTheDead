@@ -2,11 +2,13 @@ package cardofthedead.players
 
 import cardofthedead.cards.Card
 import cardofthedead.cards.PlayCardDecision
+import cardofthedead.game.Game
 
 class HardPlayer(
+    gameContext: Game,
     name: String,
-    sex: Sex?
-) : Player(name, sex) {
+    sex: Sex
+) : Player(gameContext, name, sex) {
 
     override fun chooseSinglePointCards(n: Int) {
         TODO("not implemented")

@@ -1,8 +1,8 @@
 package cardofthedead.actions
 
 import cardofthedead.TestUtils.chasedByZombies
-import cardofthedead.TestUtils.dummyPlayer
 import cardofthedead.TestUtils.gameWithEmptyDeck
+import cardofthedead.TestUtils.getDummy
 import cardofthedead.TestUtils.takeToHand
 import cardofthedead.cards.actions.Chainsaw
 import cardofthedead.cards.actions.Hide
@@ -20,21 +20,20 @@ class `Nukes!Test` : StringSpec({
     "should discard all cards from hands and all zombies" {
         // given
 
-        val player1 = dummyPlayer().apply {
-            takeToHand(Slugger(), Hide())
-            chasedByZombies(LadZombie(), BrideZombie(), `Zombies!!!`())
+        val game = gameWithEmptyDeck()
+
+        val player1 = game.getDummy().apply {
+            takeToHand(Slugger(game), Hide(game))
+            chasedByZombies(LadZombie(game), BrideZombie(game), `Zombies!!!`(game))
         }
-
-        val game = gameWithEmptyDeck(player1)
-
         val player2 = game.getNextPlayer(player1).apply {
-            takeToHand(Chainsaw())
-            chasedByZombies(`Zombies!!!`())
+            takeToHand(Chainsaw(game))
+            chasedByZombies(`Zombies!!!`(game))
         }
         val player3 = game.getNextPlayer(player2)
 
         // when
-        player1.play(`Nukes!`().apply { gameContext = game })
+        player1.play(`Nukes!`(game))
 
         // then
 

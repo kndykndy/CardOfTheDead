@@ -1,8 +1,8 @@
 package cardofthedead.actions
 
 import cardofthedead.TestUtils.chasedByZombies
-import cardofthedead.TestUtils.dummyPlayer
 import cardofthedead.TestUtils.gameWithEmptyDeck
+import cardofthedead.TestUtils.getDummy
 import cardofthedead.cards.actions.Lure
 import cardofthedead.cards.zombies.BrideZombie
 import cardofthedead.cards.zombies.GrannyZombie
@@ -19,17 +19,17 @@ class LureTest : StringSpec({
     "should give 1 out of 3 Zombie cards to any player" {
         // given
 
-        val player1 = spyk(dummyPlayer()).apply {
-            chasedByZombies(LadZombie(), BrideZombie(), GrannyZombie())
-        }
+        val game = gameWithEmptyDeck()
 
-        val game = gameWithEmptyDeck(player1)
+        val player1 = spyk(game.getDummy()).apply {
+            chasedByZombies(LadZombie(game), BrideZombie(game), GrannyZombie(game))
+        }
 
         val player2 = game.getNextPlayer(player1)
         every { player1.choosePlayerToGiveZombieToForLure() } returns player2
 
         // when
-        player1.play(Lure().apply { gameContext = game })
+        player1.play(Lure(game))
 
         // then
 
@@ -40,17 +40,17 @@ class LureTest : StringSpec({
     "should not give zombie cards if no Zombie cards" {
         // given
 
-        val player1 = spyk(dummyPlayer()).apply {
-            chasedByZombies(Zombies(), `Zombies!!!`())
-        }
+        val game = gameWithEmptyDeck()
 
-        val game = gameWithEmptyDeck(player1)
+        val player1 = spyk(game.getDummy()).apply {
+            chasedByZombies(Zombies(game), `Zombies!!!`(game))
+        }
 
         val player2 = game.getNextPlayer(player1)
         every { player1.choosePlayerToGiveZombieToForLure() } returns player2
 
         // when
-        player1.play(Lure().apply { gameContext = game })
+        player1.play(Lure(game))
 
         // then
 

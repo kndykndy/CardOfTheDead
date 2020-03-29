@@ -1,9 +1,9 @@
 package cardofthedead.actions
 
 import cardofthedead.TestUtils.addCards
-import cardofthedead.TestUtils.dummyPlayer
 import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.TestUtils.gameWithStandardDeck
+import cardofthedead.TestUtils.getDummy
 import cardofthedead.cards.actions.Armored
 import cardofthedead.cards.actions.Barricade
 import cardofthedead.cards.actions.Bitten
@@ -19,20 +19,20 @@ class BarricadeTest : StringSpec({
     "should discard 1 card and take 2 cards" {
         // given
 
-        val bitten = Bitten()
-        val armored = Armored()
-        val nukes = `Nukes!`()
+        val game = gameWithStandardDeck()
 
-        val player = dummyPlayer()
+        val bitten = Bitten(game)
+        val armored = Armored(game)
+        val nukes = `Nukes!`(game)
 
-        val game = gameWithStandardDeck(player).apply {
-            playDeck.addCards(bitten, armored, nukes)
-        }
+        game.playDeck.addCards(bitten, armored, nukes)
+
+        val player = game.getDummy()
 
         val gameDeckSize = game.playDeck.size()
 
         // when
-        player.play(Barricade().also { it.gameContext = game })
+        player.play(Barricade(game))
 
         // then
 
@@ -47,20 +47,20 @@ class BarricadeTest : StringSpec({
     "should discard 1 card and take 2 cards even if those are Zombies" {
         // given
 
-        val zombiesExcl = `Zombies!!!`()
-        val zombies = Zombies()
-        val redneckZombie = RedneckZombie()
+        val game = gameWithStandardDeck()
 
-        val player = dummyPlayer()
+        val zombiesExcl = `Zombies!!!`(game)
+        val zombies = Zombies(game)
+        val redneckZombie = RedneckZombie(game)
 
-        val game = gameWithStandardDeck(player).apply {
-            playDeck.addCards(zombiesExcl, zombies, redneckZombie)
-        }
+        game.playDeck.addCards(zombiesExcl, zombies, redneckZombie)
+
+        val player = game.getDummy()
 
         val gameDeckSize = game.playDeck.size()
 
         // when
-        player.play(Barricade().also { it.gameContext = game })
+        player.play(Barricade(game))
 
         // then
 
@@ -74,18 +74,18 @@ class BarricadeTest : StringSpec({
     "should discard 1 card and take 2 cards if 3 cards left in deck" {
         // given
 
-        val bitten = Bitten()
-        val armored = Armored()
-        val nukes = `Nukes!`()
+        val game = gameWithEmptyDeck()
 
-        val player = dummyPlayer()
+        val bitten = Bitten(game)
+        val armored = Armored(game)
+        val nukes = `Nukes!`(game)
 
-        val game = gameWithEmptyDeck(player).apply {
-            playDeck.addCards(bitten, armored, nukes)
-        }
+        game.playDeck.addCards(bitten, armored, nukes)
+
+        val player = game.getDummy()
 
         // when
-        player.play(Barricade().also { it.gameContext = game })
+        player.play(Barricade(game))
 
         // then
 
@@ -100,16 +100,16 @@ class BarricadeTest : StringSpec({
     "should discard 1 card and take no cards if 1 card left in deck" {
         // given
 
-        val nukes = `Nukes!`()
+        val game = gameWithEmptyDeck()
 
-        val player = dummyPlayer()
+        val nukes = `Nukes!`(game)
 
-        val game = gameWithEmptyDeck(player).apply {
-            playDeck.addCard(nukes)
-        }
+        game.playDeck.addCard(nukes)
+
+        val player = game.getDummy()
 
         // when
-        player.play(Barricade().also { it.gameContext = game })
+        player.play(Barricade(game))
 
         // then
 

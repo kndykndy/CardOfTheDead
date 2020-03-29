@@ -7,41 +7,38 @@ import cardofthedead.cards.PlayCardDecision
 import cardofthedead.cards.Zombie
 import cardofthedead.cards.getMovementPoints
 import cardofthedead.game.Game
-import kotlin.random.Random
 
 abstract class Player(
+    val gameContext: Game,
     val name: String,
-    val sex: Sex?
+    val sex: Sex
 ) {
 
-    internal lateinit var gameContext: Game
-
-    internal val hand: Deck<Card> = Deck()
+    internal val hand: Deck<Card> = Deck(gameContext)
 
     /**
      * Temporary cards that may transition to hand eventually.
      * For certain actions.
      */
-    internal val candidatesToHand: Deck<Card> = Deck()
+    internal val candidatesToHand: Deck<Card> = Deck(gameContext)
 
     /**
      * Zombies that chase a player.
      * For this round.
      */
-    internal val zombiesAround: Deck<Zombie> = Deck()
+    internal val zombiesAround: Deck<Zombie> = Deck(gameContext)
 
     /**
      * Action cards if gathered enough let player to escape from a round.
      * For this round.
      */
-    internal val escapeCards: Deck<Action> = Deck()
+    internal val escapeCards: Deck<Action> = Deck(gameContext)
 
     /**
      * Sum of all movement points from all escape cards played today for the player.
      * For the whole game.
      */
     private var survivalPoints: Int = 0
-        get
 
     /**
      * Amount of draws for player for a turn.
@@ -182,14 +179,24 @@ abstract class Player(
 
     companion object {
 
-        fun of(name: String, level: Level? = Level.EASY, sex: Sex? = Sex.MALE): Player =
-            if (level != null) {
-                if (level == Level.HARD) HardPlayer(name, sex) else EasyPlayer(name, sex)
-            } else {
-                if (Random.nextBoolean()) HardPlayer(name, sex) else EasyPlayer(name, sex)
-            }
+//        fun of(
+//            name: String,
+//            level: Level? = Level.EASY,
+//            sex: Sex? = Sex.MALE
+//        ): PlayerDescriptor =
+//            if (level != null) {
+//                if (level == Level.HARD) HardPlayer(name, sex) else EasyPlayer(name, sex)
+//            } else {
+//                if (Random.nextBoolean()) HardPlayer(name, sex) else EasyPlayer(name, sex)
+//            }
     }
 }
+
+data class PlayerDescriptor(
+    val name: String,
+    val level: Level = Level.EASY,
+    val sex: Sex = Sex.MALE
+)
 
 enum class Level { EASY, HARD }
 enum class Sex { MALE, FEMALE }

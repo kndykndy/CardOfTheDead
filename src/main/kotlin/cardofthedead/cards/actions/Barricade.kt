@@ -3,9 +3,10 @@ package cardofthedead.cards.actions
 import cardofthedead.cards.Action
 import cardofthedead.cards.Event
 import cardofthedead.cards.Zombie
+import cardofthedead.game.Game
 import cardofthedead.players.Player
 
-class Barricade : Action(1) {
+class Barricade(gameContext: Game) : Action(gameContext, 1) {
 
     /**
      * Draw three cards. Choose one and put it on the bottom of the deck.

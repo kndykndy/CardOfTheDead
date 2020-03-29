@@ -3,9 +3,10 @@ package cardofthedead.cards.actions
 import cardofthedead.cards.Action
 import cardofthedead.cards.getSingleZombies
 import cardofthedead.cards.zombies.Zombies
+import cardofthedead.game.Game
 import cardofthedead.players.Player
 
-class Chainsaw : Action(1) {
+class Chainsaw(gameContext: Game) : Action(gameContext, 1) {
 
     /**
      * Discard two zombie cards.

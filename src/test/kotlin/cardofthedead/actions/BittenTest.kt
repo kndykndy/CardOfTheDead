@@ -1,7 +1,7 @@
 package cardofthedead.actions
 
-import cardofthedead.TestUtils.dummyPlayer
 import cardofthedead.TestUtils.gameWithEmptyDeck
+import cardofthedead.TestUtils.getDummy
 import cardofthedead.cards.actions.Bitten
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
@@ -12,13 +12,13 @@ class BittenTest : StringSpec({
     "should throw exception if played" {
         // given
 
-        val player = dummyPlayer()
+        val game = gameWithEmptyDeck()
 
-        gameWithEmptyDeck(player)
+        val player = game.getDummy()
 
         // when
         val exception = shouldThrow<IllegalStateException> {
-            player.play(Bitten())
+            player.play(Bitten(game))
         }
 
         // then

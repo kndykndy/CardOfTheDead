@@ -1,8 +1,8 @@
 package cardofthedead.actions
 
 import cardofthedead.TestUtils.chasedByZombies
-import cardofthedead.TestUtils.dummyPlayer
 import cardofthedead.TestUtils.gameWithEmptyDeck
+import cardofthedead.TestUtils.getDummy
 import cardofthedead.cards.actions.Hide
 import cardofthedead.cards.zombies.BrideZombie
 import cardofthedead.cards.zombies.GrannyZombie
@@ -17,16 +17,16 @@ class HideTest : StringSpec({
     "should give 1 out of 3 Zombie cards to next player" {
         // given
 
-        val player1 = dummyPlayer().apply {
-            chasedByZombies(LadZombie(), BrideZombie(), GrannyZombie())
-        }
+        val game = gameWithEmptyDeck()
 
-        val game = gameWithEmptyDeck(player1)
+        val player1 = game.getDummy().apply {
+            chasedByZombies(LadZombie(game), BrideZombie(game), GrannyZombie(game))
+        }
 
         val player2 = game.getNextPlayer(player1)
 
         // when
-        player1.play(Hide().apply { gameContext = game })
+        player1.play(Hide(game))
 
         // then
 
@@ -37,16 +37,16 @@ class HideTest : StringSpec({
     "should not give zombie cards if no Zombie cards" {
         // given
 
-        val player1 = dummyPlayer().apply {
-            chasedByZombies(Zombies(), `Zombies!!!`())
-        }
+        val game = gameWithEmptyDeck()
 
-        val game = gameWithEmptyDeck(player1)
+        val player1 = game.getDummy().apply {
+            chasedByZombies(Zombies(game), `Zombies!!!`(game))
+        }
 
         val player2 = game.getNextPlayer(player1)
 
         // when
-        player1.play(Hide().apply { gameContext = game })
+        player1.play(Hide(game))
 
         // then
 

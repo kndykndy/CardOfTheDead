@@ -1,7 +1,7 @@
 package cardofthedead.actions
 
-import cardofthedead.TestUtils.dummyPlayer
 import cardofthedead.TestUtils.gameWithEmptyDeck
+import cardofthedead.TestUtils.getDummy
 import cardofthedead.TestUtils.takeToHand
 import cardofthedead.cards.actions.Bitten
 import cardofthedead.cards.actions.Chainsaw
@@ -18,21 +18,20 @@ class PillageTest : StringSpec({
     "should take one card from every other player" {
         // given
 
-        val player1 = dummyPlayer().apply {
-            takeToHand(Slugger(), Hide(), Lure())
+        val game = gameWithEmptyDeck()
+
+        val player1 = game.getDummy().apply {
+            takeToHand(Slugger(game), Hide(game), Lure(game))
         }
-
-        val game = gameWithEmptyDeck(player1)
-
         val player2 = game.getNextPlayer(player1).apply {
-            takeToHand(Chainsaw(), Dynamite())
+            takeToHand(Chainsaw(game), Dynamite(game))
         }
         val player3 = game.getNextPlayer(player2).apply {
-            takeToHand(Bitten())
+            takeToHand(Bitten(game))
         }
 
         // when
-        player1.play(Pillage().apply { gameContext = game })
+        player1.play(Pillage(game))
 
         // then
 

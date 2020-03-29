@@ -2,9 +2,10 @@ package cardofthedead.cards.events
 
 import cardofthedead.cards.Event
 import cardofthedead.cards.getSingleZombies
+import cardofthedead.game.Game
 import cardofthedead.players.Player
 
-class Ringtone : Event() {
+class Ringtone(gameContext: Game) : Event(gameContext) {
 
     /**
      * Take one zombie card from every other player.

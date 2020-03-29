@@ -2,9 +2,10 @@ package cardofthedead.cards.events
 
 import cardofthedead.cards.Event
 import cardofthedead.cards.Zombie
+import cardofthedead.game.Game
 import cardofthedead.players.Player
 
-class Fog : Event() {
+class Fog(gameContext: Game) : Event(gameContext) {
 
     /**
      * All survivors take their zombies at hand. Turn by turn players draw a card from the player

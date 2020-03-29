@@ -22,10 +22,10 @@ import cardofthedead.cards.zombies.LadZombie
 import cardofthedead.cards.zombies.RedneckZombie
 import cardofthedead.cards.zombies.Zombies
 import cardofthedead.cards.zombies.`Zombies!!!`
+import cardofthedead.game.Game
 import kotlin.reflect.KClass
-import kotlin.reflect.full.createInstance
 
-class StandardDeck : Deck<Card>() {
+class StandardDeck(gameContext: Game) : Deck<Card>(gameContext) {
 
     /**
      * 56 cards in total
@@ -108,7 +108,9 @@ class StandardDeck : Deck<Card>() {
 
     init {
         cardTypeToCardDescriptor.keys.forEach { cardType ->
-            repeat(cardTypeToAmountInDeck(cardType)) { cards.add(cardType.createInstance()) }
+            repeat(cardTypeToAmountInDeck(cardType)) {
+                cards.add(cardType.constructors.first().call(gameContext))
+            }
         }
     }
 

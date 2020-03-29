@@ -29,12 +29,14 @@ import cardofthedead.cards.zombies.LadZombie
 import cardofthedead.cards.zombies.RedneckZombie
 import cardofthedead.cards.zombies.Zombies
 import cardofthedead.cards.zombies.`Zombies!!!`
+import cardofthedead.game.Game
 import kotlin.random.Random
 
 class EasyPlayer(
+    gameContext: Game,
     name: String,
-    sex: Sex?
-) : Player(name, sex) {
+    sex: Sex
+) : Player(gameContext, name, sex) {
 
     /**
      * Worst cards rating. The bigger the better.

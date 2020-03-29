@@ -1,8 +1,8 @@
 package cardofthedead.actions
 
 import cardofthedead.TestUtils.addCards
-import cardofthedead.TestUtils.dummyPlayer
 import cardofthedead.TestUtils.gameWithEmptyDeck
+import cardofthedead.TestUtils.getDummy
 import cardofthedead.TestUtils.takeToHand
 import cardofthedead.cards.actions.Armored
 import cardofthedead.cards.actions.Bitten
@@ -15,18 +15,18 @@ class ArmoredTest : StringSpec({
     "should put Bitten at bottom of deck" {
         // given
 
-        val bitten = Bitten()
+        val game = gameWithEmptyDeck().apply {
+            playDeck.addCards(Armored(this), `Nukes!`(this))
+        }
 
-        val player = dummyPlayer().apply {
+        val bitten = Bitten(game)
+
+        val player = game.getDummy().apply {
             takeToHand(bitten)
         }
 
-        val game = gameWithEmptyDeck(player).apply {
-            playDeck.addCards(Armored(), `Nukes!`())
-        }
-
         // when
-        player.play(Armored())
+        player.play(Armored(game))
 
         // then
 
@@ -39,14 +39,14 @@ class ArmoredTest : StringSpec({
     "should do nothing if no Bitten on hand" {
         // given
 
-        val player = dummyPlayer().apply {
-            takeToHand(Armored(), `Nukes!`())
+        val game = gameWithEmptyDeck()
+
+        val player = game.getDummy().apply {
+            takeToHand(Armored(game), `Nukes!`(game))
         }
 
-        val game = gameWithEmptyDeck(player)
-
         // when
-        player.play(Armored())
+        player.play(Armored(game))
 
         // then
 

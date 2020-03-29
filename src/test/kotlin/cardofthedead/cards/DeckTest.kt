@@ -17,6 +17,7 @@ import cardofthedead.cards.zombies.GrannyZombie
 import cardofthedead.cards.zombies.LadZombie
 import cardofthedead.cards.zombies.Zombies
 import cardofthedead.cards.zombies.`Zombies!!!`
+import cardofthedead.game.Game
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldBeOneOf
@@ -29,10 +30,12 @@ class DeckTest : StringSpec({
     "should add unique cards to deck" {
         // given
 
-        val armored = Armored()
-        val deck = Deck<Card>().apply {
+        val game = Game()
+
+        val armored = Armored(game)
+        val deck = Deck<Card>(game).apply {
             addCard(armored)
-            addCard(Barricade())
+            addCard(Barricade(game))
         }
 
         // when
@@ -45,9 +48,11 @@ class DeckTest : StringSpec({
     "should add cards on deck' bottom for empty deck" {
         // given
 
-        val dynamite = Dynamite()
+        val game = Game()
 
-        val deck = Deck<Card>()
+        val dynamite = Dynamite(game)
+
+        val deck = Deck<Card>(game)
 
         // when
         deck.addCardOnBottom(dynamite)
@@ -59,11 +64,13 @@ class DeckTest : StringSpec({
     "should add cards on deck' bottom" {
         // given
 
-        val bitten = Bitten()
-        val chainsaw = Chainsaw()
-        val dynamite = Dynamite()
+        val game = Game()
 
-        val deck = Deck<Card>().apply { addCards(chainsaw, dynamite) }
+        val bitten = Bitten(game)
+        val chainsaw = Chainsaw(game)
+        val dynamite = Dynamite(game)
+
+        val deck = Deck<Card>(game).apply { addCards(chainsaw, dynamite) }
 
         // when
         deck.addCardOnBottom(bitten)
@@ -78,8 +85,10 @@ class DeckTest : StringSpec({
     "should merge two empty decks" {
         // given
 
-        val deck1 = Deck<Card>()
-        val deck2 = Deck<Card>()
+        val game = Game()
+
+        val deck1 = Deck<Card>(game)
+        val deck2 = Deck<Card>(game)
 
         // when
         deck1.merge(deck2)
@@ -93,8 +102,10 @@ class DeckTest : StringSpec({
     "should merge empty deck to non-empty deck" {
         // given
 
-        val deck1 = Deck<Card>().apply { addCard(Hide()) }
-        val deck2 = Deck<Card>()
+        val game = Game()
+
+        val deck1 = Deck<Card>(game).apply { addCard(Hide(game)) }
+        val deck2 = Deck<Card>(game)
 
         // when
         deck1.merge(deck2)
@@ -108,8 +119,10 @@ class DeckTest : StringSpec({
     "should merge non-empty deck to empty deck" {
         // given
 
-        val deck1 = Deck<Card>()
-        val deck2 = Deck<Card>().apply { addCard(Lure()) }
+        val game = Game()
+
+        val deck1 = Deck<Card>(game)
+        val deck2 = Deck<Card>(game).apply { addCard(Lure(game)) }
 
         // when
         deck1.merge(deck2)
@@ -123,8 +136,10 @@ class DeckTest : StringSpec({
     "should merge to non-empty decks" {
         // given
 
-        val deck1 = Deck<Card>().apply { addCard(Hide()) }
-        val deck2 = Deck<Card>().apply { addCard(Lure()) }
+        val game = Game()
+
+        val deck1 = Deck<Card>(game).apply { addCard(Hide(game)) }
+        val deck2 = Deck<Card>(game).apply { addCard(Lure(game)) }
 
         // when
         deck1.merge(deck2)
@@ -138,10 +153,12 @@ class DeckTest : StringSpec({
     "should pick top card from non-empty deck" {
         // given
 
-        val nukes = `Nukes!`()
-        val pillage = Pillage()
+        val game = Game()
 
-        val deck = Deck<Card>().apply { addCards(nukes, pillage) }
+        val nukes = `Nukes!`(game)
+        val pillage = Pillage(game)
+
+        val deck = Deck<Card>(game).apply { addCards(nukes, pillage) }
 
         // when
 
@@ -157,7 +174,10 @@ class DeckTest : StringSpec({
 
     "should not pick card from empty deck" {
         // given
-        val deck = Deck<Card>()
+
+        val game = Game()
+
+        val deck = Deck<Card>(game)
 
         // when
         val pickedCard = deck.pickTopCard()
@@ -169,9 +189,11 @@ class DeckTest : StringSpec({
     "should pick card if it exists in deck" {
         // given
 
-        val slugger = Slugger()
+        val game = Game()
 
-        val deck = Deck<Card>().apply { addCard(slugger) }
+        val slugger = Slugger(game)
+
+        val deck = Deck<Card>(game).apply { addCard(slugger) }
 
         // when
         val pickedCard = deck.pickCard(slugger)
@@ -185,10 +207,12 @@ class DeckTest : StringSpec({
     "should not pick card if does not exist in deck" {
         // given
 
-        val slugger = Slugger()
-        val tripped = Tripped()
+        val game = Game()
 
-        val deck = Deck<Card>().apply { addCard(tripped) }
+        val slugger = Slugger(game)
+        val tripped = Tripped(game)
+
+        val deck = Deck<Card>(game).apply { addCard(tripped) }
 
         // when
         val pickedCard = deck.pickCard(slugger)
@@ -202,9 +226,11 @@ class DeckTest : StringSpec({
     "should pick card of class if it exists in deck" {
         // given
 
-        val armored = Armored()
+        val game = Game()
 
-        val deck = Deck<Card>().apply { addCards(armored, Barricade()) }
+        val armored = Armored(game)
+
+        val deck = Deck<Card>(game).apply { addCards(armored, Barricade(game)) }
 
         // when
         val pickedCardOfClass = deck.pickCardOfClass(Action::class.java)
@@ -217,7 +243,10 @@ class DeckTest : StringSpec({
 
     "should not pick card of class from empty deck" {
         // given
-        val deck = Deck<Card>()
+
+        val game = Game()
+
+        val deck = Deck<Card>(game)
 
         // when
         val pickedCardOfClass = deck.pickCardOfClass(Action::class.java)
@@ -228,7 +257,10 @@ class DeckTest : StringSpec({
 
     "should not pick card of class if it does not exist in deck" {
         // given
-        val deck = Deck<Card>().apply { addCards(Armored(), Barricade()) }
+
+        val game = Game()
+
+        val deck = Deck<Card>(game).apply { addCards(Armored(game), Barricade(game)) }
 
         // when
         val pickedCardOfClass = deck.pickCardOfClass(Zombie::class.java)
@@ -242,10 +274,12 @@ class DeckTest : StringSpec({
     "should pick random card from deck" {
         // given
 
-        val hide = Hide()
-        val lure = Lure()
+        val game = Game()
 
-        val deck = Deck<Card>().apply { addCards(hide, lure) }
+        val hide = Hide(game)
+        val lure = Lure(game)
+
+        val deck = Deck<Card>(game).apply { addCards(hide, lure) }
 
         // when
         val pickedRandomCard = deck.pickRandomCard()
@@ -258,7 +292,10 @@ class DeckTest : StringSpec({
 
     "should not pick random card if deck is empty" {
         // given
-        val deck = Deck<Card>()
+
+        val game = Game()
+
+        val deck = Deck<Card>(game)
 
         // when
         val pickedRandomCard = deck.pickRandomCard()
@@ -270,10 +307,12 @@ class DeckTest : StringSpec({
     "should get list of action cards from deck keeping them in deck" {
         // given
 
-        val nukes = `Nukes!`()
-        val pillage = Pillage()
+        val game = Game()
 
-        val deck = Deck<Card>().apply { addCards(nukes, pillage, GrannyZombie()) }
+        val nukes = `Nukes!`(game)
+        val pillage = Pillage(game)
+
+        val deck = Deck<Card>(game).apply { addCards(nukes, pillage, GrannyZombie(game)) }
 
         // when
         val actions = deck.getActions()
@@ -287,7 +326,10 @@ class DeckTest : StringSpec({
 
     "should get empty list of action cards if no actions in deck" {
         // given
-        val deck = Deck<Card>().apply { addCards(Fog(), `Zombies!!!`()) }
+
+        val game = Game()
+
+        val deck = Deck<Card>(game).apply { addCards(Fog(game), `Zombies!!!`(game)) }
 
         // when
         val actions = deck.getActions()
@@ -300,7 +342,11 @@ class DeckTest : StringSpec({
 
     "should get total movement points" {
         // given
-        val deck = Deck<Action>().apply { addCards(Slugger(), Dynamite(), Pillage()) }
+
+        val game = Game()
+
+        val deck =
+            Deck<Action>(game).apply { addCards(Slugger(game), Dynamite(game), Pillage(game)) }
 
         // when
         val movementPoints = deck.getMovementPoints()
@@ -313,7 +359,10 @@ class DeckTest : StringSpec({
 
     "should get 0 movement points if deck is empty" {
         // given
-        val deck = Deck<Action>()
+
+        val game = Game()
+
+        val deck = Deck<Action>(game)
 
         // when
         val movementPoints = deck.getMovementPoints()
@@ -326,7 +375,16 @@ class DeckTest : StringSpec({
 
     "should get total zombie count" {
         // given
-        val deck = Deck<Zombie>().apply { addCards(GrannyZombie(), Zombies(), `Zombies!!!`()) }
+
+        val game = Game()
+
+        val deck = Deck<Zombie>(game).apply {
+            addCards(
+                GrannyZombie(game),
+                Zombies(game),
+                `Zombies!!!`(game)
+            )
+        }
 
         // when
         val zombiesCount = deck.getZombiesCount()
@@ -339,7 +397,10 @@ class DeckTest : StringSpec({
 
     "should get 0 zombies points if zombie deck is empty" {
         // given
-        val deck = Deck<Zombie>()
+
+        val game = Game()
+
+        val deck = Deck<Zombie>(game)
 
         // when
         val zombiesCount = deck.getZombiesCount()
@@ -353,10 +414,13 @@ class DeckTest : StringSpec({
     "should get single zombies" {
         // given
 
-        val granny = GrannyZombie()
-        val lad = LadZombie()
+        val game = Game()
 
-        val deck = Deck<Zombie>().apply { addCards(granny, lad, Zombies(), `Zombies!!!`()) }
+        val granny = GrannyZombie(game)
+        val lad = LadZombie(game)
+
+        val deck =
+            Deck<Zombie>(game).apply { addCards(granny, lad, Zombies(game), `Zombies!!!`(game)) }
 
         // when
         val singleZombies = deck.getSingleZombies()
@@ -370,7 +434,10 @@ class DeckTest : StringSpec({
 
     "should get 0 single zombies if no such in deck" {
         // given
-        val deck = Deck<Zombie>()
+
+        val game = Game()
+
+        val deck = Deck<Zombie>(game)
 
         // when
         val singleZombies = deck.getSingleZombies()

@@ -1,10 +1,11 @@
 package cardofthedead.cards.actions
 
 import cardofthedead.cards.Action
+import cardofthedead.game.Game
 import cardofthedead.players.Player
 
 @Suppress("ClassName")
-class `Nukes!` : Action(2) {
+class `Nukes!`(gameContext: Game) : Action(gameContext, 2) {
 
     /**
      * Discard all zombie cards and all cards in hand from all players (including yourself).

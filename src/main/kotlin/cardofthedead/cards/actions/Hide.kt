@@ -2,9 +2,10 @@ package cardofthedead.cards.actions
 
 import cardofthedead.cards.Action
 import cardofthedead.cards.getSingleZombies
+import cardofthedead.game.Game
 import cardofthedead.players.Player
 
-class Hide : Action(1) {
+class Hide(gameContext: Game) : Action(gameContext, 1) {
 
     /**
      * Give one of your Zombie cards to the next player.

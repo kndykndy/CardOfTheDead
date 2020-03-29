@@ -1,8 +1,8 @@
 package cardofthedead.events
 
 import cardofthedead.TestUtils.addMovementPoints
-import cardofthedead.TestUtils.dummyPlayer
 import cardofthedead.TestUtils.gameWithEmptyDeck
+import cardofthedead.TestUtils.getDummy
 import cardofthedead.cards.actions.Armored
 import cardofthedead.cards.actions.Dynamite
 import cardofthedead.cards.events.Cornered
@@ -14,14 +14,14 @@ class CorneredTest : StringSpec({
     "should discard all escape cards" {
         // given
 
-        val player = dummyPlayer().apply {
-            addMovementPoints(Armored(), Dynamite())
+        val game = gameWithEmptyDeck()
+
+        val player = game.getDummy().apply {
+            addMovementPoints(Armored(game), Dynamite(game))
         }
 
-        val game = gameWithEmptyDeck(player)
-
         // when
-        player.play(Cornered().apply { gameContext = game })
+        player.play(Cornered(game))
 
         // then
 
@@ -33,12 +33,12 @@ class CorneredTest : StringSpec({
     "should not discard any cards if no escape cards" {
         // given
 
-        val player = dummyPlayer()
+        val game = gameWithEmptyDeck()
 
-        val game = gameWithEmptyDeck(player)
+        val player = game.getDummy()
 
         // when
-        player.play(Cornered().apply { gameContext = game })
+        player.play(Cornered(game))
 
         // then
 

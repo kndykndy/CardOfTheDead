@@ -3,9 +3,9 @@ package cardofthedead.cards
 import cardofthedead.game.Game
 import cardofthedead.players.Player
 
-abstract class Card {
-
-    internal lateinit var gameContext: Game
+abstract class Card(
+    val gameContext: Game
+) {
 
     open fun play(playedBy: Player) {
         throw java.lang.IllegalStateException(

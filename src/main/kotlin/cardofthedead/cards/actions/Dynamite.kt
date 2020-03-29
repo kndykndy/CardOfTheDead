@@ -4,9 +4,10 @@ import cardofthedead.cards.Action
 import cardofthedead.cards.getSingleZombies
 import cardofthedead.cards.zombies.Zombies
 import cardofthedead.cards.zombies.`Zombies!!!`
+import cardofthedead.game.Game
 import cardofthedead.players.Player
 
-class Dynamite : Action(2) {
+class Dynamite(gameContext: Game) : Action(gameContext, 2) {
 
     /**
      * Discard three zombie cards & one of your movement cards.

@@ -2,8 +2,8 @@ package cardofthedead.actions
 
 import cardofthedead.TestUtils.addMovementPoints
 import cardofthedead.TestUtils.chasedByZombies
-import cardofthedead.TestUtils.dummyPlayer
 import cardofthedead.TestUtils.gameWithEmptyDeck
+import cardofthedead.TestUtils.getDummy
 import cardofthedead.cards.actions.Armored
 import cardofthedead.cards.actions.Dynamite
 import cardofthedead.cards.actions.Hide
@@ -20,15 +20,20 @@ class DynamiteTest : StringSpec({
     "should discard 3 zombies and 1 movement card" {
         // given
 
-        val player = dummyPlayer().apply {
-            chasedByZombies(RedneckZombie(), RedneckZombie(), LadZombie(), BrideZombie())
-            addMovementPoints(Armored(), Hide())
+        val game = gameWithEmptyDeck()
+
+        val player = game.getDummy().apply {
+            chasedByZombies(
+                RedneckZombie(game),
+                RedneckZombie(game),
+                LadZombie(game),
+                BrideZombie(game)
+            )
+            addMovementPoints(Armored(game), Hide(game))
         }
 
-        val game = gameWithEmptyDeck(player)
-
         // when
-        player.play(Dynamite().apply { gameContext = game })
+        player.play(Dynamite(game))
 
         // then
 
@@ -41,14 +46,14 @@ class DynamiteTest : StringSpec({
     "should discard 1 movement card and no zombies as no zombies around"{
         // given
 
-        val player = dummyPlayer().apply {
-            addMovementPoints(Armored())
+        val game = gameWithEmptyDeck()
+
+        val player = game.getDummy().apply {
+            addMovementPoints(Armored(game))
         }
 
-        val game = gameWithEmptyDeck(player)
-
         // when
-        player.play(Dynamite().apply { gameContext = game })
+        player.play(Dynamite(game))
 
         // then
 
@@ -61,14 +66,14 @@ class DynamiteTest : StringSpec({
     "should discard 1 zombie and no movement cards as no movement cards on hand"{
         // given
 
-        val player = dummyPlayer().apply {
-            chasedByZombies(LadZombie())
+        val game = gameWithEmptyDeck()
+
+        val player = game.getDummy().apply {
+            chasedByZombies(LadZombie(game))
         }
 
-        val game = gameWithEmptyDeck(player)
-
         // when
-        player.play(Dynamite().apply { gameContext = game })
+        player.play(Dynamite(game))
 
         // then
 
@@ -81,15 +86,15 @@ class DynamiteTest : StringSpec({
     "should discard Zombies!!! and 1 movement card"{
         // given
 
-        val player = dummyPlayer().apply {
-            chasedByZombies(`Zombies!!!`())
-            addMovementPoints(Armored())
+        val game = gameWithEmptyDeck()
+
+        val player = game.getDummy().apply {
+            chasedByZombies(`Zombies!!!`(game))
+            addMovementPoints(Armored(game))
         }
 
-        val game = gameWithEmptyDeck(player)
-
         // when
-        player.play(Dynamite().apply { gameContext = game })
+        player.play(Dynamite(game))
 
         // then
 
@@ -102,15 +107,15 @@ class DynamiteTest : StringSpec({
     "should discard Zombies and zombie and 1 movement card"{
         // given
 
-        val player = dummyPlayer().apply {
-            chasedByZombies(Zombies(), LadZombie())
-            addMovementPoints(Armored())
+        val game = gameWithEmptyDeck()
+
+        val player = game.getDummy().apply {
+            chasedByZombies(Zombies(game), LadZombie(game))
+            addMovementPoints(Armored(game))
         }
 
-        val game = gameWithEmptyDeck(player)
-
         // when
-        player.play(Dynamite().apply { gameContext = game })
+        player.play(Dynamite(game))
 
         // then
 

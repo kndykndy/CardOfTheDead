@@ -2,9 +2,10 @@ package cardofthedead.cards.actions
 
 import cardofthedead.cards.Action
 import cardofthedead.cards.getSingleZombies
+import cardofthedead.game.Game
 import cardofthedead.players.Player
 
-class Slugger : Action(1) {
+class Slugger(gameContext: Game) : Action(gameContext, 1) {
 
     /**
      * Discard a zombie or take a card from another players hand.

@@ -1,8 +1,12 @@
 package cardofthedead.cards
 
-open class Deck<T : Card> {
+import cardofthedead.game.Game
 
-    // todo think over removing internal modifier
+open class Deck<T : Card>(
+    val gameContext: Game
+) {
+
+    // todo think over removing internal modifier -- check if it's accessed from ui
     internal val cards: MutableList<T> = mutableListOf()
 
     // Service funcs
@@ -51,10 +55,12 @@ open class Deck<T : Card> {
     fun pickRandomCard(): Card? = if (isNotEmpty()) pickCard(cards.random()) else null
 
     override fun toString(): String =
-        "[${cards.map { it::class.simpleName }.joinToString(",")}]"
+        "[${cards.joinToString(",") { it::class.simpleName + it.hashCode() }}]"
 }
 
-class EmptyDeck : Deck<Card>()
+class EmptyDeck(gameContext: Game) : Deck<Card>(gameContext)
+
+enum class DeckType { STANDARD, EMPTY }
 
 fun Deck<Card>.getActions() = this.cards.filterIsInstance<Action>()
 

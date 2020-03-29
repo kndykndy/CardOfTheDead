@@ -1,9 +1,10 @@
 package cardofthedead.cards.events
 
 import cardofthedead.cards.Event
+import cardofthedead.game.Game
 import cardofthedead.players.Player
 
-class Horde : Event() {
+class Horde(gameContext: Game) : Event(gameContext) {
 
     /**
      * Every survivor draws two cards in their turn till the end of a round.

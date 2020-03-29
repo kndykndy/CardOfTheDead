@@ -1,6 +1,7 @@
 package cardofthedead.cards.zombies
 
 import cardofthedead.cards.Zombie
+import cardofthedead.game.Game
 
 @Suppress("ClassName")
-class `Zombies!!!` : Zombie(3)
+class `Zombies!!!`(gameContext: Game) : Zombie(gameContext, 3)

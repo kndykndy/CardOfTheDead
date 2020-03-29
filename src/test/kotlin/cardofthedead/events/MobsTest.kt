@@ -1,7 +1,7 @@
 package cardofthedead.events
 
-import cardofthedead.TestUtils.dummyPlayer
 import cardofthedead.TestUtils.gameWithStandardDeck
+import cardofthedead.TestUtils.getDummy
 import cardofthedead.TestUtils.takeToHand
 import cardofthedead.cards.actions.Chainsaw
 import cardofthedead.cards.actions.Dynamite
@@ -15,21 +15,22 @@ class MobsTest : StringSpec({
     "should pass Mobs to next player if have Slugger on hand" {
         // given
 
-        val slugger = Slugger()
-        val player1 = dummyPlayer().apply {
+        val game = gameWithStandardDeck()
+
+        val slugger = Slugger(game)
+
+        val player1 = game.getDummy().apply {
             takeToHand(slugger)
         }
 
-        val game = gameWithStandardDeck(player1)
-
-        val chainsaw = Chainsaw()
-        val dynamite = Dynamite()
+        val chainsaw = Chainsaw(game)
+        val dynamite = Dynamite(game)
         val player2 = game.getNextPlayer(player1).apply {
             takeToHand(chainsaw, dynamite)
         }
 
         // when
-        player1.play(Mobs().apply { gameContext = game })
+        player1.play(Mobs(game))
 
         // then
 
@@ -44,16 +45,16 @@ class MobsTest : StringSpec({
     "should put hand on bottom of the deck if have no Slugger on hand" {
         // given
 
-        val chainsaw = Chainsaw()
-        val dynamite = Dynamite()
-        val player1 = dummyPlayer().apply {
+        val game = gameWithStandardDeck()
+
+        val chainsaw = Chainsaw(game)
+        val dynamite = Dynamite(game)
+        val player1 = game.getDummy().apply {
             takeToHand(chainsaw, dynamite)
         }
 
-        val game = gameWithStandardDeck(player1)
-
         // when
-        player1.play(Mobs().apply { gameContext = game })
+        player1.play(Mobs(game))
 
         // then
 
