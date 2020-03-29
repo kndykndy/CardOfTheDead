@@ -67,14 +67,23 @@ class Game() {
             playRound()
         }
 
-        val lastWinners = winners.last()
-        if (lastWinners.size == 1) {
-            // todo redo -- now last is taken, which is not true -- it should be calculated by srvvl
-            val winner = lastWinners.first()
+        announceWinners()
+    }
+
+    private fun announceWinners() {
+        players.addAll(deadPlayers)
+
+        println("Player scores: " + players.joinToString { it.name + " (${it.getSurvivalPoints()})" })
+
+        val maxScore = players.map { it.getSurvivalPoints() }.max()
+        val winners = players.groupBy { it.getSurvivalPoints() }[maxScore]!!
+
+        if (winners.size == 1) {
+            val winner = winners.first()
             println("The winner is ${winner.name + " (${winner.getSurvivalPoints()})"}")
         } else {
             println("The winners are " +
-                    lastWinners.joinToString { it.name + " (${it.getSurvivalPoints()})" }
+                    winners.joinToString { it.name + " (${it.getSurvivalPoints()})" }
             )
         }
     }
