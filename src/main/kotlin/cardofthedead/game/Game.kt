@@ -16,7 +16,7 @@ import cardofthedead.players.Player
 import cardofthedead.players.PlayerDescriptor
 import kotlin.random.Random
 
-class Game() {
+class Game private constructor(builder: Builder) {
 
     internal val players: MutableList<Player> = mutableListOf()
 
@@ -37,7 +37,7 @@ class Game() {
     private val playersToZombiesToBeEaten = mapOf(2 to 7, 3 to 6, 4 to 6, 5 to 5)
     private val playersToMovementPointsToEscape = mapOf(2 to 7, 3 to 6, 4 to 6, 5 to 5)
 
-    private constructor(builder: Builder) : this() {
+    init {
         builder.playerDescriptors
             .map { player ->
                 when (player.level) {
@@ -54,7 +54,9 @@ class Game() {
 
         println("Starting a new Game of the Dead!")
         println("${playDeck.size()} cards in deck.")
-        println("Tonight we're having ${players.size} players: ${players.joinToString { it.name }}.")
+        println("Tonight we're having ${players.size} players: " +
+                "${players.joinToString { it.name }}."
+        )
 
         val player = lastPlayerWentToShoppingMall()
         println("${player.name} was the last who went to shopping mall, he's starting!")

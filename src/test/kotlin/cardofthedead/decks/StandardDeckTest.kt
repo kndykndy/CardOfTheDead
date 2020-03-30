@@ -1,8 +1,8 @@
 package cardofthedead.decks
 
+import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.cards.events.Cornered
 import cardofthedead.cards.zombies.`Zombies!!!`
-import cardofthedead.game.Game
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
@@ -11,7 +11,7 @@ class StandardDeckTest : StringSpec({
 
     "should " {
         // given
-        val game = Game()
+        val game = gameWithEmptyDeck()
 
         // when
         val deck = StandardDeck(game)
