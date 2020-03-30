@@ -176,20 +176,6 @@ abstract class Player(
                 "escp=$escapeCards (${getMovementPointsCount()}), " +
                 "srvvl=$survivalPoints"
     }
-
-    companion object {
-
-//        fun of(
-//            name: String,
-//            level: Level? = Level.EASY,
-//            sex: Sex? = Sex.MALE
-//        ): PlayerDescriptor =
-//            if (level != null) {
-//                if (level == Level.HARD) HardPlayer(name, sex) else EasyPlayer(name, sex)
-//            } else {
-//                if (Random.nextBoolean()) HardPlayer(name, sex) else EasyPlayer(name, sex)
-//            }
-    }
 }
 
 data class PlayerDescriptor(
