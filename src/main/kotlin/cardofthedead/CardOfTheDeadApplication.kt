@@ -7,10 +7,10 @@ import cardofthedead.players.Sex
 
 fun main() {
     Game.Builder(
-        PlayerDescriptor("Dimitry"),
-        PlayerDescriptor("Eugene")
+        PlayerDescriptor("Luke"),
+        PlayerDescriptor("Yoda")
     )
-        .withPlayer(PlayerDescriptor("Stacey", Level.EASY, Sex.FEMALE))
+        .withPlayer(PlayerDescriptor("Rei", Level.EASY, Sex.FEMALE))
         .build()
         .play()
 }

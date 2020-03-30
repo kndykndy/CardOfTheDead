@@ -7,6 +7,8 @@ import cardofthedead.cards.Zombie
 import cardofthedead.decks.Deck
 import cardofthedead.decks.DeckType
 import cardofthedead.game.Game
+import cardofthedead.players.EasyPlayer
+import cardofthedead.players.HardPlayer
 import cardofthedead.players.Player
 import cardofthedead.players.PlayerDescriptor
 import cardofthedead.players.Sex
@@ -20,24 +22,22 @@ object TestUtils {
         deckType: DeckType
     ) =
         Game.Builder(
-            PlayerDescriptor("John Doe"),
-            PlayerDescriptor("Jane Doe"),
+            PlayerDescriptor("Luke Skywalker"),
+            PlayerDescriptor("Obi Van Kenobi"),
             deckType
         )
             .withPlayer(playerDescriptor)
             .build()
 
-    fun gameWithEmptyDeck() = gameWithDeck(donaldTrumpDescriptor(), DeckType.EMPTY)
-    fun gameWithStandardDeck() = gameWithDeck(donaldTrumpDescriptor(), DeckType.STANDARD)
+    fun gameWithEmptyDeck() = gameWithDeck(PlayerDescriptor("C3PO"), DeckType.EMPTY)
+    fun gameWithStandardDeck() = gameWithDeck(PlayerDescriptor("C3PO"), DeckType.STANDARD)
 
     fun Game.getDummy() = this.players.last()
 
     // Players
 
-    private fun donaldTrumpDescriptor() = PlayerDescriptor("Donald Trump")
-
     fun testPlayer(gameContext: Game): Player =
-        object : Player(gameContext, "Darth Vader", Sex.MALE) {
+        object : Player(gameContext, "R2D2", Sex.MALE) {
             override fun chooseSinglePointCards(n: Int) {}
             override fun decideToPlayCardFromHand() = PlayCardDecision.doNotPlay()
             override fun chooseWorstCandidateForBarricade(): Card? = null
@@ -50,6 +50,12 @@ object TestUtils {
             override fun decideHowManyMovementCardsToDiscardForTripped(): Int = 0
         }
 
+    fun testEasyPlayer(gameContext: Game): EasyPlayer =
+        EasyPlayer(gameContext, "Kylo Ren", Sex.FEMALE)
+
+    fun testHardPlayer(gameContext: Game): HardPlayer =
+        HardPlayer(gameContext, "Darth Vader", Sex.MALE)
+
     fun Player.takeToHand(vararg listOfCards: Card) =
         listOfCards.forEach { this.takeToHand(it) }
 
@@ -58,6 +64,9 @@ object TestUtils {
 
     fun Player.addMovementPoints(vararg listOfActions: Action) =
         listOfActions.forEach { this.addMovementPoints(it) }
+
+    fun Player.addCardsToCandidates(vararg listOfCards: Card) =
+        listOfCards.forEach { this.candidatesToHand.addCard(it) }
 
     // Cards
 
