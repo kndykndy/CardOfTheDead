@@ -156,6 +156,63 @@ class DeckTest : StringSpec({
         deck2.isEmpty() shouldBe true
     }
 
+    "should return true if has card in deck" {
+        // given
+
+        val game = Game()
+
+        val hide = Hide(game)
+        val deck = Deck<Card>(game).apply { addCard(hide) }
+
+        // when
+        val hasCard = deck.hasCard(hide)
+
+        // then
+        hasCard shouldBe true
+    }
+
+    "should return false if does not have card in deck" {
+        // given
+
+        val game = Game()
+
+        val deck = Deck<Card>(game).apply { addCard(Hide(game)) }
+
+        // when
+        val hasCard = deck.hasCard(Slugger(game))
+
+        // then
+        hasCard shouldBe false
+    }
+
+    "should return true if has card of class in deck" {
+        // given
+
+        val game = Game()
+
+        val deck = Deck<Card>(game).apply { addCard(Hide(game)) }
+
+        // when
+        val hasCard = deck.hasCardOfClass(Hide::class.java)
+
+        // then
+        hasCard shouldBe true
+    }
+
+    "should return true if does not have card of class in deck" {
+        // given
+
+        val game = Game()
+
+        val deck = Deck<Card>(game).apply { addCard(Hide(game)) }
+
+        // when
+        val hasCard = deck.hasCardOfClass(Slugger::class.java)
+
+        // then
+        hasCard shouldBe false
+    }
+
     "should pick top card from non-empty deck" {
         // given
 
