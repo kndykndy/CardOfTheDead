@@ -1,6 +1,9 @@
-package cardofthedead.cards
+package cardofthedead.decks
 
 import cardofthedead.TestUtils.addCards
+import cardofthedead.cards.Action
+import cardofthedead.cards.Card
+import cardofthedead.cards.Zombie
 import cardofthedead.cards.actions.Armored
 import cardofthedead.cards.actions.Barricade
 import cardofthedead.cards.actions.Bitten
@@ -17,11 +20,6 @@ import cardofthedead.cards.zombies.GrannyZombie
 import cardofthedead.cards.zombies.LadZombie
 import cardofthedead.cards.zombies.Zombies
 import cardofthedead.cards.zombies.`Zombies!!!`
-import cardofthedead.decks.Deck
-import cardofthedead.decks.getActions
-import cardofthedead.decks.getMovementPoints
-import cardofthedead.decks.getSingleZombies
-import cardofthedead.decks.getZombiesCount
 import cardofthedead.game.Game
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldBeEmpty

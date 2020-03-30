@@ -1,11 +1,8 @@
-package cardofthedead.actions
+package cardofthedead.cards.actions
 
 import cardofthedead.TestUtils.addMovementPoints
 import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.TestUtils.getDummy
-import cardofthedead.cards.actions.Armored
-import cardofthedead.cards.actions.Dynamite
-import cardofthedead.cards.actions.Tripped
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every

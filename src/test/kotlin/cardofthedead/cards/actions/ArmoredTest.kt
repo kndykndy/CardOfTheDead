@@ -1,12 +1,9 @@
-package cardofthedead.actions
+package cardofthedead.cards.actions
 
 import cardofthedead.TestUtils.addCards
 import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.TestUtils.getDummy
 import cardofthedead.TestUtils.takeToHand
-import cardofthedead.cards.actions.Armored
-import cardofthedead.cards.actions.Bitten
-import cardofthedead.cards.actions.`Nukes!`
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 

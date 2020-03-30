@@ -1,8 +1,7 @@
-package cardofthedead.actions
+package cardofthedead.cards.actions
 
 import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.TestUtils.getDummy
-import cardofthedead.cards.actions.Bitten
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe

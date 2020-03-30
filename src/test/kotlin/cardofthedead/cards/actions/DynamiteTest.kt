@@ -1,12 +1,9 @@
-package cardofthedead.actions
+package cardofthedead.cards.actions
 
 import cardofthedead.TestUtils.addMovementPoints
 import cardofthedead.TestUtils.chasedByZombies
 import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.TestUtils.getDummy
-import cardofthedead.cards.actions.Armored
-import cardofthedead.cards.actions.Dynamite
-import cardofthedead.cards.actions.Hide
 import cardofthedead.cards.zombies.BrideZombie
 import cardofthedead.cards.zombies.LadZombie
 import cardofthedead.cards.zombies.RedneckZombie

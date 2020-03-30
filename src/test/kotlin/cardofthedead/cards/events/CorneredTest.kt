@@ -1,11 +1,10 @@
-package cardofthedead.events
+package cardofthedead.cards.events
 
 import cardofthedead.TestUtils.addMovementPoints
 import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.TestUtils.getDummy
 import cardofthedead.cards.actions.Armored
 import cardofthedead.cards.actions.Dynamite
-import cardofthedead.cards.events.Cornered
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 

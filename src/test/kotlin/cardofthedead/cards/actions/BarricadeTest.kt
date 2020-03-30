@@ -1,13 +1,9 @@
-package cardofthedead.actions
+package cardofthedead.cards.actions
 
 import cardofthedead.TestUtils.addCards
 import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.TestUtils.gameWithStandardDeck
 import cardofthedead.TestUtils.getDummy
-import cardofthedead.cards.actions.Armored
-import cardofthedead.cards.actions.Barricade
-import cardofthedead.cards.actions.Bitten
-import cardofthedead.cards.actions.`Nukes!`
 import cardofthedead.cards.zombies.RedneckZombie
 import cardofthedead.cards.zombies.Zombies
 import cardofthedead.cards.zombies.`Zombies!!!`

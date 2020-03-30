@@ -1,4 +1,4 @@
-package cardofthedead.events
+package cardofthedead.cards.events
 
 import cardofthedead.TestUtils.chasedByZombies
 import cardofthedead.TestUtils.gameWithEmptyDeck
@@ -7,7 +7,6 @@ import cardofthedead.TestUtils.takeToHand
 import cardofthedead.cards.actions.Chainsaw
 import cardofthedead.cards.actions.Hide
 import cardofthedead.cards.actions.Slugger
-import cardofthedead.cards.events.Fog
 import cardofthedead.cards.zombies.BrideZombie
 import cardofthedead.cards.zombies.LadZombie
 import cardofthedead.cards.zombies.Zombies

@@ -1,9 +1,7 @@
-package cardofthedead.cards
+package cardofthedead.decks
 
 import cardofthedead.cards.events.Cornered
 import cardofthedead.cards.zombies.`Zombies!!!`
-import cardofthedead.decks.StandardDeck
-import cardofthedead.decks.getActions
 import cardofthedead.game.Game
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldHaveSize

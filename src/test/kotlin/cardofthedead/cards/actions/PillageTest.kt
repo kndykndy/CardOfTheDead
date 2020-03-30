@@ -1,15 +1,8 @@
-package cardofthedead.actions
+package cardofthedead.cards.actions
 
 import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.TestUtils.getDummy
 import cardofthedead.TestUtils.takeToHand
-import cardofthedead.cards.actions.Bitten
-import cardofthedead.cards.actions.Chainsaw
-import cardofthedead.cards.actions.Dynamite
-import cardofthedead.cards.actions.Hide
-import cardofthedead.cards.actions.Lure
-import cardofthedead.cards.actions.Pillage
-import cardofthedead.cards.actions.Slugger
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 

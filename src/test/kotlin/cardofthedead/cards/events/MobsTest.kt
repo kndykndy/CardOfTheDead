@@ -1,4 +1,4 @@
-package cardofthedead.events
+package cardofthedead.cards.events
 
 import cardofthedead.TestUtils.gameWithStandardDeck
 import cardofthedead.TestUtils.getDummy
@@ -6,7 +6,6 @@ import cardofthedead.TestUtils.takeToHand
 import cardofthedead.cards.actions.Chainsaw
 import cardofthedead.cards.actions.Dynamite
 import cardofthedead.cards.actions.Slugger
-import cardofthedead.cards.events.Mobs
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
