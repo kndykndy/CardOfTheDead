@@ -1,5 +1,8 @@
-package cardofthedead.cards
+package cardofthedead.decks
 
+import cardofthedead.cards.Action
+import cardofthedead.cards.Card
+import cardofthedead.cards.Zombie
 import cardofthedead.game.Game
 
 open class Deck<T : Card>(

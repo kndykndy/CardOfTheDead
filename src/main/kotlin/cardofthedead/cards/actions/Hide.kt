@@ -1,7 +1,7 @@
 package cardofthedead.cards.actions
 
 import cardofthedead.cards.Action
-import cardofthedead.cards.getSingleZombies
+import cardofthedead.decks.getSingleZombies
 import cardofthedead.game.Game
 import cardofthedead.players.Player
 

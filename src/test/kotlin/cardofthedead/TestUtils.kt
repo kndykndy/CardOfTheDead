@@ -2,8 +2,8 @@ package cardofthedead
 
 import cardofthedead.cards.Action
 import cardofthedead.cards.Card
-import cardofthedead.cards.Deck
-import cardofthedead.cards.DeckType
+import cardofthedead.decks.Deck
+import cardofthedead.decks.DeckType
 import cardofthedead.cards.Zombie
 import cardofthedead.game.Game
 import cardofthedead.players.Player

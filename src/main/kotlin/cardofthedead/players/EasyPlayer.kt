@@ -20,9 +20,9 @@ import cardofthedead.cards.events.Fog
 import cardofthedead.cards.events.Horde
 import cardofthedead.cards.events.Mobs
 import cardofthedead.cards.events.Ringtone
-import cardofthedead.cards.getActions
-import cardofthedead.cards.getSingleZombies
-import cardofthedead.cards.getZombiesCount
+import cardofthedead.decks.getActions
+import cardofthedead.decks.getSingleZombies
+import cardofthedead.decks.getZombiesCount
 import cardofthedead.cards.zombies.BrideZombie
 import cardofthedead.cards.zombies.GrannyZombie
 import cardofthedead.cards.zombies.LadZombie

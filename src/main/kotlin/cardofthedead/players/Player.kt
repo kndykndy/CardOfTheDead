@@ -2,10 +2,10 @@ package cardofthedead.players
 
 import cardofthedead.cards.Action
 import cardofthedead.cards.Card
-import cardofthedead.cards.Deck
+import cardofthedead.decks.Deck
 import cardofthedead.cards.PlayCardDecision
 import cardofthedead.cards.Zombie
-import cardofthedead.cards.getMovementPoints
+import cardofthedead.decks.getMovementPoints
 import cardofthedead.game.Game
 
 abstract class Player(
@@ -14,25 +14,29 @@ abstract class Player(
     val sex: Sex
 ) {
 
-    internal val hand: Deck<Card> = Deck(gameContext)
+    internal val hand: Deck<Card> =
+        Deck(gameContext)
 
     /**
      * Temporary cards that may transition to hand eventually.
      * For certain actions.
      */
-    internal val candidatesToHand: Deck<Card> = Deck(gameContext)
+    internal val candidatesToHand: Deck<Card> =
+        Deck(gameContext)
 
     /**
      * Zombies that chase a player.
      * For this round.
      */
-    internal val zombiesAround: Deck<Zombie> = Deck(gameContext)
+    internal val zombiesAround: Deck<Zombie> =
+        Deck(gameContext)
 
     /**
      * Action cards if gathered enough let player to escape from a round.
      * For this round.
      */
-    internal val escapeCards: Deck<Action> = Deck(gameContext)
+    internal val escapeCards: Deck<Action> =
+        Deck(gameContext)
 
     /**
      * Sum of all movement points from all escape cards played today for the player.

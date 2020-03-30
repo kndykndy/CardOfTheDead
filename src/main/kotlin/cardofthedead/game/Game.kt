@@ -2,13 +2,13 @@ package cardofthedead.game
 
 import cardofthedead.cards.Action
 import cardofthedead.cards.Card
-import cardofthedead.cards.Deck
-import cardofthedead.cards.DeckType
-import cardofthedead.cards.EmptyDeck
 import cardofthedead.cards.Event
-import cardofthedead.cards.StandardDeck
 import cardofthedead.cards.WayToPlayCard
 import cardofthedead.cards.Zombie
+import cardofthedead.decks.Deck
+import cardofthedead.decks.DeckType
+import cardofthedead.decks.EmptyDeck
+import cardofthedead.decks.StandardDeck
 import cardofthedead.players.EasyPlayer
 import cardofthedead.players.HardPlayer
 import cardofthedead.players.Level
@@ -73,7 +73,8 @@ class Game() {
     private fun announceWinners() {
         players.addAll(deadPlayers)
 
-        println("Player scores: " + players.joinToString { it.name + " (${it.getSurvivalPoints()})" })
+        println("Player scores: " +
+                players.joinToString { it.name + " (${it.getSurvivalPoints()})" })
 
         val maxScore = players.map { it.getSurvivalPoints() }.max()
         val winners = players.groupBy { it.getSurvivalPoints() }[maxScore]!!

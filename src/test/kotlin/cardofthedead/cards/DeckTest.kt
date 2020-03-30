@@ -17,6 +17,11 @@ import cardofthedead.cards.zombies.GrannyZombie
 import cardofthedead.cards.zombies.LadZombie
 import cardofthedead.cards.zombies.Zombies
 import cardofthedead.cards.zombies.`Zombies!!!`
+import cardofthedead.decks.Deck
+import cardofthedead.decks.getActions
+import cardofthedead.decks.getMovementPoints
+import cardofthedead.decks.getSingleZombies
+import cardofthedead.decks.getZombiesCount
 import cardofthedead.game.Game
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldBeEmpty
@@ -70,7 +75,8 @@ class DeckTest : StringSpec({
         val chainsaw = Chainsaw(game)
         val dynamite = Dynamite(game)
 
-        val deck = Deck<Card>(game).apply { addCards(chainsaw, dynamite) }
+        val deck = Deck<Card>(game)
+            .apply { addCards(chainsaw, dynamite) }
 
         // when
         deck.addCardOnBottom(bitten)
@@ -158,7 +164,8 @@ class DeckTest : StringSpec({
         val nukes = `Nukes!`(game)
         val pillage = Pillage(game)
 
-        val deck = Deck<Card>(game).apply { addCards(nukes, pillage) }
+        val deck = Deck<Card>(game)
+            .apply { addCards(nukes, pillage) }
 
         // when
 
@@ -230,7 +237,8 @@ class DeckTest : StringSpec({
 
         val armored = Armored(game)
 
-        val deck = Deck<Card>(game).apply { addCards(armored, Barricade(game)) }
+        val deck = Deck<Card>(game)
+            .apply { addCards(armored, Barricade(game)) }
 
         // when
         val pickedCardOfClass = deck.pickCardOfClass(Action::class.java)
@@ -260,7 +268,8 @@ class DeckTest : StringSpec({
 
         val game = Game()
 
-        val deck = Deck<Card>(game).apply { addCards(Armored(game), Barricade(game)) }
+        val deck = Deck<Card>(game)
+            .apply { addCards(Armored(game), Barricade(game)) }
 
         // when
         val pickedCardOfClass = deck.pickCardOfClass(Zombie::class.java)
@@ -279,7 +288,8 @@ class DeckTest : StringSpec({
         val hide = Hide(game)
         val lure = Lure(game)
 
-        val deck = Deck<Card>(game).apply { addCards(hide, lure) }
+        val deck = Deck<Card>(game)
+            .apply { addCards(hide, lure) }
 
         // when
         val pickedRandomCard = deck.pickRandomCard()
@@ -312,7 +322,8 @@ class DeckTest : StringSpec({
         val nukes = `Nukes!`(game)
         val pillage = Pillage(game)
 
-        val deck = Deck<Card>(game).apply { addCards(nukes, pillage, GrannyZombie(game)) }
+        val deck = Deck<Card>(game)
+            .apply { addCards(nukes, pillage, GrannyZombie(game)) }
 
         // when
         val actions = deck.getActions()
@@ -329,7 +340,8 @@ class DeckTest : StringSpec({
 
         val game = Game()
 
-        val deck = Deck<Card>(game).apply { addCards(Fog(game), `Zombies!!!`(game)) }
+        val deck = Deck<Card>(game)
+            .apply { addCards(Fog(game), `Zombies!!!`(game)) }
 
         // when
         val actions = deck.getActions()
@@ -346,7 +358,8 @@ class DeckTest : StringSpec({
         val game = Game()
 
         val deck =
-            Deck<Action>(game).apply { addCards(Slugger(game), Dynamite(game), Pillage(game)) }
+            Deck<Action>(game)
+                .apply { addCards(Slugger(game), Dynamite(game), Pillage(game)) }
 
         // when
         val movementPoints = deck.getMovementPoints()
@@ -420,7 +433,8 @@ class DeckTest : StringSpec({
         val lad = LadZombie(game)
 
         val deck =
-            Deck<Zombie>(game).apply { addCards(granny, lad, Zombies(game), `Zombies!!!`(game)) }
+            Deck<Zombie>(game)
+                .apply { addCards(granny, lad, Zombies(game), `Zombies!!!`(game)) }
 
         // when
         val singleZombies = deck.getSingleZombies()

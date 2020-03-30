@@ -1,5 +1,6 @@
-package cardofthedead.cards
+package cardofthedead.decks
 
+import cardofthedead.cards.Card
 import cardofthedead.cards.actions.Armored
 import cardofthedead.cards.actions.Barricade
 import cardofthedead.cards.actions.Bitten
@@ -33,7 +34,10 @@ class StandardDeck(gameContext: Game) : Deck<Card>(gameContext) {
     private val cardTypeToCardDescriptor = mapOf(
 
         // 27 actions
-        Armored::class to CardDescriptor(2, "put bitten on the bottom of the deck from your hand"),
+        Armored::class to CardDescriptor(
+            2,
+            "put bitten on the bottom of the deck from your hand"
+        ),
         Barricade::class to CardDescriptor(
             2,
             "draw three cards. choose one and put it on the bottom of the deck"
@@ -43,7 +47,10 @@ class StandardDeck(gameContext: Game) : Deck<Card>(gameContext) {
             "you're not getting survival points if this card's in your hand by the end of " +
                     "the round. this card cannot be played as a movement card."
         ),
-        Chainsaw::class to CardDescriptor(4, "discard two zombie cards"),
+        Chainsaw::class to CardDescriptor(
+            4,
+            "discard two zombie cards"
+        ),
         Dynamite::class to CardDescriptor(
             1,
             "discard three zombie cards & one of your movement cards"
@@ -53,12 +60,18 @@ class StandardDeck(gameContext: Game) : Deck<Card>(gameContext) {
             "give one of your Zombie cards to the next player. " +
                     "you may choose to draw no cards on your next turn."
         ),
-        Lure::class to CardDescriptor(4, "give one of your zombie cards to any player"),
+        Lure::class to CardDescriptor(
+            4,
+            "give one of your zombie cards to any player"
+        ),
         `Nukes!`::class to CardDescriptor(
             1,
             "discard all zombie cards and all cards in hand from all players (including yourself)"
         ),
-        Pillage::class to CardDescriptor(1, "blindly draw a card from every other player"),
+        Pillage::class to CardDescriptor(
+            1,
+            "blindly draw a card from every other player"
+        ),
         Slugger::class to CardDescriptor(
             4,
             "discard a zombie or take a card from another players hand"
@@ -69,7 +82,10 @@ class StandardDeck(gameContext: Game) : Deck<Card>(gameContext) {
         ),
 
         // 6 events
-        Cornered::class to CardDescriptor(1, "discard all your movement cards"),
+        Cornered::class to CardDescriptor(
+            1,
+            "discard all your movement cards"
+        ),
         Fog::class to CardDescriptor(
             2,
             "all survivors take their zombies at hand. turn by turn players draw a card from " +
@@ -84,7 +100,10 @@ class StandardDeck(gameContext: Game) : Deck<Card>(gameContext) {
             1,
             "every survivor draws two cards in their turn till the end of a round"
         ),
-        Ringtone::class to CardDescriptor(1, "take one zombie card from every other player"),
+        Ringtone::class to CardDescriptor(
+            1,
+            "take one zombie card from every other player"
+        ),
 
         // 23 zombies
         BrideZombie::class to CardDescriptor(5),
