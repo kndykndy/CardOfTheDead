@@ -20,17 +20,15 @@ import cardofthedead.cards.events.Fog
 import cardofthedead.cards.events.Horde
 import cardofthedead.cards.events.Mobs
 import cardofthedead.cards.events.Ringtone
-import cardofthedead.decks.getActions
-import cardofthedead.decks.getSingleZombies
-import cardofthedead.decks.getZombiesCount
 import cardofthedead.cards.zombies.BrideZombie
 import cardofthedead.cards.zombies.GrannyZombie
 import cardofthedead.cards.zombies.LadZombie
 import cardofthedead.cards.zombies.RedneckZombie
 import cardofthedead.cards.zombies.Zombies
 import cardofthedead.cards.zombies.`Zombies!!!`
+import cardofthedead.decks.getActions
+import cardofthedead.decks.getSingleZombies
 import cardofthedead.game.Game
-import kotlin.random.Random
 
 class EasyPlayer(
     gameContext: Game,
@@ -70,6 +68,7 @@ class EasyPlayer(
      * Picks random N cards from the candidates deck.
      */
     override fun chooseSinglePointCards(n: Int) {
+        if (n <= 0) return
         val actionCards = candidatesToHand.getActions().filter { it.movementPoints == 1 }
         if (actionCards.size > n) {
             actionCards.shuffled().take(n)
@@ -84,27 +83,22 @@ class EasyPlayer(
     override fun decideToPlayCardFromHand(): PlayCardDecision {
         if (hand.isEmpty()) return PlayCardDecision.cannotPlay()
 
-        val zombiesToSurround =
-            gameContext.playersToZombiesToBeSurrounded.getValue(gameContext.initialPlayersCount)
-
         val playableActionCards = getPlayableActionCards()
 
         return if (playableActionCards.isNotEmpty()) {
-            if (Random.nextBoolean()) {
-                val notSurrounded = zombiesAround.getZombiesCount() < zombiesToSurround
-                val lotsOfCards = this.hand.size() > 3
+            if (throwCoin()) {
+                val zombiesToSurround =
+                    gameContext.playersToZombiesToBeSurrounded.getValue(gameContext.initialPlayersCount)
 
-                if ((notSurrounded && Random.nextBoolean()) || lotsOfCards) {
-                    PlayCardDecision(
-                        WayToPlayCard.PLAY_AS_MOVEMENT_POINTS,
-                        hand.pickCard(playableActionCards.random())
-                    )
-                } else {
-                    PlayCardDecision(
-                        WayToPlayCard.PLAY_AS_ACTION,
-                        hand.pickCard(playableActionCards.random())
-                    )
-                }
+                val notSurrounded = getZombiesAroundCount() < zombiesToSurround
+                val lotsOfCardsOnHand = this.hand.size() > 3
+
+                val playAsMovementPoints = (notSurrounded && throwCoin()) || lotsOfCardsOnHand
+                PlayCardDecision(
+                    if (playAsMovementPoints) WayToPlayCard.PLAY_AS_MOVEMENT_POINTS
+                    else WayToPlayCard.PLAY_AS_ACTION,
+                    hand.pickCard(playableActionCards.random())
+                )
             } else {
                 PlayCardDecision.doNotPlay()
             }
@@ -164,8 +158,7 @@ class EasyPlayer(
     override fun choosePlayerToDiscardMovementCardsFromForTripped(): Player =
         gameContext.getRandomPlayer(this)
 
-    override fun decideHowManyMovementCardsToDiscardForTripped(): Int =
-        Random.nextInt(2)
+    override fun decideHowManyMovementCardsToDiscardForTripped(): Int = throwDice(2)
 
     private fun getPlayableActionCards(): List<Action> =
         hand.getActions().filterNot { it is Bitten }

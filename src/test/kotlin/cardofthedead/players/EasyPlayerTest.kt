@@ -57,5 +57,25 @@ class EasyPlayerTest : StringSpec({
         player.hand.hasCard(lure) shouldBe true
     }
 
+    "should choose no single point cards if requested 0 or less" {
+        // given
+
+        val game = gameWithEmptyDeck()
+
+        val lure = Lure(game)
+
+        val player = testEasyPlayer(game).apply {
+            addCardsToCandidates(lure)
+        }
+
+        // when
+        player.chooseSinglePointCards(-1)
+
+        // then
+
+        player.candidatesToHand.hasCard(lure) shouldBe true
+        player.hand.hasCard(lure) shouldBe false
+    }
+
     // todo rest
 })

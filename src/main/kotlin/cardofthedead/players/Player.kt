@@ -7,6 +7,7 @@ import cardofthedead.cards.Zombie
 import cardofthedead.decks.Deck
 import cardofthedead.decks.getMovementPoints
 import cardofthedead.game.Game
+import kotlin.random.Random
 
 abstract class Player(
     val gameContext: Game,
@@ -167,6 +168,9 @@ abstract class Player(
 
         println("Oops... ${this.name} was eaten by zombies.")
     }
+
+    fun throwCoin(): Boolean = Random.nextBoolean()
+    fun throwDice(n: Int): Int = Random.nextInt(1, n + 1)
 
     override fun toString(): String {
         return "$name: " +

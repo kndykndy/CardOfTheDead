@@ -441,44 +441,6 @@ class DeckTest : StringSpec({
         deck.isEmpty() shouldBe true
     }
 
-    "should get total zombie count" {
-        // given
-
-        val game = gameWithEmptyDeck()
-
-        val deck = Deck<Zombie>(game).apply {
-            addCards(
-                GrannyZombie(game),
-                Zombies(game),
-                `Zombies!!!`(game)
-            )
-        }
-
-        // when
-        val zombiesCount = deck.getZombiesCount()
-
-        // then
-
-        zombiesCount shouldBe 6
-        deck.size() shouldBe 3
-    }
-
-    "should get 0 zombies points if zombie deck is empty" {
-        // given
-
-        val game = gameWithEmptyDeck()
-
-        val deck = Deck<Zombie>(game)
-
-        // when
-        val zombiesCount = deck.getZombiesCount()
-
-        // then
-
-        zombiesCount shouldBe 0
-        deck.isEmpty() shouldBe true
-    }
-
     "should get single zombies" {
         // given
 
