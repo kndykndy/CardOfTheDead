@@ -77,5 +77,12 @@ class EasyPlayerTest : StringSpec({
         player.hand.hasCard(lure) shouldBe false
     }
 
+    // "should decide that cannot play card if empty hand" {}
+    // "should decide that cannot play card if no playable cards" {}
+    // "should decide not to play any cards in 50% dice" {}
+    // "should decide to play card as MP if not surrounded by zombies and 50% dice" {}
+    // "should decide to play card as MP if lot of cards at hand" {}
+    // "should decide to play card as action if surrounded or few cards on hand" {}
+
     // todo rest
 })

@@ -88,7 +88,9 @@ class EasyPlayer(
         return if (playableActionCards.isNotEmpty()) {
             if (throwCoin()) {
                 val zombiesToSurround =
-                    gameContext.playersToZombiesToBeSurrounded.getValue(gameContext.initialPlayersCount)
+                    gameContext.playersToZombiesToBeSurrounded.getValue(
+                        gameContext.initialPlayersCount
+                    )
 
                 val notSurrounded = getZombiesAroundCount() < zombiesToSurround
                 val lotsOfCardsOnHand = this.hand.size() > 3
