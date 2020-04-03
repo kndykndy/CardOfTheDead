@@ -14,9 +14,14 @@ import cardofthedead.players.HardPlayer
 import cardofthedead.players.Level
 import cardofthedead.players.Player
 import cardofthedead.players.PlayerDescriptor
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.PublishSubject
 import kotlin.random.Random
 
 class Game private constructor(builder: Builder) {
+
+    var eventsQueue: Observable<MessagesFacade.Message>
+    private val gameEvents: PublishSubject<MessagesFacade.Message> = PublishSubject.create()
 
     internal val players: MutableList<Player> = mutableListOf()
 
@@ -52,20 +57,23 @@ class Game private constructor(builder: Builder) {
             playDeck.merge(StandardDeck(this))
         }
 
-        println("Starting a new Game of the Dead!")
-        println("${playDeck.size()} cards in deck.")
-        println("Tonight we're having ${players.size} players: " +
-                "${players.joinToString { it.name }}."
-        )
+        eventsQueue = Observable.merge(players.map { it.events }.plus(gameEvents))
 
-        val player = lastPlayerWentToShoppingMall()
-        println("${player.name} was the last who went to shopping mall, he's starting!")
-        winners.add(listOf(player))
+        winners.add(listOf(lastPlayerWentToShoppingMall()))
     }
 
     fun play() {
+        gameEvents.onNext(
+            MessagesFacade.NewGameMessage(
+                playDeck.size(),
+                players.size,
+                players,
+                winners.first().first()
+            )
+        )
+
         repeat(3) { i ->
-            println("Starting round #${i + 1}")
+            gameEvents.onNext(MessagesFacade.NewRoundMessage(i + 1))
             playRound()
         }
 
@@ -75,20 +83,10 @@ class Game private constructor(builder: Builder) {
     private fun announceWinners() {
         players.addAll(deadPlayers)
 
-        println("Player scores: " +
-                players.joinToString { it.name + " (${it.getSurvivalPoints()})" })
-
         val maxScore = players.map { it.getSurvivalPoints() }.max()
         val winners = players.groupBy { it.getSurvivalPoints() }[maxScore]!!
 
-        if (winners.size == 1) {
-            val winner = winners.first()
-            println("The winner is ${winner.name + " (${winner.getSurvivalPoints()})"}")
-        } else {
-            println("The winners are " +
-                    winners.joinToString { it.name + " (${it.getSurvivalPoints()})" }
-            )
-        }
+        gameEvents.onNext(MessagesFacade.WinnersAnnouncementMessage(players, winners))
     }
 
     private fun playRound() {
@@ -172,8 +170,6 @@ class Game private constructor(builder: Builder) {
     }
 
     private fun prepareForRound() {
-        println("Preparing for round...")
-
         cardsToPlay = 1
 
         players.addAll(deadPlayers)
@@ -188,7 +184,7 @@ class Game private constructor(builder: Builder) {
         players.forEach { player ->
             player.pickCandidateCards(10)
             player.chooseSinglePointCards(3)
-            println("DEBUG: ${player.name} starts with ${player.hand}")
+//            println("DEBUG: ${player.name} starts with ${player.hand}")
         }
         players.forEach { it.discardCandidatesCards() }
         playDeck.merge(discardDeck)

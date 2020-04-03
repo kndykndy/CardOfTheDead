@@ -17,6 +17,7 @@ dependencies {
     implementation(kotlin("bom"))
     implementation(kotlin("reflect"))
     implementation(kotlin("stdlib-jdk8"))
+    implementation("io.reactivex.rxjava3:rxkotlin:3.0.0")
 
     testImplementation("io.kotest:kotest-core:4.0.0-BETA1")
     testImplementation("io.kotest:kotest-assertions:4.0.0-BETA1")

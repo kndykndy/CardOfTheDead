@@ -7,6 +7,8 @@ import cardofthedead.cards.Zombie
 import cardofthedead.decks.Deck
 import cardofthedead.decks.getMovementPoints
 import cardofthedead.game.Game
+import cardofthedead.game.MessagesFacade
+import io.reactivex.rxjava3.subjects.PublishSubject
 import kotlin.random.Random
 
 abstract class Player(
@@ -14,6 +16,8 @@ abstract class Player(
     val name: String,
     val sex: Sex
 ) {
+
+    internal val events: PublishSubject<MessagesFacade.Message> = PublishSubject.create()
 
     internal val hand: Deck<Card> = Deck(gameContext)
 
@@ -190,3 +194,5 @@ data class PlayerDescriptor(
 
 enum class Level { EASY, HARD }
 enum class Sex { MALE, FEMALE }
+
+fun Player.getPronoun(): String = if (Sex.MALE == this.sex) "he" else "she"
