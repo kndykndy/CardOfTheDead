@@ -6,17 +6,29 @@ class MessagesFacade {
 
     interface Message
 
-    data class NewGameMessage(
-        val cardsInDeck: Int,
-        val playersCnt: Int,
-        val players: List<Player>,
-        val startingPlayer: Player
-    ) : Message
+    class Game {
 
-    data class NewRoundMessage(val roundIdx: Int) : Message
+        class General {
 
-    data class WinnersAnnouncementMessage(
-        val players: List<Player>,
-        val winners: List<Player>
-    ) : Message
+            data class NewGame(
+                val cardsInDeck: Int,
+                val playersCnt: Int,
+                val players: List<Player>,
+                val startingPlayer: Player
+            ) : Message
+
+            data class WinnersAnnouncement(
+                val players: List<Player>,
+                val winners: List<Player>
+            ) : Message
+        }
+
+        class Pending {
+
+            data class NewRound(val roundIdx: Int) : Message
+
+            data class FirstPlayer(val player: Player) : Message
+            data class NextPlayer(val player: Player) : Message
+        }
+    }
 }

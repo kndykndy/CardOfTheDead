@@ -64,7 +64,7 @@ class Game private constructor(builder: Builder) {
 
     fun play() {
         gameEvents.onNext(
-            MessagesFacade.NewGameMessage(
+            MessagesFacade.Game.General.NewGame(
                 playDeck.size(),
                 players.size,
                 players,
@@ -73,34 +73,86 @@ class Game private constructor(builder: Builder) {
         )
 
         repeat(3) { i ->
-            gameEvents.onNext(MessagesFacade.NewRoundMessage(i + 1))
+            gameEvents.onNext(MessagesFacade.Game.Pending.NewRound(i + 1))
             playRound()
         }
 
-        announceWinners()
-    }
-
-    private fun announceWinners() {
-        players.addAll(deadPlayers)
-
-        val maxScore = players.map { it.getSurvivalPoints() }.max()
-        val winners = players.groupBy { it.getSurvivalPoints() }[maxScore]!!
-
-        gameEvents.onNext(MessagesFacade.WinnersAnnouncementMessage(players, winners))
+        announceGameWinners()
     }
 
     private fun playRound() {
         prepareForRound()
 
-        var currentPlayer = getFirstPlayer()
-        println("${currentPlayer.name}'s starting!")
+        var currentPlayer = winners.last().random()
+        gameEvents.onNext(MessagesFacade.Game.Pending.FirstPlayer(currentPlayer))
 
         while (isRoundRunning()) {
             playTurn(currentPlayer)
 
             currentPlayer = getNextPlayer(currentPlayer)
-            println("${currentPlayer.name}'s turn now!")
+            gameEvents.onNext(MessagesFacade.Game.Pending.NextPlayer(currentPlayer))
         }
+
+        announceRoundWinners()
+    }
+
+    private fun announceRoundWinners() {
+        val winnersList = when {
+            isRoundOverBecauseOneAlivePlayerLeft() -> {
+                val winner = players.first()
+
+                winner.addSurvivalPoints(5)
+
+                println("Oops... This round is over because ${winner.name} is the only player left alive!")
+
+                listOf(winner)
+            }
+            isRoundOverBecauseEscapedPlayer() -> {
+                val first = players.first { player ->
+                    player.getMovementPointsCount() >=
+                            playersToMovementPointsToEscape.getValue(initialPlayersCount)
+                }
+
+                players.forEach { player ->
+                    player.addSurvivalPoints(player.getMovementPointsCount())
+                }
+
+                println("Oops... This round is over because ${first.name} escaped!")
+
+                listOf(first)
+            }
+            isRoundOverBecauseOfEmptyDeck() -> {
+                val maxMovementPoints =
+                    players.maxBy { it.getMovementPointsCount() }
+                        ?.getMovementPointsCount()
+                        ?: 0
+
+                val winnersList = players
+                    .map { it.addSurvivalPoints(it.getMovementPointsCount()); it }
+                    .filter { it.getMovementPointsCount() == maxMovementPoints }
+
+                println(
+                    "Oops... This round is over because there's no cards left in the deck! " +
+                            "Winners are: ${winnersList.joinToString { it.name }}."
+                )
+
+                winnersList
+            }
+            else -> {
+                throw IllegalStateException()
+            }
+        }
+
+        winners.add(winnersList)
+    }
+
+    private fun announceGameWinners() {
+        players.addAll(deadPlayers)
+
+        val maxScore = players.map { it.getSurvivalPoints() }.max()
+        val winners = players.groupBy { it.getSurvivalPoints() }[maxScore]!!
+
+        gameEvents.onNext(MessagesFacade.Game.General.WinnersAnnouncement(players, winners))
     }
 
     private fun playTurn(currentPlayer: Player) {
@@ -184,7 +236,6 @@ class Game private constructor(builder: Builder) {
         players.forEach { player ->
             player.pickCandidateCards(10)
             player.chooseSinglePointCards(3)
-//            println("DEBUG: ${player.name} starts with ${player.hand}")
         }
         players.forEach { it.discardCandidatesCards() }
         playDeck.merge(discardDeck)
@@ -192,21 +243,16 @@ class Game private constructor(builder: Builder) {
         playDeck.shuffle()
     }
 
-    /**
-     * No output!
-     */
-    private fun getFirstPlayer(): Player = winners.last().random()
+    internal fun getPrevPlayer(beforePlayer: Player): Player {
+        if (players.isEmpty() || (players.size == 1 && players.first() == beforePlayer))
+            throw IllegalStateException()
 
-    /**
-     * No output!
-     */
-    internal fun getPrevPlayer(player: Player): Player {
         var result = players.last()
 
         val iterator = players.iterator()
         while (iterator.hasNext()) {
             val next = iterator.next()
-            if (next == player) {
+            if (next == beforePlayer) {
                 return result
             } else {
                 result = next
@@ -216,27 +262,26 @@ class Game private constructor(builder: Builder) {
         return players.last()
     }
 
-    /**
-     * No output!
-     */
     internal fun getNextPlayer(afterPlayer: Player): Player {
+        if (players.isEmpty() || (players.size == 1 && players.first() == afterPlayer))
+            throw IllegalStateException()
+
         val iterator = players.iterator()
         while (iterator.hasNext()) {
             if (iterator.next() == afterPlayer) {
                 if (iterator.hasNext()) {
-                    // println("DEBUG: Next player after ${afterPlayer.name} is ${nextPlayer.name}")
                     return iterator.next()
                 }
             }
         }
-//        println("DEBUG: Next player after ${afterPlayer.name} is ${players.first().name}")
+
         return players.first()
     }
 
-    /**
-     * No output!
-     */
     internal fun getRandomPlayer(exceptForPlayer: Player): Player {
+        if (players.isEmpty() || (players.size == 1 && players.first() == exceptForPlayer))
+            throw IllegalStateException()
+
         while (true) {
             val randomPlayer = players.random()
             if (randomPlayer != exceptForPlayer) {
@@ -248,74 +293,25 @@ class Game private constructor(builder: Builder) {
     private fun lastPlayerWentToShoppingMall(): Player =
         players.elementAt(Random.nextInt(players.size))
 
-    private fun isRoundRunning(): Boolean =
-        !isRoundOverBecauseOneAlivePlayerLeft() &&
-                !isRoundOverBecauseEscapedPlayer() &&
-                !isRoundOverBecauseOfEmptyDeck()
-
     private fun removePlayer(player: Player) {
         players.remove(player)
         deadPlayers.add(player)
     }
 
-    private fun isRoundOverBecauseOneAlivePlayerLeft(): Boolean =
-        if (players.size == 1) {
-            val winner = players.first()
-            winner.addSurvivalPoints(5)
-            winners.add(listOf(winner))
+    private fun isRoundRunning(): Boolean =
+        !isRoundOverBecauseOneAlivePlayerLeft() &&
+                !isRoundOverBecauseEscapedPlayer() &&
+                !isRoundOverBecauseOfEmptyDeck()
 
-            println("Oops... This round is over because ${winner.name} is the only player left alive!")
+    private fun isRoundOverBecauseOneAlivePlayerLeft(): Boolean = players.size == 1
 
-            true
-        } else {
-            false
-        }
-
-    private fun isRoundOverBecauseEscapedPlayer(): Boolean {
-        val winner = players.firstOrNull { player ->
+    private fun isRoundOverBecauseEscapedPlayer(): Boolean =
+        players.firstOrNull { player ->
             player.getMovementPointsCount() >=
                     playersToMovementPointsToEscape.getValue(initialPlayersCount)
-        }
+        } != null
 
-        return if (winner != null) {
-            players.forEach {
-                it.addSurvivalPoints(it.getMovementPointsCount())
-            }
-
-            winners.add(listOf(winner))
-
-            println("Oops... This round is over because ${winner.name} escaped!")
-
-            true
-        } else {
-            false
-        }
-    }
-
-    private fun isRoundOverBecauseOfEmptyDeck(): Boolean =
-        if (playDeck.isEmpty()) {
-            val maxMovementPoints =
-                players.maxBy { it.getMovementPointsCount() }
-                    ?.getMovementPointsCount()
-            val winnersList = mutableListOf<Player>()
-            players.forEach { player ->
-                player.addSurvivalPoints(player.getMovementPointsCount())
-                if (player.getMovementPointsCount() == maxMovementPoints) {
-                    winnersList.add(player)
-                }
-            }
-
-            winners.add(winnersList)
-
-            println(
-                "Oops... This round is over because there's no cards left in the deck! " +
-                        "Winners are: ${winnersList.joinToString { it.name }}."
-            )
-
-            true
-        } else {
-            false
-        }
+    private fun isRoundOverBecauseOfEmptyDeck(): Boolean = playDeck.isEmpty()
 
     data class Builder(
         val player1: PlayerDescriptor,

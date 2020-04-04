@@ -109,17 +109,12 @@ class EasyPlayer(
         }
     }
 
-    override fun chooseWorstCandidateForBarricade(): Card? {
-        val worstCandidate = candidatesToHand.cards
+    override fun chooseWorstCandidateForBarricade(): Card? =
+        candidatesToHand.cards
             .map { Pair(it, cardTypeToRating.getValue(it::class)) }
             .minBy { it.second }
             ?.first
-
-        return when {
-            worstCandidate != null -> candidatesToHand.pickCard(worstCandidate)
-            else -> null
-        }
-    }
+            ?.let(candidatesToHand::pickCard)
 
     override fun chooseWorstMovementCardForDynamite(): Card? =
         if (escapeCards.isNotEmpty()) {
@@ -136,8 +131,7 @@ class EasyPlayer(
         doDrawCardThisTurn = true
     }
 
-    override fun choosePlayerToGiveZombieToForLure(): Player =
-        gameContext.getRandomPlayer(this)
+    override fun choosePlayerToGiveZombieToForLure(): Player = gameContext.getRandomPlayer(this)
 
     /**
      * @return true if decided to discard a zombie, false if take player's card.

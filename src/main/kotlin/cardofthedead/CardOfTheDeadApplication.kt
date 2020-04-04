@@ -16,7 +16,7 @@ fun main() {
         .build()
 
     game.eventsQueue
-        .ofType(MessagesFacade.NewGameMessage::class.java)
+        .ofType(MessagesFacade.Game.General.NewGame::class.java)
         .subscribe { msg ->
             println("Starting a new Game of the Dead!")
 
@@ -32,11 +32,11 @@ fun main() {
             )
         }
 
-    game.eventsQueue.ofType(MessagesFacade.NewRoundMessage::class.java)
+    game.eventsQueue.ofType(MessagesFacade.Game.Pending.NewRound::class.java)
         .subscribe { msg -> println("Starting round #${msg.roundIdx}") }
 
     game.eventsQueue
-        .ofType(MessagesFacade.WinnersAnnouncementMessage::class.java)
+        .ofType(MessagesFacade.Game.General.WinnersAnnouncement::class.java)
         .subscribe { msg ->
             println("Player scores: " +
                     msg.players.joinToString { it.name + " (${it.getSurvivalPoints()})" })
@@ -50,6 +50,9 @@ fun main() {
                 )
             }
         }
+
+//    MessagesFacade.Game.Pending.FirstPlayer -> println("${currentPlayer.name}'s starting!")
+//    MessagesFacade.Game.Pending.NextPlayer -> println("${currentPlayer.name}'s turn now!")
 
     game.play()
 }
