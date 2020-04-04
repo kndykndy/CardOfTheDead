@@ -37,7 +37,7 @@ class DynamiteTest : StringSpec({
         game.discardDeck.size() shouldBe 4 // 3 zombies, 1 Armored
         player.getZombiesAroundCount() shouldBe 1
 
-        player.getMovementPointsCount() shouldBe 1
+        player.getMovementPoints() shouldBe 1
     }
 
     "should discard 1 movement card and no zombies as no zombies around"{
@@ -57,7 +57,7 @@ class DynamiteTest : StringSpec({
         game.discardDeck.size() shouldBe 1
         player.getZombiesAroundCount() shouldBe 0
 
-        player.getMovementPointsCount() shouldBe 0
+        player.getMovementPoints() shouldBe 0
     }
 
     "should discard 1 zombie and no movement cards as no movement cards on hand"{
@@ -77,7 +77,7 @@ class DynamiteTest : StringSpec({
         game.discardDeck.size() shouldBe 1 // 1 zombie
         player.getZombiesAroundCount() shouldBe 0
 
-        player.getMovementPointsCount() shouldBe 0
+        player.getMovementPoints() shouldBe 0
     }
 
     "should discard Zombies!!! and 1 movement card"{
@@ -98,7 +98,7 @@ class DynamiteTest : StringSpec({
         game.discardDeck.size() shouldBe 2 // Zombies!!!, Armored
         player.getZombiesAroundCount() shouldBe 0
 
-        player.getMovementPointsCount() shouldBe 0
+        player.getMovementPoints() shouldBe 0
     }
 
     "should discard Zombies and zombie and 1 movement card"{
@@ -119,6 +119,6 @@ class DynamiteTest : StringSpec({
         game.discardDeck.size() shouldBe 3 // Zombies, LadZombie, Armored
         player.getZombiesAroundCount() shouldBe 0
 
-        player.getMovementPointsCount() shouldBe 0
+        player.getMovementPoints() shouldBe 0
     }
 })

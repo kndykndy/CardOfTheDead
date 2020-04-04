@@ -54,5 +54,15 @@ fun main() {
 //    MessagesFacade.Game.Pending.FirstPlayer -> println("${currentPlayer.name}'s starting!")
 //    MessagesFacade.Game.Pending.NextPlayer -> println("${currentPlayer.name}'s turn now!")
 
+//    MessagesFacade.Game.Pending.RoundWinnerOneAlive ->
+//    println("Oops... This round is over because ${winner.name} is the only player left alive!")
+//    MessagesFacade.Game.Pending.RoundWinnerEscaped ->
+//    println("Oops... This round is over because ${first.name} escaped!")
+//    MessagesFacade.Game.Pending.RoundWinnersDeckOver ->
+//    println(
+//        "Oops... This round is over because there's no cards left in the deck! " +
+//                "Winners are: ${winnersList.joinToString { it.name }}."
+//    )
+
     game.play()
 }

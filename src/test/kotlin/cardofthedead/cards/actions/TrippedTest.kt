@@ -28,7 +28,7 @@ class TrippedTest : StringSpec({
 
         // then
 
-        player1.getMovementPointsCount() shouldBe 0
+        player1.getMovementPoints() shouldBe 0
 
         game.discardDeck.size() shouldBe 2 // Armored, Dynamite
     }
@@ -49,7 +49,7 @@ class TrippedTest : StringSpec({
 
         // then
 
-        player1.getMovementPointsCount() shouldBe 0
+        player1.getMovementPoints() shouldBe 0
 
         game.discardDeck.size() shouldBe 0
     }

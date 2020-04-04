@@ -24,7 +24,7 @@ class CorneredTest : StringSpec({
 
         // then
 
-        player.getMovementPointsCount() shouldBe 0
+        player.getMovementPoints() shouldBe 0
 
         game.discardDeck.size() shouldBe 2 // Armored, Dynamite
     }
@@ -41,7 +41,7 @@ class CorneredTest : StringSpec({
 
         // then
 
-        player.getMovementPointsCount() shouldBe 0
+        player.getMovementPoints() shouldBe 0
 
         game.discardDeck.size() shouldBe 0
     }

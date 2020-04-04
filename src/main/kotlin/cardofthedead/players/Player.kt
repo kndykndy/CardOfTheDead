@@ -120,13 +120,13 @@ abstract class Player(
     fun addMovementPoints(actionCard: Action) {
         escapeCards.addCard(actionCard)
 
-        println("${this.name} has ${getMovementPointsCount()} movement points now.")
+        println("${this.name} has ${getMovementPoints()} movement points now.")
     }
 
     /**
      * Calculates sum of movement points for each escape card.
      */
-    fun getMovementPointsCount(): Int = escapeCards.getMovementPoints()
+    fun getMovementPoints(): Int = escapeCards.getMovementPoints()
 
     fun addSurvivalPoints(pointsCount: Int) {
         survivalPoints += pointsCount
@@ -181,7 +181,7 @@ abstract class Player(
                 "hnd=$hand, " +
                 "cnddts=$candidatesToHand, " +
                 "zmbs=$zombiesAround (${getZombiesAroundCount()}), " +
-                "escp=$escapeCards (${getMovementPointsCount()}), " +
+                "escp=$escapeCards (${getMovementPoints()}), " +
                 "srvvl=$survivalPoints"
     }
 }

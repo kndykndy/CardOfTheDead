@@ -29,6 +29,10 @@ class MessagesFacade {
 
             data class FirstPlayer(val player: Player) : Message
             data class NextPlayer(val player: Player) : Message
+
+            data class RoundWinnerOneAlive(val player: Player) : Message
+            data class RoundWinnerEscaped(val player: Player) : Message
+            data class RoundWinnersDeckOver(val players: List<Player>) : Message
         }
     }
 }
