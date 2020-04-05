@@ -151,12 +151,16 @@ class Game private constructor(builder: Builder) {
         repeat(cardsToPlay) {
             when (val drawnCard = currentPlayer.drawTopCard()) {
                 is Action -> {
-                    gameEvents.onNext(MessagesFacade.Game.Pending.DrawAction(drawnCard))
+                    gameEvents.onNext(
+                        MessagesFacade.Game.Pending.DrewAction(currentPlayer, drawnCard)
+                    )
 
                     currentPlayer.takeToHand(drawnCard)
                 }
                 is Zombie -> {
-                    gameEvents.onNext(MessagesFacade.Game.Pending.DrawZombie(drawnCard))
+                    gameEvents.onNext(
+                        MessagesFacade.Game.Pending.DrewZombie(currentPlayer, drawnCard)
+                    )
 
                     currentPlayer.chasedByZombie(drawnCard)
                     if (currentPlayer.getZombiesAroundCount() >=
@@ -169,12 +173,16 @@ class Game private constructor(builder: Builder) {
                     }
                 }
                 is Event -> {
-                    gameEvents.onNext(MessagesFacade.Game.Pending.DrawEvent(drawnCard))
+                    gameEvents.onNext(
+                        MessagesFacade.Game.Pending.DrewEvent(currentPlayer, drawnCard)
+                    )
 
                     currentPlayer.play(drawnCard)
                     currentPlayer.discard(drawnCard)
                 }
                 null -> {
+                    gameEvents.onNext(MessagesFacade.Game.Pending.DrewNoCard(currentPlayer))
+
                     return
                 }
             }
@@ -185,12 +193,20 @@ class Game private constructor(builder: Builder) {
             val actionCardFromHand: Card = decisionToPlayCardFromHand.card ?: return
 
             if (decisionToPlayCardFromHand.wayToPlayCard == WayToPlayCard.PLAY_AS_ACTION) {
-                println("${currentPlayer.name} decided to play ${actionCardFromHand::class.simpleName}.")
+                gameEvents.onNext(
+                    MessagesFacade.Game.Pending.DecisionToPlayFromHand(
+                        currentPlayer, actionCardFromHand
+                    )
+                )
 
                 currentPlayer.play(actionCardFromHand)
                 currentPlayer.discard(actionCardFromHand)
             } else { // as movement points
-                println("${currentPlayer.name} decided to play ${actionCardFromHand::class.simpleName} as movement points.")
+                gameEvents.onNext(
+                    MessagesFacade.Game.Pending.DecisionToPlayFromHandAsMp(
+                        currentPlayer, actionCardFromHand
+                    )
+                )
 
                 currentPlayer.addMovementPoints(actionCardFromHand as Action)
                 if (currentPlayer.getMovementPoints() >=
@@ -200,10 +216,8 @@ class Game private constructor(builder: Builder) {
                 }
             }
         } else {
-            println("${currentPlayer.name} decided not to play card from hand.")
+            gameEvents.onNext(MessagesFacade.Game.Pending.DecisionNotToPlayFromHand(currentPlayer))
         }
-
-        println("DEBUG: $currentPlayer")
     }
 
     private fun prepareForRound() {

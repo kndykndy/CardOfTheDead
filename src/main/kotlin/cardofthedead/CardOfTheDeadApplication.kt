@@ -64,9 +64,17 @@ fun main() {
 //                "Winners are: ${winnersList.joinToString { it.name }}."
 //    )
 
-//    MessagesFacade.Game.Pending.DrawAction = println("${currentPlayer.name} draws card to hand.")
-//    MessagesFacade.Game.Pending.DrawZombie =
-//    MessagesFacade.Game.Pending.DrawEvent
+//    MessagesFacade.Game.Pending.DrewAction = println("${currentPlayer.name} draws card to hand.")
+//    MessagesFacade.Game.Pending.DrewZombie
+//    MessagesFacade.Game.Pending.DrewEvent
+//    MessagesFacade.Game.Pending.DrewNoCard
+
+//    MessagesFacade.Game.Pending.DecisionToPlayFromHand =
+//        println("${currentPlayer.name} decided to play ${actionCardFromHand::class.simpleName}.")
+//    MessagesFacade.Game.Pending.DecisionToPlayFromHandAsMp =
+//        println("${currentPlayer.name} decided to play ${actionCardFromHand::class.simpleName} as movement points.")
+//    MessagesFacade.Game.Pending.DecisionNotToPlayFromHand =
+//        println("${currentPlayer.name} decided not to play card from hand.")
 
     game.play()
 }
