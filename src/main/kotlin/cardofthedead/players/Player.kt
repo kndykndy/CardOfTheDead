@@ -88,11 +88,7 @@ abstract class Player(
 
     fun drawTopCard(): Card? =
         if (doDrawCardThisTurn) {
-            val drawnCard = gameContext.playDeck.pickTopCard()
-            if (drawnCard == null) {
-                println("The deck is empty. ${this.name} can't draw a card.")
-            }
-            drawnCard
+            gameContext.playDeck.pickTopCard()
         } else {
             println("${this.name} uses their chance not to draw a card this turn.")
             doDrawCardThisTurn = true

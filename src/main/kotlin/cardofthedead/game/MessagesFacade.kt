@@ -29,6 +29,8 @@ class MessagesFacade {
 
         class Pending {
 
+            enum class DrewNoCardReason { DeckIsEmpty, DecidedNotToDraw }
+
             data class NewRound(val roundIdx: Int) : Message
 
             data class FirstPlayer(val player: Player) : Message
@@ -37,7 +39,7 @@ class MessagesFacade {
             data class DrewAction(val player: Player, val action: Action) : Message
             data class DrewZombie(val player: Player, val zombie: Zombie) : Message
             data class DrewEvent(val player: Player, val event: Event) : Message
-            data class DrewNoCard(val player: Player) : Message
+            data class DrewNoCard(val player: Player, val reason: DrewNoCardReason) : Message
 
             data class DecisionToPlayFromHand(val player: Player, val card: Card) : Message
             data class DecisionToPlayFromHandAsMp(val player: Player, val card: Card) : Message

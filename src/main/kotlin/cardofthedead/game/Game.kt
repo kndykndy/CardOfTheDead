@@ -9,6 +9,7 @@ import cardofthedead.decks.Deck
 import cardofthedead.decks.DeckType
 import cardofthedead.decks.EmptyDeck
 import cardofthedead.decks.StandardDeck
+import cardofthedead.game.MessagesFacade.Game.Pending.DrewNoCardReason
 import cardofthedead.players.EasyPlayer
 import cardofthedead.players.HardPlayer
 import cardofthedead.players.Level
@@ -98,7 +99,7 @@ class Game private constructor(builder: Builder) {
 
     private fun announceRoundWinners() {
         val winnersList = when {
-            isRoundOverBecauseOneAlivePlayerLeft() -> {
+            isOnePlayerAliveLeft() -> {
                 val winner = players.first().also {
                     it.addSurvivalPoints(5)
                 }
@@ -107,7 +108,7 @@ class Game private constructor(builder: Builder) {
 
                 listOf(winner)
             }
-            isRoundOverBecauseEscapedPlayer() -> {
+            isAnyPlayerEscaped() -> {
                 val winner = players
                     .map { it.addSurvivalPoints(it.getMovementPoints()); it }
                     .first {
@@ -119,7 +120,7 @@ class Game private constructor(builder: Builder) {
 
                 listOf(winner)
             }
-            isRoundOverBecauseOfEmptyDeck() -> {
+            isPlayDeckEmpty() -> {
                 val maxMovementPoints = players.map { it.getMovementPoints() }.max()
 
                 val winners = players
@@ -147,76 +148,83 @@ class Game private constructor(builder: Builder) {
         gameEvents.onNext(MessagesFacade.Game.General.WinnersAnnouncement(players, winners))
     }
 
-    private fun playTurn(currentPlayer: Player) {
+    private fun playTurn(player: Player) {
         repeat(cardsToPlay) {
-            when (val drawnCard = currentPlayer.drawTopCard()) {
-                is Action -> {
-                    gameEvents.onNext(
-                        MessagesFacade.Game.Pending.DrewAction(currentPlayer, drawnCard)
-                    )
-
-                    currentPlayer.takeToHand(drawnCard)
-                }
-                is Zombie -> {
-                    gameEvents.onNext(
-                        MessagesFacade.Game.Pending.DrewZombie(currentPlayer, drawnCard)
-                    )
-
-                    currentPlayer.chasedByZombie(drawnCard)
-                    if (currentPlayer.getZombiesAroundCount() >=
-                        playersToZombiesToBeEaten.getValue(initialPlayersCount)
-                    ) {
-                        currentPlayer.die()
-                        removePlayer(currentPlayer)
-
-                        return
-                    }
-                }
-                is Event -> {
-                    gameEvents.onNext(
-                        MessagesFacade.Game.Pending.DrewEvent(currentPlayer, drawnCard)
-                    )
-
-                    currentPlayer.play(drawnCard)
-                    currentPlayer.discard(drawnCard)
-                }
-                null -> {
-                    gameEvents.onNext(MessagesFacade.Game.Pending.DrewNoCard(currentPlayer))
-
-                    return
-                }
+            when (val drawnCard = player.drawTopCard()) {
+                is Action -> drewAction(player, drawnCard)
+                is Zombie -> if (drewZombie(player, drawnCard)) return
+                is Event -> drewEvent(player, drawnCard)
+                null -> drewNoCard(player)
             }
         }
 
-        val decisionToPlayCardFromHand = currentPlayer.decideToPlayCardFromHand()
-        if (decisionToPlayCardFromHand.isGonnaPlay()) {
-            val actionCardFromHand: Card = decisionToPlayCardFromHand.card ?: return
+        playCardFromHand(player)
+    }
 
-            if (decisionToPlayCardFromHand.wayToPlayCard == WayToPlayCard.PLAY_AS_ACTION) {
+    private fun drewAction(currentPlayer: Player, drawnCard: Action) {
+        gameEvents.onNext(MessagesFacade.Game.Pending.DrewAction(currentPlayer, drawnCard))
+
+        currentPlayer.takeToHand(drawnCard)
+    }
+
+    private fun drewZombie(currentPlayer: Player, drawnCard: Zombie): Boolean {
+        gameEvents.onNext(MessagesFacade.Game.Pending.DrewZombie(currentPlayer, drawnCard))
+
+        currentPlayer.chasedByZombie(drawnCard)
+        if (currentPlayer.getZombiesAroundCount() >=
+            playersToZombiesToBeEaten.getValue(initialPlayersCount)
+        ) {
+            currentPlayer.die()
+            removePlayer(currentPlayer)
+
+            return true
+        }
+
+        return false
+    }
+
+    private fun drewEvent(currentPlayer: Player, drawnCard: Event) {
+        gameEvents.onNext(MessagesFacade.Game.Pending.DrewEvent(currentPlayer, drawnCard))
+
+        currentPlayer.play(drawnCard)
+        currentPlayer.discard(drawnCard)
+    }
+
+    private fun drewNoCard(currentPlayer: Player) {
+        gameEvents.onNext(
+            MessagesFacade.Game.Pending.DrewNoCard(
+                currentPlayer,
+                if (isPlayDeckEmpty()) DrewNoCardReason.DeckIsEmpty
+                else DrewNoCardReason.DecidedNotToDraw
+            )
+        )
+    }
+
+    private fun playCardFromHand(player: Player) {
+        val decisionToPlayCardFromHand = player.decideToPlayCardFromHand()
+        if (decisionToPlayCardFromHand.isGonnaPlay()) {
+            val actionCardFromHand = decisionToPlayCardFromHand.card ?: return
+
+            if (WayToPlayCard.PLAY_AS_ACTION == decisionToPlayCardFromHand.wayToPlayCard) {
                 gameEvents.onNext(
                     MessagesFacade.Game.Pending.DecisionToPlayFromHand(
-                        currentPlayer, actionCardFromHand
+                        player, actionCardFromHand
                     )
                 )
 
-                currentPlayer.play(actionCardFromHand)
-                currentPlayer.discard(actionCardFromHand)
+                player.play(actionCardFromHand)
+                player.discard(actionCardFromHand)
             } else { // as movement points
                 gameEvents.onNext(
                     MessagesFacade.Game.Pending.DecisionToPlayFromHandAsMp(
-                        currentPlayer, actionCardFromHand
+                        player, actionCardFromHand
                     )
                 )
 
-                currentPlayer.addMovementPoints(actionCardFromHand as Action)
-                if (currentPlayer.getMovementPoints() >=
-                    playersToMovementPointsToEscape.getValue(initialPlayersCount)
-                ) {
-                    return
-                }
+                player.addMovementPoints(actionCardFromHand as Action)
             }
         } else {
-            gameEvents.onNext(MessagesFacade.Game.Pending.DecisionNotToPlayFromHand(currentPlayer))
+            gameEvents.onNext(MessagesFacade.Game.Pending.DecisionNotToPlayFromHand(player))
         }
     }
 
@@ -298,19 +306,17 @@ class Game private constructor(builder: Builder) {
     }
 
     private fun isRoundRunning(): Boolean =
-        !isRoundOverBecauseOneAlivePlayerLeft() &&
-                !isRoundOverBecauseEscapedPlayer() &&
-                !isRoundOverBecauseOfEmptyDeck()
+        !isOnePlayerAliveLeft() && !isAnyPlayerEscaped() && !isPlayDeckEmpty()
 
-    private fun isRoundOverBecauseOneAlivePlayerLeft(): Boolean = players.size == 1
+    private fun isOnePlayerAliveLeft(): Boolean = players.size == 1
 
-    private fun isRoundOverBecauseEscapedPlayer(): Boolean =
+    private fun isAnyPlayerEscaped(): Boolean =
         players.firstOrNull { player ->
             player.getMovementPoints() >=
                     playersToMovementPointsToEscape.getValue(initialPlayersCount)
         } != null
 
-    private fun isRoundOverBecauseOfEmptyDeck(): Boolean = playDeck.isEmpty()
+    private fun isPlayDeckEmpty(): Boolean = playDeck.isEmpty()
 
     data class Builder(
         val player1: PlayerDescriptor,
