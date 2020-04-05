@@ -67,4 +67,5 @@ enum class DeckType { STANDARD, EMPTY }
 
 fun Deck<Card>.getActions() = this.cards.filterIsInstance<Action>()
 fun Deck<Action>.getMovementPoints(): Int = this.cards.sumBy { it.movementPoints }
+fun Deck<Zombie>.getZombiesAroundCount(): Int = this.cards.sumBy { it.zombiesOnCard }
 fun Deck<Zombie>.getSingleZombies(): List<Zombie> = this.cards.filter { it.zombiesOnCard == 1 }

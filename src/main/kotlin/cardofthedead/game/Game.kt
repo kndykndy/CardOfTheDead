@@ -161,39 +161,40 @@ class Game private constructor(builder: Builder) {
         playCardFromHand(player)
     }
 
-    private fun drewAction(currentPlayer: Player, drawnCard: Action) {
-        gameEvents.onNext(MessagesFacade.Game.Pending.DrewAction(currentPlayer, drawnCard))
+    private fun drewAction(player: Player, action: Action) {
+        gameEvents.onNext(MessagesFacade.Game.Pending.DrewAction(player, action))
 
-        currentPlayer.takeToHand(drawnCard)
+        player.takeToHand(action)
     }
 
-    private fun drewZombie(currentPlayer: Player, drawnCard: Zombie): Boolean {
-        gameEvents.onNext(MessagesFacade.Game.Pending.DrewZombie(currentPlayer, drawnCard))
+    private fun drewZombie(player: Player, zombie: Zombie): Boolean {
+        gameEvents.onNext(MessagesFacade.Game.Pending.DrewZombie(player, zombie))
 
-        currentPlayer.chasedByZombie(drawnCard)
-        if (currentPlayer.getZombiesAroundCount() >=
-            playersToZombiesToBeEaten.getValue(initialPlayersCount)
-        ) {
-            currentPlayer.die()
-            removePlayer(currentPlayer)
+        player.chasedByZombie(zombie)
 
-            return true
+        val isEaten = player.getZombiesAroundCount() >=
+                playersToZombiesToBeEaten.getValue(initialPlayersCount)
+        if (isEaten) {
+            gameEvents.onNext(MessagesFacade.Game.Pending.Dead(player))
+
+            player.die()
+            removePlayer(player)
         }
 
-        return false
+        return isEaten
     }
 
-    private fun drewEvent(currentPlayer: Player, drawnCard: Event) {
-        gameEvents.onNext(MessagesFacade.Game.Pending.DrewEvent(currentPlayer, drawnCard))
+    private fun drewEvent(player: Player, event: Event) {
+        gameEvents.onNext(MessagesFacade.Game.Pending.DrewEvent(player, event))
 
-        currentPlayer.play(drawnCard)
-        currentPlayer.discard(drawnCard)
+        player.play(event)
+        player.discard(event)
     }
 
-    private fun drewNoCard(currentPlayer: Player) {
+    private fun drewNoCard(player: Player) {
         gameEvents.onNext(
             MessagesFacade.Game.Pending.DrewNoCard(
-                currentPlayer,
+                player,
                 if (isPlayDeckEmpty()) DrewNoCardReason.DeckIsEmpty
                 else DrewNoCardReason.DecidedNotToDraw
             )

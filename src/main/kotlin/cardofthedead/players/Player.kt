@@ -6,6 +6,7 @@ import cardofthedead.cards.PlayCardDecision
 import cardofthedead.cards.Zombie
 import cardofthedead.decks.Deck
 import cardofthedead.decks.getMovementPoints
+import cardofthedead.decks.getZombiesAroundCount
 import cardofthedead.game.Game
 import cardofthedead.game.MessagesFacade
 import io.reactivex.rxjava3.subjects.PublishSubject
@@ -90,7 +91,6 @@ abstract class Player(
         if (doDrawCardThisTurn) {
             gameContext.playDeck.pickTopCard()
         } else {
-            println("${this.name} uses their chance not to draw a card this turn.")
             doDrawCardThisTurn = true
             null
         }
@@ -104,10 +104,8 @@ abstract class Player(
 
     fun play(card: Card) = card.play(this)
 
-    fun chasedByZombie(zombieCard: Zombie) {
-        zombiesAround.addCard(zombieCard)
-
-        println("${this.name} is chased by ${getZombiesAroundCount()} zombies now.")
+    fun chasedByZombie(zombie: Zombie) {
+        zombiesAround.addCard(zombie)
     }
 
     /**
@@ -115,8 +113,6 @@ abstract class Player(
      */
     fun addMovementPoints(actionCard: Action) {
         escapeCards.addCard(actionCard)
-
-        println("${this.name} has ${getMovementPoints()} movement points now.")
     }
 
     /**
@@ -124,13 +120,13 @@ abstract class Player(
      */
     fun getMovementPoints(): Int = escapeCards.getMovementPoints()
 
-    fun addSurvivalPoints(pointsCount: Int) {
-        survivalPoints += pointsCount
+    fun addSurvivalPoints(points: Int) {
+        survivalPoints += points
     }
 
     fun getSurvivalPoints(): Int = survivalPoints
 
-    fun getZombiesAroundCount(): Int = zombiesAround.cards.sumBy { it.zombiesOnCard }
+    fun getZombiesAroundCount(): Int = zombiesAround.getZombiesAroundCount()
 
     /**
      * Put a card, not belonging to any deck, to a discard deck.
@@ -165,8 +161,6 @@ abstract class Player(
      */
     fun die() {
         discardAllCards()
-
-        println("Oops... ${this.name} was eaten by zombies.")
     }
 
     fun throwCoin(): Boolean = Random.nextBoolean()

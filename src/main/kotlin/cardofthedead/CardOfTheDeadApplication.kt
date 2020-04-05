@@ -64,15 +64,23 @@ fun main() {
 //                "Winners are: ${winnersList.joinToString { it.name }}."
 //    )
 
-//    MessagesFacade.Game.Pending.DrewAction = println("${currentPlayer.name} draws card to hand.")
-//    MessagesFacade.Game.Pending.DrewZombie
-//    MessagesFacade.Game.Pending.DrewEvent
-//    MessagesFacade.Game.Pending.DrewNoCard
+//    MessagesFacade.Game.Pending.DrewAction =
+//        println("${currentPlayer.name} draws card to hand.")
+//    MessagesFacade.Game.Pending.DrewZombie =
+//        println("${this.name} is chased by ${getZombiesAroundCount()} zombies now.")
+//    MessagesFacade.Game.Pending.DrewEvent =
+//        todo
+//    MessagesFacade.Game.Pending.DrewNoCard =
+//        println("${this.name} uses their chance not to draw a card this turn.")
+
+//    MessagesFacade.Game.Pending.Dead =
+//        println("Oops... ${this.name} was eaten by zombies.")
 
 //    MessagesFacade.Game.Pending.DecisionToPlayFromHand =
 //        println("${currentPlayer.name} decided to play ${actionCardFromHand::class.simpleName}.")
 //    MessagesFacade.Game.Pending.DecisionToPlayFromHandAsMp =
 //        println("${currentPlayer.name} decided to play ${actionCardFromHand::class.simpleName} as movement points.")
+//        println("${this.name} has ${getMovementPoints()} movement points now.")
 //    MessagesFacade.Game.Pending.DecisionNotToPlayFromHand =
 //        println("${currentPlayer.name} decided not to play card from hand.")
 

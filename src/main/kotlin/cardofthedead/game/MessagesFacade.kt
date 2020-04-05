@@ -45,6 +45,8 @@ class MessagesFacade {
             data class DecisionToPlayFromHandAsMp(val player: Player, val card: Card) : Message
             data class DecisionNotToPlayFromHand(val player: Player) : Message
 
+            data class Dead(val player: Player) : Message
+
             data class RoundWinnerOneAlive(val player: Player) : Message
             data class RoundWinnerEscaped(val player: Player) : Message
             data class RoundWinnersDeckOver(val players: List<Player>) : Message
