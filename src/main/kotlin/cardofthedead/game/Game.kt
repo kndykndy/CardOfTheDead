@@ -151,18 +151,13 @@ class Game private constructor(builder: Builder) {
         repeat(cardsToPlay) {
             when (val drawnCard = currentPlayer.drawTopCard()) {
                 is Action -> {
-//                println("${currentPlayer.name} draws card to hand.")
-                    println(
-                        "DEBUG: ${currentPlayer.name} draws " +
-                                "${drawnCard::class.simpleName + drawnCard.hashCode()} to hand."
-                    )
+                    gameEvents.onNext(MessagesFacade.Game.Pending.DrawAction(drawnCard))
+
                     currentPlayer.takeToHand(drawnCard)
                 }
                 is Zombie -> {
-                    println(
-                        "DEBUG: ${currentPlayer.name} draws " +
-                                (drawnCard::class.simpleName + drawnCard.hashCode())
-                    )
+                    gameEvents.onNext(MessagesFacade.Game.Pending.DrawZombie(drawnCard))
+
                     currentPlayer.chasedByZombie(drawnCard)
                     if (currentPlayer.getZombiesAroundCount() >=
                         playersToZombiesToBeEaten.getValue(initialPlayersCount)
@@ -174,10 +169,8 @@ class Game private constructor(builder: Builder) {
                     }
                 }
                 is Event -> {
-                    println(
-                        "DEBUG: ${currentPlayer.name} draws " +
-                                (drawnCard::class.simpleName + drawnCard.hashCode())
-                    )
+                    gameEvents.onNext(MessagesFacade.Game.Pending.DrawEvent(drawnCard))
+
                     currentPlayer.play(drawnCard)
                     currentPlayer.discard(drawnCard)
                 }

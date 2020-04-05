@@ -64,5 +64,9 @@ fun main() {
 //                "Winners are: ${winnersList.joinToString { it.name }}."
 //    )
 
+//    MessagesFacade.Game.Pending.DrawAction = println("${currentPlayer.name} draws card to hand.")
+//    MessagesFacade.Game.Pending.DrawZombie =
+//    MessagesFacade.Game.Pending.DrawEvent
+
     game.play()
 }
