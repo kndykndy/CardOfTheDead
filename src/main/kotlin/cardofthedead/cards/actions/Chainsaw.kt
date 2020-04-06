@@ -1,9 +1,11 @@
 package cardofthedead.cards.actions
 
 import cardofthedead.cards.Action
-import cardofthedead.decks.getSingleZombies
+import cardofthedead.cards.Zombie
 import cardofthedead.cards.zombies.Zombies
+import cardofthedead.decks.getSingleZombies
 import cardofthedead.game.Game
+import cardofthedead.game.MessagesFacade
 import cardofthedead.players.Player
 
 class Chainsaw(gameContext: Game) : Action(gameContext, 1) {
@@ -12,13 +14,25 @@ class Chainsaw(gameContext: Game) : Action(gameContext, 1) {
      * Discard two zombie cards.
      */
     override fun play(playedBy: Player) {
+        val discardedZombies = mutableListOf<Zombie>()
+
         val zombiesAround = playedBy.zombiesAround
         if (zombiesAround.isNotEmpty()) {
             zombiesAround.pickCardOfClass(Zombies::class.java)
-                ?.let(playedBy::discard)
+                ?.let {
+                    playedBy.discard(it)
+                    discardedZombies.add(it)
+                }
                 ?: zombiesAround.getSingleZombies()
                     .takeLast(2)
-                    .forEach { zombiesAround.pickCard(it)?.let(playedBy::discard) }
+                    .forEach {
+                        zombiesAround.pickCard(it)?.let(playedBy::discard)
+                        discardedZombies.add(it)
+                    }
         }
+
+        playedBy.events.onNext(
+            MessagesFacade.Game.ActionCards.PlayedChainsaw(playedBy, discardedZombies)
+        )
     }
 }

@@ -9,7 +9,7 @@ import cardofthedead.decks.Deck
 import cardofthedead.decks.DeckType
 import cardofthedead.decks.EmptyDeck
 import cardofthedead.decks.StandardDeck
-import cardofthedead.game.MessagesFacade.Game.Pending.DrewNoCardReason
+import cardofthedead.game.MessagesFacade.Game.Amid.DrewNoCardReason
 import cardofthedead.players.EasyPlayer
 import cardofthedead.players.HardPlayer
 import cardofthedead.players.Level
@@ -65,7 +65,7 @@ class Game private constructor(builder: Builder) {
 
     fun play() {
         gameEvents.onNext(
-            MessagesFacade.Game.General.NewGame(
+            MessagesFacade.Game.Around.StartedNewGame(
                 playDeck.size(),
                 players.size,
                 players,
@@ -74,7 +74,7 @@ class Game private constructor(builder: Builder) {
         )
 
         repeat(3) { i ->
-            gameEvents.onNext(MessagesFacade.Game.Pending.NewRound(i + 1))
+            gameEvents.onNext(MessagesFacade.Game.Amid.StartedNewRound(i + 1))
             playRound()
         }
 
@@ -85,13 +85,13 @@ class Game private constructor(builder: Builder) {
         prepareForRound()
 
         var currentPlayer = winners.last().random()
-        gameEvents.onNext(MessagesFacade.Game.Pending.FirstPlayer(currentPlayer))
+        gameEvents.onNext(MessagesFacade.Game.Amid.ChoseFirstPlayer(currentPlayer))
 
         while (isRoundRunning()) {
             playTurn(currentPlayer)
 
             currentPlayer = getNextPlayer(currentPlayer)
-            gameEvents.onNext(MessagesFacade.Game.Pending.NextPlayer(currentPlayer))
+            gameEvents.onNext(MessagesFacade.Game.Amid.ChoseNextPlayer(currentPlayer))
         }
 
         announceRoundWinners()
@@ -104,7 +104,7 @@ class Game private constructor(builder: Builder) {
                     it.addSurvivalPoints(5)
                 }
 
-                gameEvents.onNext(MessagesFacade.Game.Pending.RoundWinnerOneAlive(winner))
+                gameEvents.onNext(MessagesFacade.Game.Amid.WonRoundCauseOneAlive(winner))
 
                 listOf(winner)
             }
@@ -116,7 +116,7 @@ class Game private constructor(builder: Builder) {
                                 playersToMovementPointsToEscape.getValue(initialPlayersCount)
                     }
 
-                gameEvents.onNext(MessagesFacade.Game.Pending.RoundWinnerEscaped(winner))
+                gameEvents.onNext(MessagesFacade.Game.Amid.WonRoundCauseEscaped(winner))
 
                 listOf(winner)
             }
@@ -127,7 +127,7 @@ class Game private constructor(builder: Builder) {
                     .map { it.addSurvivalPoints(it.getMovementPoints()); it }
                     .filter { it.getMovementPoints() == maxMovementPoints }
 
-                gameEvents.onNext(MessagesFacade.Game.Pending.RoundWinnersDeckOver(winners))
+                gameEvents.onNext(MessagesFacade.Game.Amid.WonRoundCauseDeckOver(winners))
 
                 winners
             }
@@ -145,7 +145,7 @@ class Game private constructor(builder: Builder) {
         val maxScore = players.map { it.getSurvivalPoints() }.max()
         val winners = players.groupBy { it.getSurvivalPoints() }[maxScore]!!
 
-        gameEvents.onNext(MessagesFacade.Game.General.WinnersAnnouncement(players, winners))
+        gameEvents.onNext(MessagesFacade.Game.Around.AnnouncedGameWinners(players, winners))
     }
 
     private fun playTurn(player: Player) {
@@ -162,20 +162,20 @@ class Game private constructor(builder: Builder) {
     }
 
     private fun drewAction(player: Player, action: Action) {
-        gameEvents.onNext(MessagesFacade.Game.Pending.DrewAction(player, action))
+        gameEvents.onNext(MessagesFacade.Game.Amid.DrewAction(player, action))
 
         player.takeToHand(action)
     }
 
     private fun drewZombie(player: Player, zombie: Zombie): Boolean {
-        gameEvents.onNext(MessagesFacade.Game.Pending.DrewZombie(player, zombie))
+        gameEvents.onNext(MessagesFacade.Game.Amid.DrewZombie(player, zombie))
 
         player.chasedByZombie(zombie)
 
         val isEaten = player.getZombiesAroundCount() >=
                 playersToZombiesToBeEaten.getValue(initialPlayersCount)
         if (isEaten) {
-            gameEvents.onNext(MessagesFacade.Game.Pending.Dead(player))
+            gameEvents.onNext(MessagesFacade.Game.Amid.Died(player))
 
             player.die()
             removePlayer(player)
@@ -185,7 +185,7 @@ class Game private constructor(builder: Builder) {
     }
 
     private fun drewEvent(player: Player, event: Event) {
-        gameEvents.onNext(MessagesFacade.Game.Pending.DrewEvent(player, event))
+        gameEvents.onNext(MessagesFacade.Game.Amid.DrewEvent(player, event))
 
         player.play(event)
         player.discard(event)
@@ -193,7 +193,7 @@ class Game private constructor(builder: Builder) {
 
     private fun drewNoCard(player: Player) {
         gameEvents.onNext(
-            MessagesFacade.Game.Pending.DrewNoCard(
+            MessagesFacade.Game.Amid.DrewNoCard(
                 player,
                 if (isPlayDeckEmpty()) DrewNoCardReason.DeckIsEmpty
                 else DrewNoCardReason.DecidedNotToDraw
@@ -208,7 +208,7 @@ class Game private constructor(builder: Builder) {
 
             if (WayToPlayCard.PLAY_AS_ACTION == decisionToPlayCardFromHand.wayToPlayCard) {
                 gameEvents.onNext(
-                    MessagesFacade.Game.Pending.DecisionToPlayFromHand(
+                    MessagesFacade.Game.Amid.DecidedToPlayFromHand(
                         player, actionCardFromHand
                     )
                 )
@@ -217,7 +217,7 @@ class Game private constructor(builder: Builder) {
                 player.discard(actionCardFromHand)
             } else { // as movement points
                 gameEvents.onNext(
-                    MessagesFacade.Game.Pending.DecisionToPlayFromHandAsMp(
+                    MessagesFacade.Game.Amid.DecidedToPlayFromHandAsMp(
                         player, actionCardFromHand
                     )
                 )
@@ -225,7 +225,7 @@ class Game private constructor(builder: Builder) {
                 player.addMovementPoints(actionCardFromHand as Action)
             }
         } else {
-            gameEvents.onNext(MessagesFacade.Game.Pending.DecisionNotToPlayFromHand(player))
+            gameEvents.onNext(MessagesFacade.Game.Amid.DecidedNotToPlayFromHand(player))
         }
     }
 
