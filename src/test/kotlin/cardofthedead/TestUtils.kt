@@ -41,7 +41,7 @@ object TestUtils {
             override fun chooseSinglePointCards(n: Int) {}
             override fun decideToPlayCardFromHand() = PlayCardDecision.doNotPlay()
             override fun chooseWorstCandidateForBarricade(): Card? = null
-            override fun chooseWorstMovementCardForDynamite(): Card? = null
+            override fun chooseWorstMovementCardForDynamite(): Action? = null
             override fun decideToDrawNoCardsNextTurnForHide() {}
             override fun choosePlayerToGiveZombieToForLure(): Player = this
             override fun decideToDiscardZombieOrTakeCardForSlugger(): Boolean = false

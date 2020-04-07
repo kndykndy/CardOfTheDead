@@ -116,7 +116,7 @@ class EasyPlayer(
             ?.first
             ?.let(candidatesToHand::pickCard)
 
-    override fun chooseWorstMovementCardForDynamite(): Card? =
+    override fun chooseWorstMovementCardForDynamite(): Action? =
         if (escapeCards.isNotEmpty()) {
             if (escapeCards.size() == 1) {
                 escapeCards.pickTopCard()

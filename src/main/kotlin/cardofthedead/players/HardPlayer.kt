@@ -1,5 +1,6 @@
 package cardofthedead.players
 
+import cardofthedead.cards.Action
 import cardofthedead.cards.Card
 import cardofthedead.cards.PlayCardDecision
 import cardofthedead.game.Game
@@ -23,7 +24,7 @@ class HardPlayer(
         TODO("not implemented")
     }
 
-    override fun chooseWorstMovementCardForDynamite(): Card? {
+    override fun chooseWorstMovementCardForDynamite(): Action? {
         TODO("not implemented")
     }
 

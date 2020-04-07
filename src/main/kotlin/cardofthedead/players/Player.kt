@@ -62,7 +62,7 @@ abstract class Player(
 
     abstract fun chooseWorstCandidateForBarricade(): Card?
 
-    abstract fun chooseWorstMovementCardForDynamite(): Card?
+    abstract fun chooseWorstMovementCardForDynamite(): Action?
 
     abstract fun decideToDrawNoCardsNextTurnForHide()
 

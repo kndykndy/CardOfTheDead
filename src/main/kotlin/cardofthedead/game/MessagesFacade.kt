@@ -59,6 +59,12 @@ class MessagesFacade {
                 val player: Player,
                 val discardedZombies: MutableList<Zombie>
             ) : Message
+
+            data class PlayDynamite(
+                val player: Player,
+                val discardedZombies: MutableList<Zombie>,
+                val discardedMovementCard: Action?
+            ) : Message
         }
     }
 }

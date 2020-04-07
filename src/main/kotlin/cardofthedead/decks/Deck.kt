@@ -55,7 +55,7 @@ open class Deck<T : Card>(
             ?.let(::pickCard)
     }
 
-    fun pickRandomCard(): Card? = if (isNotEmpty()) pickCard(cards.random()) else null
+    fun pickRandomCard(): T? = if (isNotEmpty()) pickCard(cards.random()) else null
 
     override fun toString(): String =
         "[${cards.joinToString(",") { it::class.simpleName + it.hashCode() }}]"
