@@ -78,6 +78,8 @@ class MessagesFacade {
                 val toPlayer: Player?,
                 val zombie: Zombie?
             ) : Message
+
+            data class PlayNukes(val player: Player) : Message
         }
     }
 }
