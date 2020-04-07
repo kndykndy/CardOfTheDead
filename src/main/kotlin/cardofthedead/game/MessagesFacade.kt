@@ -65,6 +65,13 @@ class MessagesFacade {
                 val discardedZombies: MutableList<Zombie>,
                 val discardedMovementCard: Action?
             ) : Message
+
+            data class PlayHide(
+                val player: Player,
+                val toPlayer: Player?,
+                val zombie: Zombie?,
+                val decideToDrawNoCardsNextTurn: Boolean
+            ) : Message
         }
     }
 }

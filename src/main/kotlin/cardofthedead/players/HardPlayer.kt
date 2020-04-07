@@ -28,7 +28,7 @@ class HardPlayer(
         TODO("not implemented")
     }
 
-    override fun decideToDrawNoCardsNextTurnForHide() {
+    override fun decideToDrawNoCardsNextTurnForHide(): Boolean {
         TODO("not implemented")
     }
 
