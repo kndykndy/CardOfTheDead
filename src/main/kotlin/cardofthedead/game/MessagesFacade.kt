@@ -72,6 +72,12 @@ class MessagesFacade {
                 val zombie: Zombie?,
                 val decideToDrawNoCardsNextTurn: Boolean
             ) : Message
+
+            data class PlayLure(
+                val player: Player,
+                val toPlayer: Player?,
+                val zombie: Zombie?
+            ) : Message
         }
     }
 }
