@@ -21,22 +21,27 @@ class Dynamite(gameContext: Game) : Action(gameContext, 2) {
         if (zombiesAround.isNotEmpty()) {
             var zombiesToDiscard = 3
 
-            zombiesAround.pickCardOfClass(`Zombies!!!`::class.java)?.let {
-                playedBy.discard(it)
-                zombiesToDiscard = 0
-                discardedZombies.add(it)
-            }
-
-            if (zombiesToDiscard != 0) {
-                zombiesAround.pickCardOfClass(Zombies::class.java)?.let {
+            zombiesAround
+                .pickCardOfClass(`Zombies!!!`::class.java)
+                ?.let {
                     playedBy.discard(it)
-                    zombiesToDiscard -= 2
+                    zombiesToDiscard = 0
                     discardedZombies.add(it)
                 }
+
+            if (zombiesToDiscard != 0) {
+                zombiesAround
+                    .pickCardOfClass(Zombies::class.java)
+                    ?.let {
+                        playedBy.discard(it)
+                        zombiesToDiscard -= 2
+                        discardedZombies.add(it)
+                    }
             }
 
             if (zombiesToDiscard != 0) {
-                zombiesAround.getSingleZombies()
+                zombiesAround
+                    .getSingleZombies()
                     .takeLast(zombiesToDiscard)
                     .forEach {
                         zombiesAround.pickCard(it)?.let(playedBy::discard)
@@ -47,17 +52,16 @@ class Dynamite(gameContext: Game) : Action(gameContext, 2) {
 
         var discardedMovementCard: Action? = null
 
-        playedBy.chooseWorstMovementCardForDynamite()
+        playedBy
+            .chooseWorstMovementCardForDynamite()
             ?.let {
                 playedBy.discard(it)
                 discardedMovementCard = it
             }
 
         playedBy.events.onNext(
-            MessagesFacade.Game.ActionCards.PlayDynamite(
-                playedBy,
-                discardedZombies,
-                discardedMovementCard
+            MessagesFacade.Game.ActionCards.PlayedDynamite(
+                playedBy, discardedZombies, discardedMovementCard
             )
         )
     }

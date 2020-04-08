@@ -13,7 +13,9 @@ class Armored(gameContext: Game) : Action(gameContext, 1) {
     override fun play(playedBy: Player) {
         var putBittenOnBottom = false
 
-        playedBy.hand.pickCardOfClass(Bitten::class.java)
+        playedBy
+            .hand
+            .pickCardOfClass(Bitten::class.java)
             ?.let {
                 playedBy.putOnBottom(it)
                 putBittenOnBottom = true

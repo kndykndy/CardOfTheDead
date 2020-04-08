@@ -33,7 +33,7 @@ fun main() {
         }
 
     game.eventsQueue.ofType(MessagesFacade.Game.Amid.StartedNewRound::class.java)
-        .subscribe { msg -> println("Starting round #${msg.roundIdx}") }
+        .subscribe { msg -> println("Starting round #${msg.withNumber}") }
 
     game.eventsQueue
         .ofType(MessagesFacade.Game.Around.AnnouncedGameWinners::class.java)

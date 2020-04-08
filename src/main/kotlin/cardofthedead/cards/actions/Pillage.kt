@@ -16,14 +16,16 @@ class Pillage(gameContext: Game) : Action(gameContext, 2) {
         gameContext.players
             .filterNot { it == playedBy }
             .forEach {
-                it.hand.pickRandomCard()?.let { card ->
-                    playedBy.takeToHand(card)
-                    pillagedCards.add(card as Action)
-                }
+                it.hand
+                    .pickRandomCard()
+                    ?.let { card ->
+                        playedBy.takeToHand(card)
+                        pillagedCards.add(card as Action)
+                    }
             }
 
         playedBy.events.onNext(
-            MessagesFacade.Game.ActionCards.PlayPillage(playedBy, pillagedCards)
+            MessagesFacade.Game.ActionCards.PlayedPillage(playedBy, pillagedCards)
         )
     }
 }

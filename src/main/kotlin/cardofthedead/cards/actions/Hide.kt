@@ -15,28 +15,29 @@ class Hide(gameContext: Game) : Action(gameContext, 1) {
      */
     override fun play(playedBy: Player) {
         var toPlayer: Player? = null
-        var zombie: Zombie? = null
+        var gaveZombie: Zombie? = null
 
         val zombiesAround = playedBy.zombiesAround
         if (zombiesAround.isNotEmpty()) {
             val singleZombies = zombiesAround.getSingleZombies()
             if (singleZombies.isNotEmpty()) {
-                zombiesAround.pickCard(singleZombies.random())
+                zombiesAround
+                    .pickCard(singleZombies.random())
                     ?.let {
                         val nextPlayer = gameContext.getNextPlayer(playedBy)
                         nextPlayer.chasedByZombie(it)
 
                         toPlayer = nextPlayer
-                        zombie = it
+                        gaveZombie = it
                     }
             }
         }
 
-        val decideToDrawNoCardsNextTurn = playedBy.decideToDrawNoCardsNextTurnForHide()
+        val decidedToDrawNoCardsNextTurn = playedBy.decideToDrawNoCardsNextTurnForHide()
 
         playedBy.events.onNext(
-            MessagesFacade.Game.ActionCards.PlayHide(
-                playedBy, toPlayer, zombie, decideToDrawNoCardsNextTurn
+            MessagesFacade.Game.ActionCards.PlayedHide(
+                playedBy, gaveZombie, toPlayer, decidedToDrawNoCardsNextTurn
             )
         )
     }

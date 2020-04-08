@@ -18,12 +18,14 @@ class Chainsaw(gameContext: Game) : Action(gameContext, 1) {
 
         val zombiesAround = playedBy.zombiesAround
         if (zombiesAround.isNotEmpty()) {
-            zombiesAround.pickCardOfClass(Zombies::class.java)
+            zombiesAround
+                .pickCardOfClass(Zombies::class.java)
                 ?.let {
                     playedBy.discard(it)
                     discardedZombies.add(it)
                 }
-                ?: zombiesAround.getSingleZombies()
+                ?: zombiesAround
+                    .getSingleZombies()
                     .takeLast(2)
                     .forEach {
                         zombiesAround.pickCard(it)?.let(playedBy::discard)

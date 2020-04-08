@@ -12,11 +12,13 @@ class `Nukes!`(gameContext: Game) : Action(gameContext, 2) {
      * Discard all zombie cards and all cards in hand from all players (including yourself).
      */
     override fun play(playedBy: Player) {
-        gameContext.players.forEach { player ->
-            player.discardZombiesAround()
-            player.discardHand()
-        }
+        gameContext
+            .players
+            .forEach { player ->
+                player.discardZombiesAround()
+                player.discardHand()
+            }
 
-        playedBy.events.onNext(MessagesFacade.Game.ActionCards.PlayNukes(playedBy))
+        playedBy.events.onNext(MessagesFacade.Game.ActionCards.PlayedNukes(playedBy))
     }
 }

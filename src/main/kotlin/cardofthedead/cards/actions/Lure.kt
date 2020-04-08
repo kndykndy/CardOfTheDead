@@ -13,28 +13,27 @@ class Lure(gameContext: Game) : Action(gameContext, 1) {
      * Give one of your zombie cards to any player.
      */
     override fun play(playedBy: Player) {
+        var gaveZombie: Zombie? = null
         var toPlayer: Player? = null
-        var zombie: Zombie? = null
 
         val zombiesAround = playedBy.zombiesAround
         if (zombiesAround.isNotEmpty()) {
             val singleZombies = zombiesAround.getSingleZombies()
             if (singleZombies.isNotEmpty()) {
-                zombiesAround.pickCard(singleZombies.random())
+                zombiesAround
+                    .pickCard(singleZombies.random())
                     ?.let {
                         val playerToGiveZombieTo = playedBy.choosePlayerToGiveZombieToForLure()
                         playerToGiveZombieTo.chasedByZombie(it)
 
+                        gaveZombie = it
                         toPlayer = playerToGiveZombieTo
-                        zombie = it
                     }
             }
         }
 
         playedBy.events.onNext(
-            MessagesFacade.Game.ActionCards.PlayLure(
-                playedBy, toPlayer, zombie
-            )
+            MessagesFacade.Game.ActionCards.PlayedLure(playedBy, gaveZombie, toPlayer)
         )
     }
 }

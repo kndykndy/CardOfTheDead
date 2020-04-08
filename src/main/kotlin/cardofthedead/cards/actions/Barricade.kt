@@ -14,11 +14,11 @@ class Barricade(gameContext: Game) : Action(gameContext, 1) {
      */
     override fun play(playedBy: Player) {
         playedBy.pickCandidateCards(3)
-
-        playedBy.chooseWorstCandidateForBarricade()
+        playedBy
+            .chooseWorstCandidateForBarricade()
             ?.let(gameContext.playDeck::addCardOnBottom)
 
-        var tookToHand = 0
+        var tookCardsToHand = 0
 
         repeat(2) {
             when (val candidateTopHand = playedBy.candidatesToHand.pickTopCard()) {
@@ -27,13 +27,13 @@ class Barricade(gameContext: Game) : Action(gameContext, 1) {
                 is Event -> playedBy.play(candidateTopHand)
                 else -> {
                     playedBy.takeToHand(candidateTopHand)
-                    tookToHand++
+                    tookCardsToHand++
                 }
             }
         }
 
         playedBy.events.onNext(
-            MessagesFacade.Game.ActionCards.PlayedBarricade(playedBy, tookToHand)
+            MessagesFacade.Game.ActionCards.PlayedBarricade(playedBy, tookCardsToHand)
         )
     }
 }

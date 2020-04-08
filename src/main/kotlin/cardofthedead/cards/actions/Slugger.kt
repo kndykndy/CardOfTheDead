@@ -1,6 +1,7 @@
 package cardofthedead.cards.actions
 
 import cardofthedead.cards.Action
+import cardofthedead.cards.Zombie
 import cardofthedead.decks.getSingleZombies
 import cardofthedead.game.Game
 import cardofthedead.game.MessagesFacade
@@ -12,34 +13,40 @@ class Slugger(gameContext: Game) : Action(gameContext, 1) {
      * Discard a zombie or take a card from another players hand.
      */
     override fun play(playedBy: Player) {
-        if (playedBy.decideToDiscardZombieOrTakeCardForSlugger()) {
-            // discard a zombie
+        if (playedBy.decideToDiscardZombieOrTakeCardForSlugger()) { // discard a zombie
+            var discardedZombie: Zombie? = null
 
             val zombiesAround = playedBy.zombiesAround
             val singleZombies = zombiesAround.getSingleZombies()
             if (singleZombies.isNotEmpty()) {
-                zombiesAround.pickCard(singleZombies.random())
+                zombiesAround
+                    .pickCard(singleZombies.random())
                     ?.let {
                         playedBy.discard(it)
-                        playedBy.events.onNext(
-                            MessagesFacade.Game.ActionCards.PlaySlugger(playedBy, it)
-                        )
+                        discardedZombie = it
                     }
             }
-        } else {
-            // take a card from player
+
+            playedBy.events.onNext(
+                MessagesFacade.Game.ActionCards.PlayedSlugger(playedBy, discardedZombie)
+            )
+        } else { // take a card from player
+            var tookCard: Action? = null
 
             val playerToTakeCardFrom = playedBy.choosePlayerToTakeCardFromForSlugger()
             playerToTakeCardFrom
-                .hand.pickRandomCard()
+                .hand
+                .pickRandomCard()
                 ?.let {
                     playedBy.takeToHand(it)
-                    playedBy.events.onNext(
-                        MessagesFacade.Game.ActionCards.PlaySlugger(
-                            playedBy, null, it, playerToTakeCardFrom
-                        )
-                    )
+                    tookCard = it as Action
                 }
+
+            playedBy.events.onNext(
+                MessagesFacade.Game.ActionCards.PlayedSlugger(
+                    playedBy, null, tookCard, playerToTakeCardFrom
+                )
+            )
         }
     }
 }

@@ -31,15 +31,15 @@ class MessagesFacade {
 
             enum class DrewNoCardReason { DeckIsEmpty, DecidedNotToDraw }
 
-            data class StartedNewRound(val roundIdx: Int) : Message
+            data class StartedNewRound(val withNumber: Int) : Message
 
             data class ChoseFirstPlayer(val player: Player) : Message
             data class ChoseNextPlayer(val player: Player) : Message
 
-            data class DrewAction(val player: Player, val action: Action) : Message
-            data class DrewZombie(val player: Player, val zombie: Zombie) : Message
-            data class DrewEvent(val player: Player, val event: Event) : Message
-            data class DrewNoCard(val player: Player, val reason: DrewNoCardReason) : Message
+            data class DrewAction(val player: Player, val drewAction: Action) : Message
+            data class DrewZombie(val player: Player, val drewZombie: Zombie) : Message
+            data class DrewEvent(val player: Player, val drewEvent: Event) : Message
+            data class DrewNoCard(val player: Player, val forReason: DrewNoCardReason) : Message
 
             data class DecidedToPlayFromHand(val player: Player, val card: Card) : Message
             data class DecidedToPlayFromHandAsMp(val player: Player, val card: Card) : Message
@@ -53,43 +53,53 @@ class MessagesFacade {
         }
 
         class ActionCards {
-            data class PlayedArmored(val player: Player, val putBittenOnBottom: Boolean) : Message
-            data class PlayedBarricade(val player: Player, val tookToHandEventually: Int) : Message
+
+            data class PlayedArmored(
+                val player: Player,
+                val putBittenOnBottom: Boolean
+            ) : Message
+
+            data class PlayedBarricade(
+                val player: Player,
+                val tookCardsToHand: Int
+            ) : Message
+
             data class PlayedChainsaw(
                 val player: Player,
                 val discardedZombies: List<Zombie>
             ) : Message
 
-            data class PlayDynamite(
+            data class PlayedDynamite(
                 val player: Player,
                 val discardedZombies: List<Zombie>,
-                val discardedMovementCard: Action?
+                val andDiscardedMovementCard: Action?
             ) : Message
 
-            data class PlayHide(
+            data class PlayedHide(
                 val player: Player,
+                val gaveZombie: Zombie?,
                 val toPlayer: Player?,
-                val zombie: Zombie?,
-                val decideToDrawNoCardsNextTurn: Boolean
+                val andDecidedToDrawNoCardsNextTurn: Boolean
             ) : Message
 
-            data class PlayLure(
+            data class PlayedLure(
                 val player: Player,
-                val toPlayer: Player?,
-                val zombie: Zombie?
+                val gaveZombie: Zombie?,
+                val toPlayer: Player?
             ) : Message
 
-            data class PlayNukes(val player: Player) : Message
-            data class PlayPillage(
+            data class PlayedNukes(val player: Player) : Message
+            data class PlayedPillage(
                 val player: Player,
                 val pillagedCards: List<Action>
             ) : Message
-            data class PlaySlugger(
+
+            data class PlayedSlugger(
                 val player: Player,
                 val discardedZombie: Zombie?,
-                val orTookCard: Card? = null,
+                val orTookCard: Action? = null,
                 val fromPlayer: Player? = null
-            ):Message
+            ) : Message
         }
     }
 }
