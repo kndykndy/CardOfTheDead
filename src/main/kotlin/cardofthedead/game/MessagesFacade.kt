@@ -57,12 +57,12 @@ class MessagesFacade {
             data class PlayedBarricade(val player: Player, val tookToHandEventually: Int) : Message
             data class PlayedChainsaw(
                 val player: Player,
-                val discardedZombies: MutableList<Zombie>
+                val discardedZombies: List<Zombie>
             ) : Message
 
             data class PlayDynamite(
                 val player: Player,
-                val discardedZombies: MutableList<Zombie>,
+                val discardedZombies: List<Zombie>,
                 val discardedMovementCard: Action?
             ) : Message
 
@@ -80,6 +80,10 @@ class MessagesFacade {
             ) : Message
 
             data class PlayNukes(val player: Player) : Message
+            data class PlayPillage(
+                val player: Player,
+                val pillagedCards: List<Action>
+            ) : Message
         }
     }
 }
