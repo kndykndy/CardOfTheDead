@@ -2,6 +2,7 @@ package cardofthedead.cards.actions
 
 import cardofthedead.cards.Action
 import cardofthedead.game.Game
+import cardofthedead.game.MessagesFacade
 import cardofthedead.players.Player
 
 class Tripped(gameContext: Game) : Action(gameContext, 1) {
@@ -13,9 +14,22 @@ class Tripped(gameContext: Game) : Action(gameContext, 1) {
         val playerToDiscardMovementCardsFrom =
             playedBy.choosePlayerToDiscardMovementCardsFromForTripped()
 
+        val discardedMovementCards = mutableListOf<Action>()
+
         repeat(playedBy.decideHowManyMovementCardsToDiscardForTripped()) {
-            playerToDiscardMovementCardsFrom.escapeCards.pickTopCard()
-                ?.let(playerToDiscardMovementCardsFrom::discard)
+            playerToDiscardMovementCardsFrom
+                .escapeCards
+                .pickTopCard()
+                ?.let {
+                    playerToDiscardMovementCardsFrom.discard(it)
+                    discardedMovementCards.add(it)
+                }
         }
+
+        playedBy.events.onNext(
+            MessagesFacade.Game.ActionCards.PlayedTripped(
+                playedBy, discardedMovementCards, playerToDiscardMovementCardsFrom
+            )
+        )
     }
 }

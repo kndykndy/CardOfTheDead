@@ -100,6 +100,12 @@ class MessagesFacade {
                 val orTookCard: Action? = null,
                 val fromPlayer: Player? = null
             ) : Message
+
+            data class PlayedTripped(
+                val player: Player,
+                val discardedMovementCards: List<Action>,
+                val fromPlayer: Player
+            ) : Message
         }
     }
 }
