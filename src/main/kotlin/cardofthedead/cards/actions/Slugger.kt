@@ -3,6 +3,7 @@ package cardofthedead.cards.actions
 import cardofthedead.cards.Action
 import cardofthedead.decks.getSingleZombies
 import cardofthedead.game.Game
+import cardofthedead.game.MessagesFacade
 import cardofthedead.players.Player
 
 class Slugger(gameContext: Game) : Action(gameContext, 1) {
@@ -18,15 +19,27 @@ class Slugger(gameContext: Game) : Action(gameContext, 1) {
             val singleZombies = zombiesAround.getSingleZombies()
             if (singleZombies.isNotEmpty()) {
                 zombiesAround.pickCard(singleZombies.random())
-                    ?.let(playedBy::discard)
+                    ?.let {
+                        playedBy.discard(it)
+                        playedBy.events.onNext(
+                            MessagesFacade.Game.ActionCards.PlaySlugger(playedBy, it)
+                        )
+                    }
             }
         } else {
             // take a card from player
 
-            playedBy
-                .choosePlayerToTakeCardFromForSlugger()
+            val playerToTakeCardFrom = playedBy.choosePlayerToTakeCardFromForSlugger()
+            playerToTakeCardFrom
                 .hand.pickRandomCard()
-                ?.let(playedBy::takeToHand)
+                ?.let {
+                    playedBy.takeToHand(it)
+                    playedBy.events.onNext(
+                        MessagesFacade.Game.ActionCards.PlaySlugger(
+                            playedBy, null, it, playerToTakeCardFrom
+                        )
+                    )
+                }
         }
     }
 }

@@ -84,6 +84,12 @@ class MessagesFacade {
                 val player: Player,
                 val pillagedCards: List<Action>
             ) : Message
+            data class PlaySlugger(
+                val player: Player,
+                val discardedZombie: Zombie?,
+                val orTookCard: Card? = null,
+                val fromPlayer: Player? = null
+            ):Message
         }
     }
 }
