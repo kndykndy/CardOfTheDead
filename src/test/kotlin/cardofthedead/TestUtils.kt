@@ -59,14 +59,14 @@ object TestUtils {
     fun Player.takeToHand(vararg listOfCards: Card) =
         listOfCards.forEach { this.takeToHand(it) }
 
+    fun Player.takeToCandidates(vararg listOfCards: Card) =
+        listOfCards.forEach { this.candidatesToHand.addCard(it) }
+
     fun Player.chasedByZombies(vararg listOfZombies: Zombie) =
         listOfZombies.forEach { this.chasedByZombie(it) }
 
     fun Player.addMovementPoints(vararg listOfActions: Action) =
         listOfActions.forEach { this.addMovementPoints(it) }
-
-    fun Player.addCardsToCandidates(vararg listOfCards: Card) =
-        listOfCards.forEach { this.candidatesToHand.addCard(it) }
 
     // Cards
 

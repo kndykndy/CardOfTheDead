@@ -28,7 +28,7 @@ abstract class Zombie(
 
 class PlayCardDecision(
     val wayToPlayCard: WayToPlayCard,
-    val card: Card?
+    val card: Card? = null
 ) {
 
     fun isGonnaPlay(): Boolean =
@@ -37,8 +37,8 @@ class PlayCardDecision(
 
     companion object {
 
-        fun cannotPlay(): PlayCardDecision = PlayCardDecision(WayToPlayCard.CANNOT_PLAY, null)
-        fun doNotPlay(): PlayCardDecision = PlayCardDecision(WayToPlayCard.DO_NOT_PLAY, null)
+        fun cannotPlay(): PlayCardDecision = PlayCardDecision(WayToPlayCard.CANNOT_PLAY)
+        fun doNotPlay(): PlayCardDecision = PlayCardDecision(WayToPlayCard.DO_NOT_PLAY)
     }
 }
 

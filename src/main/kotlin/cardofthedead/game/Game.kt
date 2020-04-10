@@ -39,7 +39,7 @@ class Game private constructor(builder: Builder) {
      */
     internal var cardsToPlay: Int = 1
 
-    val playersToZombiesToBeSurrounded = mapOf(2 to 5, 3 to 4, 4 to 4, 5 to 3)
+    private val playersToZombiesToBeSurrounded = mapOf(2 to 5, 3 to 4, 4 to 4, 5 to 3)
     private val playersToZombiesToBeEaten = mapOf(2 to 7, 3 to 6, 4 to 6, 5 to 5)
     private val playersToMovementPointsToEscape = mapOf(2 to 7, 3 to 6, 4 to 6, 5 to 5)
 
@@ -62,6 +62,15 @@ class Game private constructor(builder: Builder) {
 
         winners.add(listOf(lastPlayerWentToShoppingMall()))
     }
+
+    fun getZombiesCountToBeSurrounded() =
+        playersToZombiesToBeSurrounded.getValue(initialPlayersCount)
+
+    private fun getZombiesCountToBeEaten() =
+        playersToZombiesToBeEaten.getValue(initialPlayersCount)
+
+    private fun getMovementPointsToEscape() =
+        playersToMovementPointsToEscape.getValue(initialPlayersCount)
 
     fun play() {
         gameEvents.onNext(
@@ -111,10 +120,7 @@ class Game private constructor(builder: Builder) {
             isAnyPlayerEscaped() -> {
                 val winner = players
                     .map { it.addSurvivalPoints(it.getMovementPoints()); it }
-                    .first {
-                        it.getMovementPoints() >=
-                                playersToMovementPointsToEscape.getValue(initialPlayersCount)
-                    }
+                    .first { it.getMovementPoints() >= getMovementPointsToEscape() }
 
                 gameEvents.onNext(MessagesFacade.Game.Amid.WonRoundCauseEscaped(winner))
 
@@ -172,8 +178,7 @@ class Game private constructor(builder: Builder) {
 
         player.chasedByZombie(zombie)
 
-        val isEaten = player.getZombiesAroundCount() >=
-                playersToZombiesToBeEaten.getValue(initialPlayersCount)
+        val isEaten = player.getZombiesAroundCount() >= getZombiesCountToBeEaten()
         if (isEaten) {
             gameEvents.onNext(MessagesFacade.Game.Amid.Died(player))
 
@@ -312,10 +317,7 @@ class Game private constructor(builder: Builder) {
     private fun isOnePlayerAliveLeft(): Boolean = players.size == 1
 
     private fun isAnyPlayerEscaped(): Boolean =
-        players.firstOrNull { player ->
-            player.getMovementPoints() >=
-                    playersToMovementPointsToEscape.getValue(initialPlayersCount)
-        } != null
+        players.firstOrNull { it.getMovementPoints() >= getMovementPointsToEscape() } != null
 
     private fun isPlayDeckEmpty(): Boolean = playDeck.isEmpty()
 

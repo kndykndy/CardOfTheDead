@@ -83,16 +83,12 @@ class EasyPlayer(
     override fun decideToPlayCardFromHand(): PlayCardDecision {
         if (hand.isEmpty()) return PlayCardDecision.cannotPlay()
 
-        val playableActionCards = getPlayableActionCards()
+        val playableActionCards = hand.getActions().filterNot { it is Bitten }
 
         return if (playableActionCards.isNotEmpty()) {
             if (throwCoin()) {
-                val zombiesToSurround =
-                    gameContext.playersToZombiesToBeSurrounded.getValue(
-                        gameContext.initialPlayersCount
-                    )
-
-                val notSurrounded = getZombiesAroundCount() < zombiesToSurround
+                val notSurrounded =
+                    getZombiesAroundCount() < gameContext.getZombiesCountToBeSurrounded()
                 val lotsOfCardsOnHand = this.hand.size() > 3
 
                 val playAsMovementPoints = (notSurrounded && throwCoin()) || lotsOfCardsOnHand
@@ -135,15 +131,11 @@ class EasyPlayer(
     override fun choosePlayerToGiveZombieToForLure(): Player = gameContext.getRandomPlayer(this)
 
     /**
-     * @return true if decided to discard a zombie, false if take player's card.
+     * @return true if decided to discard a zombie, false if taking player's card.
      */
     override fun decideToDiscardZombieOrTakeCardForSlugger(): Boolean {
         val tooManyZombiesAround =
-            getZombiesAroundCount() >
-                    gameContext.playersToZombiesToBeSurrounded.getValue(
-                        gameContext.initialPlayersCount
-                    )
-
+            getZombiesAroundCount() > gameContext.getZombiesCountToBeSurrounded()
         val hasZombieToDiscard = zombiesAround.getSingleZombies().isNotEmpty()
 
         return tooManyZombiesAround && hasZombieToDiscard
@@ -156,7 +148,4 @@ class EasyPlayer(
         gameContext.getRandomPlayer(this)
 
     override fun decideHowManyMovementCardsToDiscardForTripped(): Int = throwDice(2)
-
-    private fun getPlayableActionCards(): List<Action> =
-        hand.getActions().filterNot { it is Bitten }
 }
