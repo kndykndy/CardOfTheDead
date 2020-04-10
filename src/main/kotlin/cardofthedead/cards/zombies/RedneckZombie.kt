@@ -3,4 +3,4 @@ package cardofthedead.cards.zombies
 import cardofthedead.cards.Zombie
 import cardofthedead.game.Game
 
-class RedneckZombie(gameContext: Game) : Zombie(gameContext, 1)
+class RedneckZombie(game: Game) : Zombie(game, 1)

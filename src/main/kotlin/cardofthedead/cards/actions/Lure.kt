@@ -7,7 +7,7 @@ import cardofthedead.game.Game
 import cardofthedead.game.MessagesFacade
 import cardofthedead.players.Player
 
-class Lure(gameContext: Game) : Action(gameContext, 1) {
+class Lure(game: Game) : Action(game, 1) {
 
     /**
      * Give one of your zombie cards to any player.

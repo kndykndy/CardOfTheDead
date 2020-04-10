@@ -13,32 +13,32 @@ import io.reactivex.rxjava3.subjects.PublishSubject
 import kotlin.random.Random
 
 abstract class Player(
-    val gameContext: Game,
+    val game: Game,
     val name: String,
     val sex: Sex
 ) {
 
     internal val events: PublishSubject<MessagesFacade.Message> = PublishSubject.create()
 
-    internal val hand: Deck<Card> = Deck(gameContext)
+    internal val hand: Deck<Card> = Deck(game)
 
     /**
      * Temporary cards that may transition to hand eventually.
      * For certain actions.
      */
-    internal val candidatesToHand: Deck<Card> = Deck(gameContext)
+    internal val candidatesToHand: Deck<Card> = Deck(game)
 
     /**
      * Zombies that chase a player.
      * For this round.
      */
-    internal val zombiesAround: Deck<Zombie> = Deck(gameContext)
+    internal val zombiesAround: Deck<Zombie> = Deck(game)
 
     /**
      * Action cards if gathered enough let player to escape from a round.
      * For this round.
      */
-    internal val escapeCards: Deck<Action> = Deck(gameContext)
+    internal val escapeCards: Deck<Action> = Deck(game)
 
     /**
      * Sum of all movement points from all escape cards played today for the player.
@@ -49,7 +49,7 @@ abstract class Player(
     /**
      * Amount of draws for player for a turn.
      */
-    protected var doDrawCardThisTurn: Boolean = true
+    protected var drawCardThisTurn: Boolean = true
 
     // Decision funcs
 
@@ -83,15 +83,15 @@ abstract class Player(
      */
     fun pickCandidateCards(n: Int) {
         repeat(n) {
-            gameContext.playDeck.pickTopCard()?.let(candidatesToHand::addCard)
+            game.playDeck.pickTopCard()?.let(candidatesToHand::addCard)
         }
     }
 
     fun drawTopCard(): Card? =
-        if (doDrawCardThisTurn) {
-            gameContext.playDeck.pickTopCard()
+        if (drawCardThisTurn) {
+            game.playDeck.pickTopCard()
         } else {
-            doDrawCardThisTurn = true
+            drawCardThisTurn = true
             null
         }
 
@@ -100,7 +100,7 @@ abstract class Player(
      */
     fun takeToHand(card: Card) = hand.addCard(card)
 
-    fun putOnBottom(card: Card) = gameContext.playDeck.addCardOnBottom(card)
+    fun putOnBottom(card: Card) = game.playDeck.addCardOnBottom(card)
 
     fun play(card: Card) = card.play(this)
 
@@ -131,22 +131,22 @@ abstract class Player(
     /**
      * Put a card, not belonging to any deck, to a discard deck.
      */
-    fun discard(card: Card) = gameContext.discardDeck.addCard(card)
+    fun discard(card: Card) = game.discardDeck.addCard(card)
 
     fun discardHand() {
-        gameContext.discardDeck.merge(hand)
+        game.discardDeck.merge(hand)
     }
 
     fun discardCandidatesCards() {
-        gameContext.discardDeck.merge(candidatesToHand)
+        game.discardDeck.merge(candidatesToHand)
     }
 
     fun discardZombiesAround() {
-        gameContext.discardDeck.merge(zombiesAround)
+        game.discardDeck.merge(zombiesAround)
     }
 
     fun discardEscapeCards() {
-        gameContext.discardDeck.merge(escapeCards)
+        game.discardDeck.merge(escapeCards)
     }
 
     fun discardAllCards() {

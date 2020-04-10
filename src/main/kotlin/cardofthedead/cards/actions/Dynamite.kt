@@ -9,7 +9,7 @@ import cardofthedead.game.Game
 import cardofthedead.game.MessagesFacade
 import cardofthedead.players.Player
 
-class Dynamite(gameContext: Game) : Action(gameContext, 2) {
+class Dynamite(game: Game) : Action(game, 2) {
 
     /**
      * Discard three zombie cards & one of your movement cards.

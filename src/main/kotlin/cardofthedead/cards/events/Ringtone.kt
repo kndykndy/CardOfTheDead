@@ -5,13 +5,13 @@ import cardofthedead.decks.getSingleZombies
 import cardofthedead.game.Game
 import cardofthedead.players.Player
 
-class Ringtone(gameContext: Game) : Event(gameContext) {
+class Ringtone(game: Game) : Event(game) {
 
     /**
      * Take one zombie card from every other player.
      */
     override fun play(playedBy: Player) {
-        gameContext.players
+        game.players
             .filterNot { it == playedBy }
             .forEach { player ->
                 val zombiesAround = player.zombiesAround

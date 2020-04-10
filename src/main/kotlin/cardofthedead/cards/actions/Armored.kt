@@ -5,7 +5,7 @@ import cardofthedead.game.Game
 import cardofthedead.game.MessagesFacade
 import cardofthedead.players.Player
 
-class Armored(gameContext: Game) : Action(gameContext, 1) {
+class Armored(game: Game) : Action(game, 1) {
 
     /**
      * Put bitten on the bottom of the deck from your hand.

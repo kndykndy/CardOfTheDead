@@ -31,10 +31,10 @@ import cardofthedead.decks.getSingleZombies
 import cardofthedead.game.Game
 
 class EasyPlayer(
-    gameContext: Game,
+    game: Game,
     name: String,
     sex: Sex
-) : Player(gameContext, name, sex) {
+) : Player(game, name, sex) {
 
     /**
      * Worst cards rating. The bigger the better.
@@ -87,9 +87,8 @@ class EasyPlayer(
 
         return if (playableActionCards.isNotEmpty()) {
             if (throwCoin()) {
-                val notSurrounded =
-                    getZombiesAroundCount() < gameContext.getZombiesCountToBeSurrounded()
-                val lotsOfCardsOnHand = this.hand.size() > 3
+                val notSurrounded = getZombiesAroundCount() < game.getZombiesCountToBeSurrounded()
+                val lotsOfCardsOnHand = hand.size() > 3
 
                 val playAsMovementPoints = (notSurrounded && throwCoin()) || lotsOfCardsOnHand
                 PlayCardDecision(
@@ -124,28 +123,26 @@ class EasyPlayer(
         }
 
     override fun decideToDrawNoCardsNextTurnForHide(): Boolean {
-        doDrawCardThisTurn = true
-        return doDrawCardThisTurn
+        drawCardThisTurn = true
+        return drawCardThisTurn
     }
 
-    override fun choosePlayerToGiveZombieToForLure(): Player = gameContext.getRandomPlayer(this)
+    override fun choosePlayerToGiveZombieToForLure(): Player = game.getRandomPlayer(this)
 
     /**
      * @return true if decided to discard a zombie, false if taking player's card.
      */
     override fun decideToDiscardZombieOrTakeCardForSlugger(): Boolean {
-        val tooManyZombiesAround =
-            getZombiesAroundCount() > gameContext.getZombiesCountToBeSurrounded()
+        val tooManyZombiesAround = getZombiesAroundCount() > game.getZombiesCountToBeSurrounded()
         val hasZombieToDiscard = zombiesAround.getSingleZombies().isNotEmpty()
 
         return tooManyZombiesAround && hasZombieToDiscard
     }
 
-    override fun choosePlayerToTakeCardFromForSlugger(): Player =
-        gameContext.getRandomPlayer(this)
+    override fun choosePlayerToTakeCardFromForSlugger(): Player = game.getRandomPlayer(this)
 
     override fun choosePlayerToDiscardMovementCardsFromForTripped(): Player =
-        gameContext.getRandomPlayer(this)
+        game.getRandomPlayer(this)
 
     override fun decideHowManyMovementCardsToDiscardForTripped(): Int = throwDice(2)
 }

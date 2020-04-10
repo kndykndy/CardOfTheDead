@@ -6,7 +6,7 @@ import cardofthedead.cards.Zombie
 import cardofthedead.game.Game
 
 open class Deck<T : Card>(
-    val gameContext: Game
+    val game: Game
 ) {
 
     // todo think over removing internal modifier -- check if it's accessed from ui
@@ -61,7 +61,7 @@ open class Deck<T : Card>(
         "[${cards.joinToString(",") { it::class.simpleName + it.hashCode() }}]"
 }
 
-class EmptyDeck(gameContext: Game) : Deck<Card>(gameContext)
+class EmptyDeck(game: Game) : Deck<Card>(game)
 
 enum class DeckType { STANDARD, EMPTY }
 

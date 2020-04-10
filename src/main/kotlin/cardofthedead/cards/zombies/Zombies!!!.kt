@@ -4,4 +4,4 @@ import cardofthedead.cards.Zombie
 import cardofthedead.game.Game
 
 @Suppress("ClassName")
-class `Zombies!!!`(gameContext: Game) : Zombie(gameContext, 3)
+class `Zombies!!!`(game: Game) : Zombie(game, 3)

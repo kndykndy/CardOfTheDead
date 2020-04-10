@@ -6,10 +6,10 @@ import cardofthedead.cards.PlayCardDecision
 import cardofthedead.game.Game
 
 class HardPlayer(
-    gameContext: Game,
+    game: Game,
     name: String,
     sex: Sex
-) : Player(gameContext, name, sex) {
+) : Player(game, name, sex) {
 
     override fun chooseSinglePointCards(n: Int) {
         TODO("not implemented")

@@ -5,7 +5,7 @@ import cardofthedead.game.Game
 import cardofthedead.game.MessagesFacade
 import cardofthedead.players.Player
 
-class Pillage(gameContext: Game) : Action(gameContext, 2) {
+class Pillage(game: Game) : Action(game, 2) {
 
     /**
      * Blindly draw a card from every other player.
@@ -13,7 +13,7 @@ class Pillage(gameContext: Game) : Action(gameContext, 2) {
     override fun play(playedBy: Player) {
         val pillagedCards = mutableListOf<Action>()
 
-        gameContext.players
+        game.players
             .filterNot { it == playedBy }
             .forEach {
                 it.hand

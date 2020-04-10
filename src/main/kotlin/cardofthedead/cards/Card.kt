@@ -4,7 +4,7 @@ import cardofthedead.game.Game
 import cardofthedead.players.Player
 
 abstract class Card(
-    val gameContext: Game
+    val game: Game
 ) {
 
     open fun play(playedBy: Player) {
@@ -15,16 +15,16 @@ abstract class Card(
 }
 
 abstract class Action(
-    gameContext: Game,
+    game: Game,
     val movementPoints: Int
-) : Card(gameContext)
+) : Card(game)
 
-abstract class Event(gameContext: Game) : Card(gameContext)
+abstract class Event(game: Game) : Card(game)
 
 abstract class Zombie(
-    gameContext: Game,
+    game: Game,
     val zombiesOnCard: Int
-) : Card(gameContext)
+) : Card(game)
 
 class PlayCardDecision(
     val wayToPlayCard: WayToPlayCard,

@@ -6,13 +6,13 @@ import cardofthedead.game.MessagesFacade
 import cardofthedead.players.Player
 
 @Suppress("ClassName")
-class `Nukes!`(gameContext: Game) : Action(gameContext, 2) {
+class `Nukes!`(game: Game) : Action(game, 2) {
 
     /**
      * Discard all zombie cards and all cards in hand from all players (including yourself).
      */
     override fun play(playedBy: Player) {
-        gameContext
+        game
             .players
             .forEach { player ->
                 player.discardZombiesAround()

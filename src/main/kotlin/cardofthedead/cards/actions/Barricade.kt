@@ -7,7 +7,7 @@ import cardofthedead.game.Game
 import cardofthedead.game.MessagesFacade
 import cardofthedead.players.Player
 
-class Barricade(gameContext: Game) : Action(gameContext, 1) {
+class Barricade(game: Game) : Action(game, 1) {
 
     /**
      * Draw three cards. Choose one and put it on the bottom of the deck.
@@ -16,7 +16,7 @@ class Barricade(gameContext: Game) : Action(gameContext, 1) {
         playedBy.pickCandidateCards(3)
         playedBy
             .chooseWorstCandidateForBarricade()
-            ?.let(gameContext.playDeck::addCardOnBottom)
+            ?.let(game.playDeck::addCardOnBottom)
 
         var tookCardsToHand = 0
 

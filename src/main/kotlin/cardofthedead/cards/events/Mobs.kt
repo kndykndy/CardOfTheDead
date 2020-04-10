@@ -5,7 +5,7 @@ import cardofthedead.cards.actions.Slugger
 import cardofthedead.game.Game
 import cardofthedead.players.Player
 
-class Mobs(gameContext: Game) : Event(gameContext) {
+class Mobs(game: Game) : Event(game) {
 
     /**
      * If you have a slugger at hand, ignore the event and pass it to the next player to the left.
@@ -18,13 +18,13 @@ class Mobs(gameContext: Game) : Event(gameContext) {
             if (!hand.hasCardOfClass(Slugger::class.java)) {
                 val cards = hand.cards.toList()
                 cards.forEach {
-                    hand.pickCard(it)?.let(gameContext.playDeck::addCardOnBottom)
+                    hand.pickCard(it)?.let(game.playDeck::addCardOnBottom)
                 }
 
                 return
             }
 
-            currentPlayer = gameContext.getNextPlayer(currentPlayer)
+            currentPlayer = game.getNextPlayer(currentPlayer)
         } while (currentPlayer != playedBy)
     }
 }

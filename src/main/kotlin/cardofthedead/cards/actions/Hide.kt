@@ -7,7 +7,7 @@ import cardofthedead.game.Game
 import cardofthedead.game.MessagesFacade
 import cardofthedead.players.Player
 
-class Hide(gameContext: Game) : Action(gameContext, 1) {
+class Hide(game: Game) : Action(game, 1) {
 
     /**
      * Give one of your Zombie cards to the next player.
@@ -24,7 +24,7 @@ class Hide(gameContext: Game) : Action(gameContext, 1) {
                 zombiesAround
                     .pickCard(singleZombies.random())
                     ?.let {
-                        val nextPlayer = gameContext.getNextPlayer(playedBy)
+                        val nextPlayer = game.getNextPlayer(playedBy)
                         nextPlayer.chasedByZombie(it)
 
                         toPlayer = nextPlayer

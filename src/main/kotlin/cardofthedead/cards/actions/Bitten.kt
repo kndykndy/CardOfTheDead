@@ -9,4 +9,4 @@ import cardofthedead.game.Game
  *
  * This card cannot be played as Movement card.
  */
-class Bitten(gameContext: Game) : Action(gameContext, 0)
+class Bitten(game: Game) : Action(game, 0)
