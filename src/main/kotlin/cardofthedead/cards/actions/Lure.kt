@@ -32,7 +32,7 @@ class Lure(game: Game) : Action(game, 1) {
             }
         }
 
-        playedBy.events.onNext(
+        playedBy.publishEvent(
             MessagesFacade.Game.ActionCards.PlayedLure(playedBy, gaveZombie, toPlayer)
         )
     }

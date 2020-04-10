@@ -32,7 +32,7 @@ class Barricade(game: Game) : Action(game, 1) {
             }
         }
 
-        playedBy.events.onNext(
+        playedBy.publishEvent(
             MessagesFacade.Game.ActionCards.PlayedBarricade(playedBy, tookCardsToHand)
         )
     }

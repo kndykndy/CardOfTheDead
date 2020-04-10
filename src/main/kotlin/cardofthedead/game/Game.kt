@@ -58,7 +58,7 @@ class Game private constructor(builder: Builder) {
             playDeck.merge(StandardDeck(this))
         }
 
-        eventsQueue = Observable.merge(players.map { it.events }.plus(gameEvents))
+        eventsQueue = Observable.merge(players.map { it.getEventQueue() }.plus(gameEvents))
 
         winners.add(listOf(lastPlayerWentToShoppingMall()))
     }

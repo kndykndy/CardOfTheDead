@@ -35,7 +35,7 @@ class Hide(game: Game) : Action(game, 1) {
 
         val decidedToDrawNoCardsNextTurn = playedBy.decideToDrawNoCardsNextTurnForHide()
 
-        playedBy.events.onNext(
+        playedBy.publishEvent(
             MessagesFacade.Game.ActionCards.PlayedHide(
                 playedBy, gaveZombie, toPlayer, decidedToDrawNoCardsNextTurn
             )

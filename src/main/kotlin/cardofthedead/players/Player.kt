@@ -9,6 +9,7 @@ import cardofthedead.decks.getMovementPoints
 import cardofthedead.decks.getZombiesAroundCount
 import cardofthedead.game.Game
 import cardofthedead.game.MessagesFacade
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
 import kotlin.random.Random
 
@@ -18,7 +19,7 @@ abstract class Player(
     val sex: Sex
 ) {
 
-    internal val events: PublishSubject<MessagesFacade.Message> = PublishSubject.create()
+    private val events: PublishSubject<MessagesFacade.Message> = PublishSubject.create()
 
     internal val hand: Deck<Card> = Deck(game)
 
@@ -51,7 +52,7 @@ abstract class Player(
      */
     protected var drawCardThisTurn: Boolean = true
 
-    // Decision funcs
+    // Decisions
 
     /**
      * Chooses N cards from the candidates deck.
@@ -64,7 +65,7 @@ abstract class Player(
 
     abstract fun chooseWorstMovementCardForDynamite(): Action?
 
-    abstract fun decideToDrawNoCardsNextTurnForHide() : Boolean
+    abstract fun decideToDrawNoCardsNextTurnForHide(): Boolean
 
     abstract fun choosePlayerToGiveZombieToForLure(): Player
 
@@ -77,6 +78,10 @@ abstract class Player(
     abstract fun decideHowManyMovementCardsToDiscardForTripped(): Int
 
     // Common logic
+
+    fun getEventQueue(): Observable<MessagesFacade.Message> = events
+
+    fun publishEvent(message: MessagesFacade.Message) = events.onNext(message)
 
     /**
      * Picks N top cards from the play deck to the candidates deck.

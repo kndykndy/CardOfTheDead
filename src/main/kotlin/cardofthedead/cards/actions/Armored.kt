@@ -21,7 +21,7 @@ class Armored(game: Game) : Action(game, 1) {
                 putBittenOnBottom = true
             }
 
-        playedBy.events.onNext(
+        playedBy.publishEvent(
             MessagesFacade.Game.ActionCards.PlayedArmored(playedBy, putBittenOnBottom)
         )
     }

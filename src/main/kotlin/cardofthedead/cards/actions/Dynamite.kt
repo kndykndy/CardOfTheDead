@@ -59,7 +59,7 @@ class Dynamite(game: Game) : Action(game, 2) {
                 discardedMovementCard = it
             }
 
-        playedBy.events.onNext(
+        playedBy.publishEvent(
             MessagesFacade.Game.ActionCards.PlayedDynamite(
                 playedBy, discardedZombies, discardedMovementCard
             )

@@ -19,6 +19,6 @@ class `Nukes!`(game: Game) : Action(game, 2) {
                 player.discardHand()
             }
 
-        playedBy.events.onNext(MessagesFacade.Game.ActionCards.PlayedNukes(playedBy))
+        playedBy.publishEvent(MessagesFacade.Game.ActionCards.PlayedNukes(playedBy))
     }
 }

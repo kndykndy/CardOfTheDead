@@ -24,7 +24,7 @@ class Pillage(game: Game) : Action(game, 2) {
                     }
             }
 
-        playedBy.events.onNext(
+        playedBy.publishEvent(
             MessagesFacade.Game.ActionCards.PlayedPillage(playedBy, pillagedCards)
         )
     }

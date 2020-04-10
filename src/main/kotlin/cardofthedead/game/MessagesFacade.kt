@@ -107,5 +107,27 @@ class MessagesFacade {
                 val fromPlayer: Player
             ) : Message
         }
+
+        class EventCards {
+
+            data class PlayedCornered(val player: Player) : Message
+            data class PlayedFog(
+                val player: Player,
+                val newPlayersToZombiesAroundMap: Map<Player, Int>
+            ) : Message
+
+            data class PlayedHorde(val player: Player) : Message
+
+            data class PlayedMobs(
+                val player: Player,
+                val playersWereMobbedMap: Map<Player, Boolean>
+            ) : Message
+
+            data class PlayedRingtone(
+                val player: Player,
+                val hadZombiesAround: Int,
+                val nowHasZombiesAround: Int
+            ) : Message
+        }
     }
 }

@@ -3,6 +3,7 @@ package cardofthedead.cards.events
 import cardofthedead.cards.Event
 import cardofthedead.cards.Zombie
 import cardofthedead.game.Game
+import cardofthedead.game.MessagesFacade
 import cardofthedead.players.Player
 
 class Fog(game: Game) : Event(game) {
@@ -12,9 +13,8 @@ class Fog(game: Game) : Event(game) {
      * to the right. And then once more. Survivors show their zombies.
      */
     override fun play(playedBy: Player) {
-        game.players.forEach { player ->
-            player.hand.merge(player.zombiesAround)
-        }
+        game.players
+            .forEach { it.hand.merge(it.zombiesAround) }
 
         repeat(2) {
             var currentPlayer = playedBy
@@ -26,10 +26,20 @@ class Fog(game: Game) : Event(game) {
             } while (currentPlayer != playedBy)
         }
 
-        game.players.forEach { player ->
-            while (player.hand.hasCardOfClass(Zombie::class.java)) {
-                player.chasedByZombie(player.hand.pickCardOfClass(Zombie::class.java) as Zombie)
+        game.players
+            .forEach { player ->
+                while (player.hand.hasCardOfClass(Zombie::class.java)) {
+                    player.chasedByZombie(player.hand.pickCardOfClass(Zombie::class.java) as Zombie)
+                }
             }
-        }
+
+        playedBy.publishEvent(
+            MessagesFacade.Game.EventCards.PlayedFog(
+                playedBy,
+                game.players
+                    .map { it to it.getZombiesAroundCount() }
+                    .toMap()
+            )
+        )
     }
 }

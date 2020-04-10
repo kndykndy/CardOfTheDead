@@ -3,6 +3,7 @@ package cardofthedead.cards.events
 import cardofthedead.cards.Event
 import cardofthedead.decks.getSingleZombies
 import cardofthedead.game.Game
+import cardofthedead.game.MessagesFacade
 import cardofthedead.players.Player
 
 class Ringtone(game: Game) : Event(game) {
@@ -11,6 +12,8 @@ class Ringtone(game: Game) : Event(game) {
      * Take one zombie card from every other player.
      */
     override fun play(playedBy: Player) {
+        val initialZombiesAroundCount = playedBy.getZombiesAroundCount()
+
         game.players
             .filterNot { it == playedBy }
             .forEach { player ->
@@ -21,5 +24,13 @@ class Ringtone(game: Game) : Event(game) {
                         ?.let(playedBy::chasedByZombie)
                 }
             }
+
+        playedBy.publishEvent(
+            MessagesFacade.Game.EventCards.PlayedRingtone(
+                playedBy,
+                initialZombiesAroundCount,
+                playedBy.getZombiesAroundCount()
+            )
+        )
     }
 }

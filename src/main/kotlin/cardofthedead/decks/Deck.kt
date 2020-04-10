@@ -39,9 +39,8 @@ open class Deck<T : Card>(
 
     fun hasCard(card: T): Boolean = cards.contains(card)
 
-    fun hasCardOfClass(cKlass: Class<out T>): Boolean {
-        return cards.filterIsInstance(cKlass).firstOrNull() != null
-    }
+    fun hasCardOfClass(cKlass: Class<out T>): Boolean =
+        cards.filterIsInstance(cKlass).firstOrNull() != null
 
     // Picking cards
 
@@ -49,11 +48,11 @@ open class Deck<T : Card>(
 
     fun pickTopCard(): T? = if (isNotEmpty()) pickCard(cards.last()) else null
 
-    fun pickCardOfClass(cKlass: Class<out T>): T? {
-        return cards.filterIsInstance(cKlass)
+    fun pickCardOfClass(cKlass: Class<out T>): T? =
+        cards
+            .filterIsInstance(cKlass)
             .firstOrNull()
             ?.let(::pickCard)
-    }
 
     fun pickRandomCard(): T? = if (isNotEmpty()) pickCard(cards.random()) else null
 

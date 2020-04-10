@@ -33,7 +33,7 @@ class Chainsaw(game: Game) : Action(game, 1) {
                     }
         }
 
-        playedBy.events.onNext(
+        playedBy.publishEvent(
             MessagesFacade.Game.ActionCards.PlayedChainsaw(playedBy, discardedZombies)
         )
     }

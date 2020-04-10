@@ -27,7 +27,7 @@ class Slugger(game: Game) : Action(game, 1) {
                     }
             }
 
-            playedBy.events.onNext(
+            playedBy.publishEvent(
                 MessagesFacade.Game.ActionCards.PlayedSlugger(playedBy, discardedZombie)
             )
         } else { // take a card from player
@@ -42,7 +42,7 @@ class Slugger(game: Game) : Action(game, 1) {
                     tookCard = it as Action
                 }
 
-            playedBy.events.onNext(
+            playedBy.publishEvent(
                 MessagesFacade.Game.ActionCards.PlayedSlugger(
                     playedBy, null, tookCard, playerToTakeCardFrom
                 )

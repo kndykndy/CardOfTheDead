@@ -128,11 +128,12 @@ class StandardDeck(
     )
 
     init {
-        cardTypeToCardDescriptor.keys.forEach { cardType ->
-            repeat(cardTypeToAmountInDeck(cardType)) {
-                cards.add(cardType.constructors.first().call(game))
+        cardTypeToCardDescriptor.keys
+            .forEach { cardType ->
+                repeat(cardTypeToAmountInDeck(cardType)) {
+                    cards.add(cardType.constructors.first().call(game))
+                }
             }
-        }
     }
 
     private fun cardTypeToAmountInDeck(klass: KClass<out Card>): Int =
