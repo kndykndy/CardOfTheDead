@@ -1,8 +1,8 @@
 package cardofthedead.cards.actions
 
 import cardofthedead.cards.Action
+import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedArmored
 import cardofthedead.game.Game
-import cardofthedead.game.MessagesFacade
 import cardofthedead.players.Player
 
 class Armored(game: Game) : Action(game, 1) {
@@ -21,8 +21,6 @@ class Armored(game: Game) : Action(game, 1) {
                 putBittenOnBottom = true
             }
 
-        playedBy.publishEvent(
-            MessagesFacade.Game.ActionCards.PlayedArmored(playedBy, putBittenOnBottom)
-        )
+        playedBy.publishEvent(PlayedArmored(playedBy, putBittenOnBottom))
     }
 }

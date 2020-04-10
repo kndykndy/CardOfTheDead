@@ -5,8 +5,8 @@ import cardofthedead.cards.Zombie
 import cardofthedead.cards.zombies.Zombies
 import cardofthedead.cards.zombies.`Zombies!!!`
 import cardofthedead.decks.getSingleZombies
+import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedDynamite
 import cardofthedead.game.Game
-import cardofthedead.game.MessagesFacade
 import cardofthedead.players.Player
 
 class Dynamite(game: Game) : Action(game, 2) {
@@ -59,10 +59,6 @@ class Dynamite(game: Game) : Action(game, 2) {
                 discardedMovementCard = it
             }
 
-        playedBy.publishEvent(
-            MessagesFacade.Game.ActionCards.PlayedDynamite(
-                playedBy, discardedZombies, discardedMovementCard
-            )
-        )
+        playedBy.publishEvent(PlayedDynamite(playedBy, discardedZombies, discardedMovementCard))
     }
 }

@@ -3,8 +3,8 @@ package cardofthedead.cards.actions
 import cardofthedead.cards.Action
 import cardofthedead.cards.Event
 import cardofthedead.cards.Zombie
+import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedBarricade
 import cardofthedead.game.Game
-import cardofthedead.game.MessagesFacade
 import cardofthedead.players.Player
 
 class Barricade(game: Game) : Action(game, 1) {
@@ -32,8 +32,6 @@ class Barricade(game: Game) : Action(game, 1) {
             }
         }
 
-        playedBy.publishEvent(
-            MessagesFacade.Game.ActionCards.PlayedBarricade(playedBy, tookCardsToHand)
-        )
+        playedBy.publishEvent(PlayedBarricade(playedBy, tookCardsToHand))
     }
 }

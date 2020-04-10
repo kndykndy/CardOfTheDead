@@ -1,8 +1,8 @@
 package cardofthedead.cards.actions
 
 import cardofthedead.cards.Action
+import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedNukes
 import cardofthedead.game.Game
-import cardofthedead.game.MessagesFacade
 import cardofthedead.players.Player
 
 @Suppress("ClassName")
@@ -19,6 +19,6 @@ class `Nukes!`(game: Game) : Action(game, 2) {
                 player.discardHand()
             }
 
-        playedBy.publishEvent(MessagesFacade.Game.ActionCards.PlayedNukes(playedBy))
+        playedBy.publishEvent(PlayedNukes(playedBy))
     }
 }

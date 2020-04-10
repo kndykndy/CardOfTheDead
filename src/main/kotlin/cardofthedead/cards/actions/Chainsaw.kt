@@ -4,8 +4,8 @@ import cardofthedead.cards.Action
 import cardofthedead.cards.Zombie
 import cardofthedead.cards.zombies.Zombies
 import cardofthedead.decks.getSingleZombies
+import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedChainsaw
 import cardofthedead.game.Game
-import cardofthedead.game.MessagesFacade
 import cardofthedead.players.Player
 
 class Chainsaw(game: Game) : Action(game, 1) {
@@ -33,8 +33,6 @@ class Chainsaw(game: Game) : Action(game, 1) {
                     }
         }
 
-        playedBy.publishEvent(
-            MessagesFacade.Game.ActionCards.PlayedChainsaw(playedBy, discardedZombies)
-        )
+        playedBy.publishEvent(PlayedChainsaw(playedBy, discardedZombies))
     }
 }

@@ -1,8 +1,8 @@
 package cardofthedead.cards.events
 
 import cardofthedead.cards.Event
+import cardofthedead.game.EventsFacade.Game.EventCards.PlayedCornered
 import cardofthedead.game.Game
-import cardofthedead.game.MessagesFacade
 import cardofthedead.players.Player
 
 class Cornered(game: Game) : Event(game) {
@@ -13,6 +13,6 @@ class Cornered(game: Game) : Event(game) {
     override fun play(playedBy: Player) {
         playedBy.discardEscapeCards()
 
-        playedBy.publishEvent(MessagesFacade.Game.EventCards.PlayedCornered(playedBy))
+        playedBy.publishEvent(PlayedCornered(playedBy))
     }
 }

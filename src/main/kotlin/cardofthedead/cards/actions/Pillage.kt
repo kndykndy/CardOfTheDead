@@ -1,8 +1,8 @@
 package cardofthedead.cards.actions
 
 import cardofthedead.cards.Action
+import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedPillage
 import cardofthedead.game.Game
-import cardofthedead.game.MessagesFacade
 import cardofthedead.players.Player
 
 class Pillage(game: Game) : Action(game, 2) {
@@ -24,8 +24,6 @@ class Pillage(game: Game) : Action(game, 2) {
                     }
             }
 
-        playedBy.publishEvent(
-            MessagesFacade.Game.ActionCards.PlayedPillage(playedBy, pillagedCards)
-        )
+        playedBy.publishEvent(PlayedPillage(playedBy, pillagedCards))
     }
 }

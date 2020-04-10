@@ -8,7 +8,7 @@ import cardofthedead.decks.Deck
 import cardofthedead.decks.getMovementPoints
 import cardofthedead.decks.getZombiesAroundCount
 import cardofthedead.game.Game
-import cardofthedead.game.MessagesFacade
+import cardofthedead.game.EventsFacade
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
 import kotlin.random.Random
@@ -19,7 +19,7 @@ abstract class Player(
     val sex: Sex
 ) {
 
-    private val events: PublishSubject<MessagesFacade.Message> = PublishSubject.create()
+    private val events: PublishSubject<EventsFacade.Event> = PublishSubject.create()
 
     internal val hand: Deck<Card> = Deck(game)
 
@@ -79,9 +79,9 @@ abstract class Player(
 
     // Common logic
 
-    fun getEventQueue(): Observable<MessagesFacade.Message> = events
+    fun getEvents(): Observable<EventsFacade.Event> = events
 
-    fun publishEvent(message: MessagesFacade.Message) = events.onNext(message)
+    fun publishEvent(event: EventsFacade.Event) = events.onNext(event)
 
     /**
      * Picks N top cards from the play deck to the candidates deck.

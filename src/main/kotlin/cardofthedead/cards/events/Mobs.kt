@@ -2,8 +2,8 @@ package cardofthedead.cards.events
 
 import cardofthedead.cards.Event
 import cardofthedead.cards.actions.Slugger
+import cardofthedead.game.EventsFacade.Game.EventCards.PlayedMobs
 import cardofthedead.game.Game
-import cardofthedead.game.MessagesFacade
 import cardofthedead.players.Player
 
 class Mobs(game: Game) : Event(game) {
@@ -13,16 +13,15 @@ class Mobs(game: Game) : Event(game) {
      * Otherwise put all your hand on the bottom of the deck.
      */
     override fun play(playedBy: Player) {
-        val playersWereMobbedMap: MutableMap<Player, Boolean> = mutableMapOf()
+        val playersWereMobbedMap = mutableMapOf<Player, Boolean>()
 
         var currentPlayer = playedBy
         do {
             val hand = currentPlayer.hand
             if (!hand.hasCardOfClass(Slugger::class.java)) {
-                val cards = hand.cards.toList()
-                cards.forEach {
-                    hand.pickCard(it)?.let(game.playDeck::addCardOnBottom)
-                }
+                hand.cards
+                    .toList()
+                    .forEach { hand.pickCard(it)?.let(game.playDeck::addCardOnBottom) }
 
                 playersWereMobbedMap[currentPlayer] = true
 
@@ -33,11 +32,6 @@ class Mobs(game: Game) : Event(game) {
             currentPlayer = game.getNextPlayer(currentPlayer)
         } while (currentPlayer != playedBy)
 
-        playedBy.publishEvent(
-            MessagesFacade.Game.EventCards.PlayedMobs(
-                playedBy,
-                playersWereMobbedMap
-            )
-        )
+        playedBy.publishEvent(PlayedMobs(playedBy, playersWereMobbedMap))
     }
 }

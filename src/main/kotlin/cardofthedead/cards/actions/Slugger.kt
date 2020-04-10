@@ -3,8 +3,8 @@ package cardofthedead.cards.actions
 import cardofthedead.cards.Action
 import cardofthedead.cards.Zombie
 import cardofthedead.decks.getSingleZombies
+import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedSlugger
 import cardofthedead.game.Game
-import cardofthedead.game.MessagesFacade
 import cardofthedead.players.Player
 
 class Slugger(game: Game) : Action(game, 1) {
@@ -27,9 +27,7 @@ class Slugger(game: Game) : Action(game, 1) {
                     }
             }
 
-            playedBy.publishEvent(
-                MessagesFacade.Game.ActionCards.PlayedSlugger(playedBy, discardedZombie)
-            )
+            playedBy.publishEvent(PlayedSlugger(playedBy, discardedZombie))
         } else { // take a card from player
             var tookCard: Action? = null
 
@@ -42,11 +40,7 @@ class Slugger(game: Game) : Action(game, 1) {
                     tookCard = it as Action
                 }
 
-            playedBy.publishEvent(
-                MessagesFacade.Game.ActionCards.PlayedSlugger(
-                    playedBy, null, tookCard, playerToTakeCardFrom
-                )
-            )
+            playedBy.publishEvent(PlayedSlugger(playedBy, null, tookCard, playerToTakeCardFrom))
         }
     }
 }

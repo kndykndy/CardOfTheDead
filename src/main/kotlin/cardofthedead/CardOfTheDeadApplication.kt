@@ -1,7 +1,9 @@
 package cardofthedead
 
+import cardofthedead.game.EventsFacade.Game.Amid.StartedNewRound
+import cardofthedead.game.EventsFacade.Game.Around.AnnouncedGameWinners
+import cardofthedead.game.EventsFacade.Game.Around.StartedNewGame
 import cardofthedead.game.Game
-import cardofthedead.game.MessagesFacade
 import cardofthedead.players.Level
 import cardofthedead.players.PlayerDescriptor
 import cardofthedead.players.Sex
@@ -15,8 +17,8 @@ fun main() {
         .withPlayer(PlayerDescriptor("Rei", Level.EASY, Sex.FEMALE))
         .build()
 
-    game.eventsQueue
-        .ofType(MessagesFacade.Game.Around.StartedNewGame::class.java)
+    game.getEventQueue()
+        .ofType(StartedNewGame::class.java)
         .subscribe { msg ->
             println("Starting a new Game of the Dead!")
 
@@ -32,11 +34,12 @@ fun main() {
             )
         }
 
-    game.eventsQueue.ofType(MessagesFacade.Game.Amid.StartedNewRound::class.java)
+    game.getEventQueue()
+        .ofType(StartedNewRound::class.java)
         .subscribe { msg -> println("Starting round #${msg.withNumber}") }
 
-    game.eventsQueue
-        .ofType(MessagesFacade.Game.Around.AnnouncedGameWinners::class.java)
+    game.getEventQueue()
+        .ofType(AnnouncedGameWinners::class.java)
         .subscribe { msg ->
             println("Player scores: " +
                     msg.players.joinToString { it.name + " (${it.getSurvivalPoints()})" })

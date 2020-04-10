@@ -9,7 +9,23 @@ import cardofthedead.decks.Deck
 import cardofthedead.decks.DeckType
 import cardofthedead.decks.EmptyDeck
 import cardofthedead.decks.StandardDeck
-import cardofthedead.game.MessagesFacade.Game.Amid.DrewNoCardReason
+import cardofthedead.game.EventsFacade.Game.Amid.ChoseFirstPlayer
+import cardofthedead.game.EventsFacade.Game.Amid.ChoseNextPlayer
+import cardofthedead.game.EventsFacade.Game.Amid.DecidedNotToPlayFromHand
+import cardofthedead.game.EventsFacade.Game.Amid.DecidedToPlayFromHand
+import cardofthedead.game.EventsFacade.Game.Amid.DecidedToPlayFromHandAsMp
+import cardofthedead.game.EventsFacade.Game.Amid.Died
+import cardofthedead.game.EventsFacade.Game.Amid.DrewAction
+import cardofthedead.game.EventsFacade.Game.Amid.DrewEvent
+import cardofthedead.game.EventsFacade.Game.Amid.DrewNoCard
+import cardofthedead.game.EventsFacade.Game.Amid.DrewNoCardReason
+import cardofthedead.game.EventsFacade.Game.Amid.DrewZombie
+import cardofthedead.game.EventsFacade.Game.Amid.StartedNewRound
+import cardofthedead.game.EventsFacade.Game.Amid.WonRoundCauseDeckOver
+import cardofthedead.game.EventsFacade.Game.Amid.WonRoundCauseEscaped
+import cardofthedead.game.EventsFacade.Game.Amid.WonRoundCauseOneAlive
+import cardofthedead.game.EventsFacade.Game.Around.AnnouncedGameWinners
+import cardofthedead.game.EventsFacade.Game.Around.StartedNewGame
 import cardofthedead.players.EasyPlayer
 import cardofthedead.players.HardPlayer
 import cardofthedead.players.Level
@@ -21,15 +37,21 @@ import kotlin.random.Random
 
 class Game private constructor(builder: Builder) {
 
-    var eventsQueue: Observable<MessagesFacade.Message>
-    private val gameEvents: PublishSubject<MessagesFacade.Message> = PublishSubject.create()
+    /**
+     * Events superqueue, combines all the subqueues from players and game queue.
+     */
+    private var eventQueue: Observable<EventsFacade.Event>
+    /**
+     * Game queue.
+     */
+    private val events: PublishSubject<EventsFacade.Event> = PublishSubject.create()
 
     internal val players: MutableList<Player> = mutableListOf()
 
     private val deadPlayers: MutableList<Player> = mutableListOf()
     private val winners: MutableList<List<Player>> = mutableListOf()
 
-    internal var initialPlayersCount: Int = 0
+    private var initialPlayersCount: Int = 0
 
     internal val playDeck: Deck<Card> = EmptyDeck(this)
     internal val discardDeck: Deck<Card> = EmptyDeck(this)
@@ -58,10 +80,12 @@ class Game private constructor(builder: Builder) {
             playDeck.merge(StandardDeck(this))
         }
 
-        eventsQueue = Observable.merge(players.map { it.getEventQueue() }.plus(gameEvents))
+        eventQueue = Observable.merge(players.map { it.getEvents() }.plus(events))
 
         winners.add(listOf(lastPlayerWentToShoppingMall()))
     }
+
+    fun getEventQueue(): Observable<EventsFacade.Event> = eventQueue
 
     fun getZombiesCountToBeSurrounded() =
         playersToZombiesToBeSurrounded.getValue(initialPlayersCount)
@@ -73,8 +97,8 @@ class Game private constructor(builder: Builder) {
         playersToMovementPointsToEscape.getValue(initialPlayersCount)
 
     fun play() {
-        gameEvents.onNext(
-            MessagesFacade.Game.Around.StartedNewGame(
+        events.onNext(
+            StartedNewGame(
                 playDeck.size(),
                 players.size,
                 players,
@@ -83,7 +107,7 @@ class Game private constructor(builder: Builder) {
         )
 
         repeat(3) { i ->
-            gameEvents.onNext(MessagesFacade.Game.Amid.StartedNewRound(i + 1))
+            events.onNext(StartedNewRound(i + 1))
             playRound()
         }
 
@@ -94,13 +118,13 @@ class Game private constructor(builder: Builder) {
         prepareForRound()
 
         var currentPlayer = winners.last().random()
-        gameEvents.onNext(MessagesFacade.Game.Amid.ChoseFirstPlayer(currentPlayer))
+        events.onNext(ChoseFirstPlayer(currentPlayer))
 
         while (isRoundRunning()) {
             playTurn(currentPlayer)
 
             currentPlayer = getNextPlayer(currentPlayer)
-            gameEvents.onNext(MessagesFacade.Game.Amid.ChoseNextPlayer(currentPlayer))
+            events.onNext(ChoseNextPlayer(currentPlayer))
         }
 
         announceRoundWinners()
@@ -113,7 +137,7 @@ class Game private constructor(builder: Builder) {
                     it.addSurvivalPoints(5)
                 }
 
-                gameEvents.onNext(MessagesFacade.Game.Amid.WonRoundCauseOneAlive(winner))
+                events.onNext(WonRoundCauseOneAlive(winner))
 
                 listOf(winner)
             }
@@ -122,7 +146,7 @@ class Game private constructor(builder: Builder) {
                     .map { it.addSurvivalPoints(it.getMovementPoints()); it }
                     .first { it.getMovementPoints() >= getMovementPointsToEscape() }
 
-                gameEvents.onNext(MessagesFacade.Game.Amid.WonRoundCauseEscaped(winner))
+                events.onNext(WonRoundCauseEscaped(winner))
 
                 listOf(winner)
             }
@@ -133,7 +157,7 @@ class Game private constructor(builder: Builder) {
                     .map { it.addSurvivalPoints(it.getMovementPoints()); it }
                     .filter { it.getMovementPoints() == maxMovementPoints }
 
-                gameEvents.onNext(MessagesFacade.Game.Amid.WonRoundCauseDeckOver(winners))
+                events.onNext(WonRoundCauseDeckOver(winners))
 
                 winners
             }
@@ -151,7 +175,7 @@ class Game private constructor(builder: Builder) {
         val maxScore = players.map { it.getSurvivalPoints() }.max()
         val winners = players.groupBy { it.getSurvivalPoints() }[maxScore]!!
 
-        gameEvents.onNext(MessagesFacade.Game.Around.AnnouncedGameWinners(players, winners))
+        events.onNext(AnnouncedGameWinners(players, winners))
     }
 
     private fun playTurn(player: Player) {
@@ -168,19 +192,19 @@ class Game private constructor(builder: Builder) {
     }
 
     private fun drewAction(player: Player, action: Action) {
-        gameEvents.onNext(MessagesFacade.Game.Amid.DrewAction(player, action))
+        events.onNext(DrewAction(player, action))
 
         player.takeToHand(action)
     }
 
     private fun drewZombie(player: Player, zombie: Zombie): Boolean {
-        gameEvents.onNext(MessagesFacade.Game.Amid.DrewZombie(player, zombie))
+        events.onNext(DrewZombie(player, zombie))
 
         player.chasedByZombie(zombie)
 
         val isEaten = player.getZombiesAroundCount() >= getZombiesCountToBeEaten()
         if (isEaten) {
-            gameEvents.onNext(MessagesFacade.Game.Amid.Died(player))
+            events.onNext(Died(player))
 
             player.die()
             removePlayer(player)
@@ -190,15 +214,15 @@ class Game private constructor(builder: Builder) {
     }
 
     private fun drewEvent(player: Player, event: Event) {
-        gameEvents.onNext(MessagesFacade.Game.Amid.DrewEvent(player, event))
+        events.onNext(DrewEvent(player, event))
 
         player.play(event)
         player.discard(event)
     }
 
     private fun drewNoCard(player: Player) {
-        gameEvents.onNext(
-            MessagesFacade.Game.Amid.DrewNoCard(
+        events.onNext(
+            DrewNoCard(
                 player,
                 if (isPlayDeckEmpty()) DrewNoCardReason.DeckIsEmpty
                 else DrewNoCardReason.DecidedNotToDraw
@@ -212,8 +236,8 @@ class Game private constructor(builder: Builder) {
             val actionCardFromHand = decisionToPlayCardFromHand.card ?: return
 
             if (WayToPlayCard.PLAY_AS_ACTION == decisionToPlayCardFromHand.wayToPlayCard) {
-                gameEvents.onNext(
-                    MessagesFacade.Game.Amid.DecidedToPlayFromHand(
+                events.onNext(
+                    DecidedToPlayFromHand(
                         player, actionCardFromHand
                     )
                 )
@@ -221,8 +245,8 @@ class Game private constructor(builder: Builder) {
                 player.play(actionCardFromHand)
                 player.discard(actionCardFromHand)
             } else { // as movement points
-                gameEvents.onNext(
-                    MessagesFacade.Game.Amid.DecidedToPlayFromHandAsMp(
+                events.onNext(
+                    DecidedToPlayFromHandAsMp(
                         player, actionCardFromHand
                     )
                 )
@@ -230,7 +254,7 @@ class Game private constructor(builder: Builder) {
                 player.addMovementPoints(actionCardFromHand as Action)
             }
         } else {
-            gameEvents.onNext(MessagesFacade.Game.Amid.DecidedNotToPlayFromHand(player))
+            events.onNext(DecidedNotToPlayFromHand(player))
         }
     }
 

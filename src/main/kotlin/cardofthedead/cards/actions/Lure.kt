@@ -3,8 +3,8 @@ package cardofthedead.cards.actions
 import cardofthedead.cards.Action
 import cardofthedead.cards.Zombie
 import cardofthedead.decks.getSingleZombies
+import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedLure
 import cardofthedead.game.Game
-import cardofthedead.game.MessagesFacade
 import cardofthedead.players.Player
 
 class Lure(game: Game) : Action(game, 1) {
@@ -32,8 +32,6 @@ class Lure(game: Game) : Action(game, 1) {
             }
         }
 
-        playedBy.publishEvent(
-            MessagesFacade.Game.ActionCards.PlayedLure(playedBy, gaveZombie, toPlayer)
-        )
+        playedBy.publishEvent(PlayedLure(playedBy, gaveZombie, toPlayer))
     }
 }

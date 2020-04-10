@@ -3,8 +3,8 @@ package cardofthedead.cards.actions
 import cardofthedead.cards.Action
 import cardofthedead.cards.Zombie
 import cardofthedead.decks.getSingleZombies
+import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedHide
 import cardofthedead.game.Game
-import cardofthedead.game.MessagesFacade
 import cardofthedead.players.Player
 
 class Hide(game: Game) : Action(game, 1) {
@@ -36,9 +36,7 @@ class Hide(game: Game) : Action(game, 1) {
         val decidedToDrawNoCardsNextTurn = playedBy.decideToDrawNoCardsNextTurnForHide()
 
         playedBy.publishEvent(
-            MessagesFacade.Game.ActionCards.PlayedHide(
-                playedBy, gaveZombie, toPlayer, decidedToDrawNoCardsNextTurn
-            )
+            PlayedHide(playedBy, gaveZombie, toPlayer, decidedToDrawNoCardsNextTurn)
         )
     }
 }

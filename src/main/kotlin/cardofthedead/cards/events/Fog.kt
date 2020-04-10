@@ -2,8 +2,8 @@ package cardofthedead.cards.events
 
 import cardofthedead.cards.Event
 import cardofthedead.cards.Zombie
+import cardofthedead.game.EventsFacade.Game.EventCards.PlayedFog
 import cardofthedead.game.Game
-import cardofthedead.game.MessagesFacade
 import cardofthedead.players.Player
 
 class Fog(game: Game) : Event(game) {
@@ -34,7 +34,7 @@ class Fog(game: Game) : Event(game) {
             }
 
         playedBy.publishEvent(
-            MessagesFacade.Game.EventCards.PlayedFog(
+            PlayedFog(
                 playedBy,
                 game.players
                     .map { it to it.getZombiesAroundCount() }

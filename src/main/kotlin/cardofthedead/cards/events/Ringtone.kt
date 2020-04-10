@@ -2,8 +2,8 @@ package cardofthedead.cards.events
 
 import cardofthedead.cards.Event
 import cardofthedead.decks.getSingleZombies
+import cardofthedead.game.EventsFacade.Game.EventCards.PlayedRingtone
 import cardofthedead.game.Game
-import cardofthedead.game.MessagesFacade
 import cardofthedead.players.Player
 
 class Ringtone(game: Game) : Event(game) {
@@ -26,7 +26,7 @@ class Ringtone(game: Game) : Event(game) {
             }
 
         playedBy.publishEvent(
-            MessagesFacade.Game.EventCards.PlayedRingtone(
+            PlayedRingtone(
                 playedBy,
                 initialZombiesAroundCount,
                 playedBy.getZombiesAroundCount()

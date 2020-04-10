@@ -1,8 +1,8 @@
 package cardofthedead.cards.actions
 
 import cardofthedead.cards.Action
+import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedTripped
 import cardofthedead.game.Game
-import cardofthedead.game.MessagesFacade
 import cardofthedead.players.Player
 
 class Tripped(game: Game) : Action(game, 1) {
@@ -27,9 +27,7 @@ class Tripped(game: Game) : Action(game, 1) {
         }
 
         playedBy.publishEvent(
-            MessagesFacade.Game.ActionCards.PlayedTripped(
-                playedBy, discardedMovementCards, playerToDiscardMovementCardsFrom
-            )
+            PlayedTripped(playedBy, discardedMovementCards, playerToDiscardMovementCardsFrom)
         )
     }
 }
