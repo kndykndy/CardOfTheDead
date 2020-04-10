@@ -87,6 +87,8 @@ class Game private constructor(builder: Builder) {
 
     fun getEventQueue(): Observable<EventsFacade.Event> = eventQueue
 
+    fun publishEvent(event: EventsFacade.Event) = events.onNext(event)
+
     fun getZombiesCountToBeSurrounded() =
         playersToZombiesToBeSurrounded.getValue(initialPlayersCount)
 
@@ -97,7 +99,7 @@ class Game private constructor(builder: Builder) {
         playersToMovementPointsToEscape.getValue(initialPlayersCount)
 
     fun play() {
-        events.onNext(
+        publishEvent(
             StartedNewGame(
                 playDeck.size(),
                 players.size,
@@ -107,7 +109,7 @@ class Game private constructor(builder: Builder) {
         )
 
         repeat(3) { i ->
-            events.onNext(StartedNewRound(i + 1))
+            publishEvent(StartedNewRound(i + 1))
             playRound()
         }
 
@@ -118,13 +120,13 @@ class Game private constructor(builder: Builder) {
         prepareForRound()
 
         var currentPlayer = winners.last().random()
-        events.onNext(ChoseFirstPlayer(currentPlayer))
+        publishEvent(ChoseFirstPlayer(currentPlayer))
 
         while (isRoundRunning()) {
             playTurn(currentPlayer)
 
             currentPlayer = getNextPlayer(currentPlayer)
-            events.onNext(ChoseNextPlayer(currentPlayer))
+            publishEvent(ChoseNextPlayer(currentPlayer))
         }
 
         announceRoundWinners()
@@ -137,7 +139,7 @@ class Game private constructor(builder: Builder) {
                     it.addSurvivalPoints(5)
                 }
 
-                events.onNext(WonRoundCauseOneAlive(winner))
+                publishEvent(WonRoundCauseOneAlive(winner))
 
                 listOf(winner)
             }
@@ -146,7 +148,7 @@ class Game private constructor(builder: Builder) {
                     .map { it.addSurvivalPoints(it.getMovementPoints()); it }
                     .first { it.getMovementPoints() >= getMovementPointsToEscape() }
 
-                events.onNext(WonRoundCauseEscaped(winner))
+                publishEvent(WonRoundCauseEscaped(winner))
 
                 listOf(winner)
             }
@@ -157,7 +159,7 @@ class Game private constructor(builder: Builder) {
                     .map { it.addSurvivalPoints(it.getMovementPoints()); it }
                     .filter { it.getMovementPoints() == maxMovementPoints }
 
-                events.onNext(WonRoundCauseDeckOver(winners))
+                publishEvent(WonRoundCauseDeckOver(winners))
 
                 winners
             }
@@ -175,7 +177,7 @@ class Game private constructor(builder: Builder) {
         val maxScore = players.map { it.getSurvivalPoints() }.max()
         val winners = players.groupBy { it.getSurvivalPoints() }[maxScore]!!
 
-        events.onNext(AnnouncedGameWinners(players, winners))
+        publishEvent(AnnouncedGameWinners(players, winners))
     }
 
     private fun playTurn(player: Player) {
@@ -192,19 +194,19 @@ class Game private constructor(builder: Builder) {
     }
 
     private fun drewAction(player: Player, action: Action) {
-        events.onNext(DrewAction(player, action))
+        publishEvent(DrewAction(player, action))
 
         player.takeToHand(action)
     }
 
     private fun drewZombie(player: Player, zombie: Zombie): Boolean {
-        events.onNext(DrewZombie(player, zombie))
+        publishEvent(DrewZombie(player, zombie))
 
         player.chasedByZombie(zombie)
 
         val isEaten = player.getZombiesAroundCount() >= getZombiesCountToBeEaten()
         if (isEaten) {
-            events.onNext(Died(player))
+            publishEvent(Died(player))
 
             player.die()
             removePlayer(player)
@@ -214,14 +216,14 @@ class Game private constructor(builder: Builder) {
     }
 
     private fun drewEvent(player: Player, event: Event) {
-        events.onNext(DrewEvent(player, event))
+        publishEvent(DrewEvent(player, event))
 
         player.play(event)
         player.discard(event)
     }
 
     private fun drewNoCard(player: Player) {
-        events.onNext(
+        publishEvent(
             DrewNoCard(
                 player,
                 if (isPlayDeckEmpty()) DrewNoCardReason.DeckIsEmpty
@@ -236,7 +238,7 @@ class Game private constructor(builder: Builder) {
             val actionCardFromHand = decisionToPlayCardFromHand.card ?: return
 
             if (WayToPlayCard.PLAY_AS_ACTION == decisionToPlayCardFromHand.wayToPlayCard) {
-                events.onNext(
+                publishEvent(
                     DecidedToPlayFromHand(
                         player, actionCardFromHand
                     )
@@ -245,7 +247,7 @@ class Game private constructor(builder: Builder) {
                 player.play(actionCardFromHand)
                 player.discard(actionCardFromHand)
             } else { // as movement points
-                events.onNext(
+                publishEvent(
                     DecidedToPlayFromHandAsMp(
                         player, actionCardFromHand
                     )
@@ -254,7 +256,7 @@ class Game private constructor(builder: Builder) {
                 player.addMovementPoints(actionCardFromHand as Action)
             }
         } else {
-            events.onNext(DecidedNotToPlayFromHand(player))
+            publishEvent(DecidedNotToPlayFromHand(player))
         }
     }
 
