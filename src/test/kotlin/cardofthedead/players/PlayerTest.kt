@@ -8,65 +8,133 @@ import io.kotest.matchers.shouldBe
 
 class PlayerTest : StringSpec({
 
-    "should pick 2 cards to candidates" {
-        // given
+    "when picking cards to candidates" {
 
-        val game = gameWithStandardDeck()
+        should("get requested amount if available") {
+            // given
 
-        val player = testPlayer(game)
+            val game = gameWithStandardDeck()
 
-        val topCard = game.playDeck.cards.last()
+            val player = testPlayer(game)
 
-        // when
-        player.pickCandidateCards(2)
+            val topCard = game.playDeck.cards.last()
 
-        // then
+            // when
+            player.pickCandidateCards(2)
 
-        player.candidatesToHand.size() shouldBe 2
-        player.candidatesToHand.cards.first() shouldBe topCard
+            // then
+
+            // todo lower deck
+            player.candidatesToHand.size() shouldBe 2
+            player.candidatesToHand.cards.first() shouldBe topCard
+        }
+
+        should("get no cards if no cards available") {
+            // given
+            val player = testPlayer(gameWithEmptyDeck())
+
+            // when
+            player.pickCandidateCards(1)
+
+            // then
+            player.candidatesToHand.isEmpty() shouldBe true
+        }
+
+        should("not attempt to pick 0 or less cards") {
+            // todo
+        }
     }
 
-    "should not pick any cards to candidates if no cards" {
-        // given
-        val player = testPlayer(gameWithEmptyDeck())
+    "when drawing top card" {
 
-        // when
-        player.pickCandidateCards(1)
+        should("draw only if drawing this turn") {
+            // todo
+        }
 
-        // then
-        player.candidatesToHand.isEmpty() shouldBe true
+        should("not get any cards if no cards available") {
+            // todo
+        }
     }
 
-    // todo do these
+    "when adding card to hand" {
+        should("do it if cards available") {
+            // todo
+        }
 
-    // "should not pick negative or zero amount of cards to candidates" {}
+        should("not do it if card is already in deck") {
+            // todo
+        }
+    }
 
-    // "should draw top card if drawing this turn" {}
-    // "should not draw top card if no cards" {}
-    // "should not draw top card if not drawing this turn" {}
+    "when putting card on bottom of deck" {
 
-    // "should take card to hand" {}
-    // "should not take card to hand if it is already there" {}
+        should("do it") {
+            // todo
+        }
 
-    // "should put card on bottom of deck" {}
-    // "should put card on bottom if deck if deck is empty" {}
+        should("do it if deck is empty") {
+            // todo
+        }
+    }
 
-    // "should be chased by zombie" {}
+    "when " {
 
-    // "should add movement points" {}
-    // "should not add movement points for Bitten" {}
+    }
 
-    // "should add survival points" {}
-    // "should not add negative survival points" {}
+    "when dealing with zombies" {
 
-    // "should get zombies around" {}
+        should("be chased by it") {
+            // + should get zombies around
+            // todo
+        }
 
-    // "should discard card" {}
-    // "should discard hand" {}
-    // "should discard candidates to hand" {}
-    // "should discard zombies" {}
-    // "should discard escape cards" {}
-    // "should discard all cards" {}
+        should("add movement points") {
+            // + get mp
+            // todo
+        }
 
-    // "should die" {}
+        should("not add movement points for Bitten") {
+            // todo
+        }
+
+        should("add survival points") {
+            // + get SP
+            // todo
+        }
+
+        should("not add negative survival points") {
+            // todo
+        }
+    }
+
+    "when dealing with discarding" {
+
+        should("discard card") {
+            // todo
+        }
+
+        should("discard hand") {
+            // todo
+        }
+
+        should("discard candidates to hand") {
+            // todo
+        }
+
+        should("discard zombies") {
+            // todo
+        }
+
+        should("discard escape cards") {
+            // todo
+        }
+
+        should("discard all cards") {
+            // todo
+        }
+    }
+
+    should("die") {
+        // todo
+    }
 })

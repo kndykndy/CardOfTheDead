@@ -7,8 +7,8 @@ import cardofthedead.cards.Zombie
 import cardofthedead.decks.Deck
 import cardofthedead.decks.getMovementPoints
 import cardofthedead.decks.getZombiesAroundCount
-import cardofthedead.game.Game
 import cardofthedead.game.EventsFacade
+import cardofthedead.game.Game
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
 import kotlin.random.Random
@@ -113,6 +113,8 @@ abstract class Player(
         zombiesAround.addCard(zombie)
     }
 
+    fun getZombiesAroundCount(): Int = zombiesAround.getZombiesAroundCount()
+
     /**
      * Add action card as an escape card.
      */
@@ -130,8 +132,6 @@ abstract class Player(
     }
 
     fun getSurvivalPoints(): Int = survivalPoints
-
-    fun getZombiesAroundCount(): Int = zombiesAround.getZombiesAroundCount()
 
     /**
      * Put a card, not belonging to any deck, to a discard deck.
