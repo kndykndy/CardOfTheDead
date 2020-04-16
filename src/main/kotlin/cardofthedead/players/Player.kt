@@ -87,6 +87,7 @@ abstract class Player(
      * Picks N top cards from the play deck to the candidates deck.
      */
     fun pickCandidateCards(n: Int) {
+        if (n < 0) throw IllegalArgumentException("n cannot be less than zero")
         repeat(n) {
             game.playDeck.pickTopCard()?.let(candidatesToHand::addCard)
         }

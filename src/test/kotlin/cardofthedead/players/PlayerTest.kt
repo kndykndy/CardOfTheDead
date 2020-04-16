@@ -3,10 +3,14 @@ package cardofthedead.players
 import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.TestUtils.gameWithStandardDeck
 import cardofthedead.TestUtils.testPlayer
-import io.kotest.core.spec.style.StringSpec
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+import io.mockk.every
+import io.mockk.spyk
 
-class PlayerTest : StringSpec({
+class PlayerTest : ShouldSpec({
 
     "when picking cards to candidates" {
 
@@ -18,13 +22,17 @@ class PlayerTest : StringSpec({
             val player = testPlayer(game)
 
             val topCard = game.playDeck.cards.last()
+            val playDeckSize = game.playDeck.size()
 
             // when
             player.pickCandidateCards(2)
 
             // then
 
-            // todo lower deck
+            game.playDeck.size() shouldBe playDeckSize - 2
+            player.candidatesToHand.cards.forEach {
+                game.playDeck.hasCard(it) shouldBe false
+            }
             player.candidatesToHand.size() shouldBe 2
             player.candidatesToHand.cards.first() shouldBe topCard
         }
@@ -40,19 +48,50 @@ class PlayerTest : StringSpec({
             player.candidatesToHand.isEmpty() shouldBe true
         }
 
-        should("not attempt to pick 0 or less cards") {
-            // todo
+        should("not attempt to pick less than zero cards") {
+            // given
+            val player = testPlayer(gameWithEmptyDeck())
+
+            // when-then
+
+            shouldThrow<IllegalArgumentException> {
+                player.pickCandidateCards(-1)
+            }
         }
     }
 
     "when drawing top card" {
 
         should("draw only if drawing this turn") {
-            // todo
+            // given
+
+            val game = gameWithStandardDeck()
+
+            val player = spyk(testPlayer(game))
+
+            every { player.decideToDrawNoCardsNextTurnForHide() } returns true
+
+            // when
+            val topCard = player.drawTopCard()
+
+            // then
+
+            topCard shouldNotBe null
+            game.playDeck.hasCard(topCard!!) shouldBe false
         }
 
         should("not get any cards if no cards available") {
-            // todo
+            // given
+
+            val player = spyk(testPlayer(gameWithEmptyDeck()))
+
+            every { player.decideToDrawNoCardsNextTurnForHide() } returns false
+
+            // when
+            val topCard = player.drawTopCard()
+
+            // then
+            topCard shouldBe null
         }
     }
 
