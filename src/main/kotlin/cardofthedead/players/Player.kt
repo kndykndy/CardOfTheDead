@@ -4,6 +4,7 @@ import cardofthedead.cards.Action
 import cardofthedead.cards.Card
 import cardofthedead.cards.PlayCardDecision
 import cardofthedead.cards.Zombie
+import cardofthedead.cards.actions.Bitten
 import cardofthedead.decks.Deck
 import cardofthedead.decks.getMovementPoints
 import cardofthedead.decks.getZombiesAroundCount
@@ -86,9 +87,9 @@ abstract class Player(
     /**
      * Picks N top cards from the play deck to the candidates deck.
      */
-    fun pickCandidateCards(n: Int) {
-        if (n < 0) throw IllegalArgumentException("n cannot be less than zero")
-        repeat(n) {
+    fun pickCandidateCards(cardsCnt: Int) {
+        if (cardsCnt < 0) throw IllegalArgumentException("Cards count cannot be negative")
+        repeat(cardsCnt) {
             game.playDeck.pickTopCard()?.let(candidatesToHand::addCard)
         }
     }
@@ -120,6 +121,8 @@ abstract class Player(
      * Add action card as an escape card.
      */
     fun addMovementPoints(actionCard: Action) {
+        if (actionCard is Bitten)
+            throw IllegalArgumentException("Cannot add movement points for Bitten")
         escapeCards.addCard(actionCard)
     }
 
@@ -129,6 +132,7 @@ abstract class Player(
     fun getMovementPoints(): Int = escapeCards.getMovementPoints()
 
     fun addSurvivalPoints(points: Int) {
+        if (points < 0) throw IllegalArgumentException("Points cannot be negative")
         survivalPoints += points
     }
 
