@@ -1,6 +1,19 @@
 package cardofthedead
 
+import cardofthedead.game.EventsFacade.Game.Amid.ChoseFirstPlayer
+import cardofthedead.game.EventsFacade.Game.Amid.ChoseNextPlayer
+import cardofthedead.game.EventsFacade.Game.Amid.DecidedNotToPlayFromHand
+import cardofthedead.game.EventsFacade.Game.Amid.DecidedToPlayFromHand
+import cardofthedead.game.EventsFacade.Game.Amid.DecidedToPlayFromHandAsMp
+import cardofthedead.game.EventsFacade.Game.Amid.Died
+import cardofthedead.game.EventsFacade.Game.Amid.DrewAction
+import cardofthedead.game.EventsFacade.Game.Amid.DrewEvent
+import cardofthedead.game.EventsFacade.Game.Amid.DrewNoCard
+import cardofthedead.game.EventsFacade.Game.Amid.DrewZombie
 import cardofthedead.game.EventsFacade.Game.Amid.StartedNewRound
+import cardofthedead.game.EventsFacade.Game.Amid.WonRoundCauseDeckOver
+import cardofthedead.game.EventsFacade.Game.Amid.WonRoundCauseEscaped
+import cardofthedead.game.EventsFacade.Game.Amid.WonRoundCauseOneAlive
 import cardofthedead.game.EventsFacade.Game.Around.AnnouncedGameWinners
 import cardofthedead.game.EventsFacade.Game.Around.StartedNewGame
 import cardofthedead.game.Game
@@ -35,10 +48,6 @@ fun main() {
         }
 
     game.getEventQueue()
-        .ofType(StartedNewRound::class.java)
-        .subscribe { msg -> println("Starting round #${msg.withNumber}") }
-
-    game.getEventQueue()
         .ofType(AnnouncedGameWinners::class.java)
         .subscribe { msg ->
             println("Player scores: " +
@@ -54,38 +63,78 @@ fun main() {
             }
         }
 
-//    MessagesFacade.Game.Pending.FirstPlayer -> println("${currentPlayer.name}'s starting!")
-//    MessagesFacade.Game.Pending.NextPlayer -> println("${currentPlayer.name}'s turn now!")
+    game.getEventQueue()
+        .ofType(StartedNewRound::class.java)
+        .subscribe { msg -> println("Starting round #${msg.withNumber}") }
 
-//    MessagesFacade.Game.Pending.RoundWinnerOneAlive ->
-//    println("Oops... This round is over because ${winner.name} is the only player left alive!")
-//    MessagesFacade.Game.Pending.RoundWinnerEscaped ->
-//    println("Oops... This round is over because ${first.name} escaped!")
-//    MessagesFacade.Game.Pending.RoundWinnersDeckOver ->
-//    println(
-//        "Oops... This round is over because there's no cards left in the deck! " +
-//                "Winners are: ${winnersList.joinToString { it.name }}."
-//    )
+    game.getEventQueue()
+        .ofType(ChoseFirstPlayer::class.java)
+        .subscribe { msg -> println("${currentPlayer.name}'s starting!") } // todo
+    game.getEventQueue()
+        .ofType(ChoseNextPlayer::class.java)
+        .subscribe { msg -> println("${currentPlayer.name}'s turn now!") } // todo
 
-//    MessagesFacade.Game.Pending.DrewAction =
-//        println("${currentPlayer.name} draws card to hand.")
-//    MessagesFacade.Game.Pending.DrewZombie =
-//        println("${this.name} is chased by ${getZombiesAroundCount()} zombies now.")
-//    MessagesFacade.Game.Pending.DrewEvent =
-//        todo
-//    MessagesFacade.Game.Pending.DrewNoCard =
-//        println("${this.name} uses their chance not to draw a card this turn.")
+    game.getEventQueue()
+        .ofType(DrewAction::class.java)
+        .subscribe { msg -> println("${currentPlayer.name} draws card to hand.") } // todo
+    game.getEventQueue()
+        .ofType(DrewZombie::class.java)
+        .subscribe { msg ->
+            println("${this.name} is chased by ${getZombiesAroundCount()} zombies now.")
+        } // todo
+    game.getEventQueue()
+        .ofType(DrewEvent::class.java)
+        .subscribe {} // todo
+    game.getEventQueue()
+        .ofType(DrewNoCard::class.java)
+        .subscribe { msg ->
+            println("${this.name} uses their chance not to draw a card this turn.")
+        } // todo
 
-//    MessagesFacade.Game.Pending.Dead =
-//        println("Oops... ${this.name} was eaten by zombies.")
+    game.getEventQueue()
+        .ofType(DecidedToPlayFromHand::class.java)
+        .subscribe { msg ->
+            println("${currentPlayer.name} decided to play ${actionCardFromHand::class.simpleName}.")
+        } // todo
+    game.getEventQueue()
+        .ofType(DecidedToPlayFromHandAsMp::class.java)
+        .subscribe { msg ->
+            println("${currentPlayer.name} decided to play ${actionCardFromHand::class.simpleName} as movement points.")
+            println("${this.name} has ${getMovementPoints()} movement points now.")
+        } // todo
+    game.getEventQueue()
+        .ofType(DecidedNotToPlayFromHand::class.java)
+        .subscribe { msg ->
+            println("${currentPlayer.name} decided not to play card from hand.")
+        } // todo
 
-//    MessagesFacade.Game.Pending.DecisionToPlayFromHand =
-//        println("${currentPlayer.name} decided to play ${actionCardFromHand::class.simpleName}.")
-//    MessagesFacade.Game.Pending.DecisionToPlayFromHandAsMp =
-//        println("${currentPlayer.name} decided to play ${actionCardFromHand::class.simpleName} as movement points.")
-//        println("${this.name} has ${getMovementPoints()} movement points now.")
-//    MessagesFacade.Game.Pending.DecisionNotToPlayFromHand =
-//        println("${currentPlayer.name} decided not to play card from hand.")
+    game.getEventQueue()
+        .ofType(Died::class.java)
+        .subscribe { msg -> println("Oops... ${this.name} was eaten by zombies.") } // todo
+
+    game.getEventQueue()
+        .ofType(WonRoundCauseOneAlive::class.java)
+        .subscribe { msg ->
+            println("Oops... This round is over because ${winner.name} is the only player left alive!")
+        } // todo
+    game.getEventQueue()
+        .ofType(WonRoundCauseEscaped::class.java)
+        .subscribe { msg ->
+            println("Oops... This round is over because ${first.name} escaped!")
+        } // todo
+    game.getEventQueue()
+        .ofType(WonRoundCauseDeckOver::class.java)
+        .subscribe { msg ->
+            println(
+                "Oops... This round is over because there's no cards left in the deck! " +
+                        "Winners are: ${winnersList.joinToString { it.name }}."
+            )
+        } // todo
+
+
+    game.getEventQueue()
+        .ofType(::class.java)
+        .subscribe {} // todo
 
     game.play()
 }
