@@ -204,7 +204,28 @@ fun main() {
         }
     game.getEventQueue()
         .ofType(PlayedDynamite::class.java)
-        .subscribe {} // todo
+        .subscribe { msg ->
+            val playerPronoun = msg.player.getPronoun().capitalize()
+            val discardCard =
+                if (msg.andDiscardedMovementCard != null) msg.andDiscardedMovementCard.title
+                else "no"
+
+            println("${msg.player.name} plays Dynamite.")
+            if (msg.discardedZombies.isNotEmpty()) {
+                val zombies = msg.discardedZombies.joinToString { it.title }
+                val zombiesAroundCount = msg.player.getZombiesAroundCount()
+                val decision =
+                    if (zombiesAroundCount == 0) "not followed by"
+                    else "followed by $zombiesAroundCount"
+
+                println(
+                    "$playerPronoun discards $zombies and $discardCard movement card " +
+                            "and now is $decision zombies!"
+                )
+            } else {
+                println("$playerPronoun discards no zombies but $discardCard movement card.")
+            }
+        }
     game.getEventQueue()
         .ofType(PlayedHide::class.java)
         .subscribe {} // todo
