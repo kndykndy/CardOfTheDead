@@ -6,7 +6,16 @@ import cardofthedead.game.EventsFacade.Game.EventCards.PlayedFog
 import cardofthedead.game.Game
 import cardofthedead.players.Player
 
-class Fog(game: Game) : Event(game) {
+class Fog(
+    game: Game
+) : Event(
+    game,
+    "Fog",
+    "all survivors take their zombies at hand. " +
+            "turn by turn players draw a card from the player to the right. " +
+            "and then once more. " +
+            "survivors show their zombies."
+) {
 
     /**
      * All survivors take their zombies at hand. Turn by turn players draw a card from the player

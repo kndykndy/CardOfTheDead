@@ -58,7 +58,7 @@ fun main() {
             )
             println(
                 "${msg.startingPlayer.name} was the last who went to shopping mall, " +
-                        "${msg.startingPlayer.getPronoun()}'s starting!"
+                        "${msg.startingPlayer.getPronoun()}'s starting the game!"
             )
         }
     game.getEventQueue()
@@ -94,21 +94,21 @@ fun main() {
     game.getEventQueue()
         .ofType(DrewAction::class.java)
         .subscribe { msg ->
-            println("${msg.player.name} draws ${msg.drewAction::class.simpleName} to hand.")
+            println("${msg.player.name} draws ${msg.drewAction.title} to hand.")
         }
     game.getEventQueue()
         .ofType(DrewZombie::class.java)
         .subscribe { msg ->
-            println("${msg.player.name} is chased by ${msg.drewZombie::class.simpleName}.")
+            print("${msg.player.name} is chased by ${msg.drewZombie.title}. ")
             println(
                 "${msg.player.getPronoun().capitalize()}'s chased by " +
-                        "${msg.player.getZombiesAroundCount()} now."
+                        "${msg.player.getZombiesAroundCount()} zombies now."
             )
         }
     game.getEventQueue()
         .ofType(DrewEvent::class.java)
         .subscribe { msg ->
-            println("${msg.player.name} draws ${msg.drewEvent::class.simpleName}.")
+            println("${msg.player.name} draws ${msg.drewEvent.title}.")
         }
     game.getEventQueue()
         .ofType(DrewNoCard::class.java)
@@ -119,13 +119,13 @@ fun main() {
     game.getEventQueue()
         .ofType(DecidedToPlayFromHand::class.java)
         .subscribe { msg ->
-            println("${msg.player.name} decides to play ${msg.card::class.simpleName}.")
+            println("${msg.player.name} decides to play ${msg.card.title}.")
         }
     game.getEventQueue()
         .ofType(DecidedToPlayFromHandAsMp::class.java)
         .subscribe { msg ->
-            println(
-                "${msg.player.name} decides to play ${msg.card::class.simpleName} as Movement Points."
+            print(
+                "${msg.player.name} decides to play ${msg.card.title} as Movement Points. "
             )
             println(
                 "${msg.player.getPronoun().capitalize()} has " +
@@ -181,7 +181,7 @@ fun main() {
         .subscribe { msg ->
             val playerPronoun = msg.player.getPronoun().capitalize()
 
-            println("${msg.player.name} plays Barricade.")
+            print("${msg.player.name} plays Barricade. ")
             println("$playerPronoun takes ${msg.tookCardsToHand} cards to hand.")
         }
     game.getEventQueue()
@@ -191,7 +191,7 @@ fun main() {
 
             println("${msg.player.name} plays Chainsaw.")
             if (msg.discardedZombies.isNotEmpty()) {
-                val zombies = msg.discardedZombies.joinToString { it.javaClass.simpleName }
+                val zombies = msg.discardedZombies.joinToString { it.title }
                 val zombiesAroundCount = msg.player.getZombiesAroundCount()
                 val decision =
                     if (zombiesAroundCount == 0) "not followed by"

@@ -7,7 +7,13 @@ import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedSlugger
 import cardofthedead.game.Game
 import cardofthedead.players.Player
 
-class Slugger(game: Game) : Action(game, 1) {
+class Slugger(
+    game: Game
+) : Action(
+    game,
+    "Slugger",
+    "discard a zombie or take a card from another players hand"
+) {
 
     /**
      * Discard a zombie or take a card from another players hand.

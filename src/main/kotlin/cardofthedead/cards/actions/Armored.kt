@@ -5,7 +5,13 @@ import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedArmored
 import cardofthedead.game.Game
 import cardofthedead.players.Player
 
-class Armored(game: Game) : Action(game, 1) {
+class Armored(
+    game: Game
+) : Action(
+    game,
+    "Armored",
+    "put bitten on the bottom of the deck from your hand"
+) {
 
     /**
      * Put bitten on the bottom of the deck from your hand.

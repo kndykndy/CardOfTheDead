@@ -6,7 +6,14 @@ import cardofthedead.game.EventsFacade.Game.EventCards.PlayedMobs
 import cardofthedead.game.Game
 import cardofthedead.players.Player
 
-class Mobs(game: Game) : Event(game) {
+class Mobs(
+    game: Game
+) : Event(
+    game,
+    "Mobs",
+    "if you have a slugger at hand, ignore the event and pass it to the next player to the left. " +
+            "otherwise put all your hand on the bottom of the deck"
+) {
 
     /**
      * If you have a slugger at hand, ignore the event and pass it to the next player to the left.

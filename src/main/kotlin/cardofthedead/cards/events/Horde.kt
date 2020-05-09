@@ -5,7 +5,13 @@ import cardofthedead.game.EventsFacade.Game.EventCards.PlayedHorde
 import cardofthedead.game.Game
 import cardofthedead.players.Player
 
-class Horde(game: Game) : Event(game) {
+class Horde(
+    game: Game
+) : Event(
+    game,
+    "Horde",
+    "every survivor draws two cards in their turn till the end of a round"
+) {
 
     /**
      * Every survivor draws two cards in their turn till the end of a round.

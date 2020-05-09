@@ -7,7 +7,14 @@ import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedHide
 import cardofthedead.game.Game
 import cardofthedead.players.Player
 
-class Hide(game: Game) : Action(game, 1) {
+class Hide(
+    game: Game
+) : Action(
+    game,
+    "Hide",
+    "give one of your Zombie cards to the next player. " +
+            "you may choose to draw no cards on your next turn."
+) {
 
     /**
      * Give one of your Zombie cards to the next player.

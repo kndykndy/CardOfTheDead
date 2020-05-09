@@ -5,7 +5,13 @@ import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedTripped
 import cardofthedead.game.Game
 import cardofthedead.players.Player
 
-class Tripped(game: Game) : Action(game, 1) {
+class Tripped(
+    game: Game
+) : Action(
+    game,
+    "Tripped",
+    "discard up to two of another player's newest movement cards"
+) {
 
     /**
      * Discard up to two of another player's newest movement cards.

@@ -6,7 +6,14 @@ import cardofthedead.game.Game
 import cardofthedead.players.Player
 
 @Suppress("ClassName")
-class `Nukes!`(game: Game) : Action(game, 2) {
+class `Nukes!`(
+    game: Game
+) : Action(
+    game,
+    "Nukes!",
+    "discard all zombie cards and all cards in hand from all players (including yourself)",
+    2
+) {
 
     /**
      * Discard all zombie cards and all cards in hand from all players (including yourself).

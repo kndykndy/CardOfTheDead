@@ -41,6 +41,7 @@ class Game private constructor(builder: Builder) {
      * Events superqueue, combines all the subqueues from players and game queue.
      */
     private var eventQueue: Observable<EventsFacade.Event>
+
     /**
      * Game queue.
      */
@@ -194,22 +195,22 @@ class Game private constructor(builder: Builder) {
     }
 
     private fun drewAction(player: Player, action: Action) {
-        publishEvent(DrewAction(player, action))
-
         player.takeToHand(action)
+
+        publishEvent(DrewAction(player, action))
     }
 
     private fun drewZombie(player: Player, zombie: Zombie): Boolean {
-        publishEvent(DrewZombie(player, zombie))
-
         player.chasedByZombie(zombie)
+
+        publishEvent(DrewZombie(player, zombie))
 
         val isEaten = player.getZombiesAroundCount() >= getZombiesCountToBeEaten()
         if (isEaten) {
-            publishEvent(Died(player))
-
             player.die()
             removePlayer(player)
+
+            publishEvent(Died(player))
         }
 
         return isEaten
@@ -247,13 +248,13 @@ class Game private constructor(builder: Builder) {
                 player.play(actionCardFromHand)
                 player.discard(actionCardFromHand)
             } else { // as movement points
+                player.addMovementPoints(actionCardFromHand as Action)
+
                 publishEvent(
                     DecidedToPlayFromHandAsMp(
                         player, actionCardFromHand
                     )
                 )
-
-                player.addMovementPoints(actionCardFromHand as Action)
             }
         } else {
             publishEvent(DecidedNotToPlayFromHand(player))

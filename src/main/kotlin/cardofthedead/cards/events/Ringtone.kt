@@ -6,7 +6,13 @@ import cardofthedead.game.EventsFacade.Game.EventCards.PlayedRingtone
 import cardofthedead.game.Game
 import cardofthedead.players.Player
 
-class Ringtone(game: Game) : Event(game) {
+class Ringtone(
+    game: Game
+) : Event(
+    game,
+    "Ringtone",
+    "take one zombie card from every other player"
+) {
 
     /**
      * Take one zombie card from every other player.

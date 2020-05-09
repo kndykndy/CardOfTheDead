@@ -5,7 +5,14 @@ import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedPillage
 import cardofthedead.game.Game
 import cardofthedead.players.Player
 
-class Pillage(game: Game) : Action(game, 2) {
+class Pillage(
+    game: Game
+) : Action(
+    game,
+    "Pillage",
+    "blindly draw a card from every other player",
+    2
+) {
 
     /**
      * Blindly draw a card from every other player.

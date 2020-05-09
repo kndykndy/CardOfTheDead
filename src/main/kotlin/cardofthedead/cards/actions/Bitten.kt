@@ -9,4 +9,12 @@ import cardofthedead.game.Game
  *
  * This card cannot be played as Movement card.
  */
-class Bitten(game: Game) : Action(game, 0)
+class Bitten(
+    game: Game
+) : Action(
+    game,
+    "Bitten",
+    "you're not getting survival points if this card's in your hand by the end of the round. " +
+            "this card cannot be played as a movement card.",
+    0
+)

@@ -4,27 +4,35 @@ import cardofthedead.game.Game
 import cardofthedead.players.Player
 
 abstract class Card(
-    val game: Game
+    val game: Game,
+    val title: String,
+    val description: String
 ) {
 
     open fun play(playedBy: Player) {
-        throw java.lang.IllegalStateException(
-            "${this::class.simpleName} cannot be played directly."
-        )
+        throw java.lang.IllegalStateException("${this.title} cannot be played directly.")
     }
 }
 
 abstract class Action(
     game: Game,
-    val movementPoints: Int
-) : Card(game)
+    name: String,
+    description: String,
+    val movementPoints: Int = 1
+) : Card(game, name, description)
 
-abstract class Event(game: Game) : Card(game)
+abstract class Event(
+    game: Game,
+    name: String,
+    description: String
+) : Card(game, name, description)
 
 abstract class Zombie(
     game: Game,
-    val zombiesOnCard: Int
-) : Card(game)
+    name: String,
+    description: String = "",
+    val zombiesOnCard: Int = 1
+) : Card(game, name, description)
 
 class PlayCardDecision(
     val wayToPlayCard: WayToPlayCard,

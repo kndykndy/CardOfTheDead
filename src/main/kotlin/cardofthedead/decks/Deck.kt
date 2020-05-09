@@ -56,7 +56,7 @@ open class Deck<T : Card>(
     fun pickRandomCard(): T? = if (isNotEmpty()) pickCard(cards.random()) else null
 
     override fun toString(): String =
-        "[${cards.joinToString(",") { it::class.simpleName + it.hashCode() }}]"
+        "[${cards.joinToString(",") { it.title + it.hashCode() }}]"
 }
 
 class EmptyDeck(game: Game) : Deck<Card>(game)

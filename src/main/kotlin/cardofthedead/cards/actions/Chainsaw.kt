@@ -8,7 +8,13 @@ import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedChainsaw
 import cardofthedead.game.Game
 import cardofthedead.players.Player
 
-class Chainsaw(game: Game) : Action(game, 1) {
+class Chainsaw(
+    game: Game
+) : Action(
+    game,
+    "Chainsaw",
+    "discard two zombie cards"
+) {
 
     /**
      * Discard two zombie cards.

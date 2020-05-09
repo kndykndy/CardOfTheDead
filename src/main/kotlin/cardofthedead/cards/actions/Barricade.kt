@@ -7,7 +7,13 @@ import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedBarricade
 import cardofthedead.game.Game
 import cardofthedead.players.Player
 
-class Barricade(game: Game) : Action(game, 1) {
+class Barricade(
+    game: Game
+) : Action(
+    game,
+    "Barricade",
+    "draw three cards. choose one and put it on the bottom of the deck"
+) {
 
     /**
      * Draw three cards. Choose one and put it on the bottom of the deck.
