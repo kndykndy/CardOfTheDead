@@ -40,7 +40,7 @@ class EasyPlayerTest : ShouldSpec({
             }
 
             // when
-            player.chooseSinglePointCards(2)
+            player.chooseSinglePointCardsFromCandidates(2)
 
             // then
 
@@ -64,7 +64,7 @@ class EasyPlayerTest : ShouldSpec({
             }
 
             // when
-            player.chooseSinglePointCards(3)
+            player.chooseSinglePointCardsFromCandidates(3)
 
             // then
 
@@ -84,7 +84,7 @@ class EasyPlayerTest : ShouldSpec({
             }
 
             // when
-            player.chooseSinglePointCards(-1)
+            player.chooseSinglePointCardsFromCandidates(-1)
 
             // then
 

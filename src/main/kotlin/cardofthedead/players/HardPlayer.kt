@@ -64,7 +64,7 @@ class HardPlayer(
         `Nukes!`::class to 29
     )
 
-    override fun chooseSinglePointCards(n: Int) {
+    override fun chooseSinglePointCardsFromCandidates(n: Int) {
         TODO("not implemented")
     }
 

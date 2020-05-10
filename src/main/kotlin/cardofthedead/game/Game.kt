@@ -275,7 +275,7 @@ class Game private constructor(builder: Builder) {
         // initial dealing
         players.forEach { player ->
             player.pickCandidateCards(10)
-            player.chooseSinglePointCards(3)
+            player.chooseSinglePointCardsFromCandidates(3)
         }
         players.forEach { it.discardCandidatesCards() }
         playDeck.merge(discardDeck)

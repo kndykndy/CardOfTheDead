@@ -67,7 +67,7 @@ class EasyPlayer(
     /**
      * Picks random N cards from the candidates deck.
      */
-    override fun chooseSinglePointCards(n: Int) {
+    override fun chooseSinglePointCardsFromCandidates(n: Int) {
         if (n <= 0) return
         val actionCards = candidatesToHand.getActions().filter { it.movementPoints == 1 }
         if (actionCards.size > n) {

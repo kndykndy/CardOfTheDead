@@ -54,11 +54,8 @@ abstract class Player(
     protected var drawCardThisTurn: Boolean = true
 
     // Decisions
-
-    /**
-     * Chooses N cards from the candidates deck.
-     */
-    abstract fun chooseSinglePointCards(n: Int)
+    
+    abstract fun chooseSinglePointCardsFromCandidates(n: Int)
 
     abstract fun decideToPlayCardFromHand(): PlayCardDecision
 

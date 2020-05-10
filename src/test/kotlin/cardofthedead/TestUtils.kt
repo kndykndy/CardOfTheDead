@@ -38,7 +38,7 @@ object TestUtils {
 
     fun testPlayer(game: Game): Player =
         object : Player(game, "R2D2", Sex.MALE) {
-            override fun chooseSinglePointCards(n: Int) {}
+            override fun chooseSinglePointCardsFromCandidates(n: Int) {}
             override fun decideToPlayCardFromHand() = PlayCardDecision.doNotPlay()
             override fun chooseWorstCandidateForBarricade(): Card? = null
             override fun chooseWorstMovementCardForDynamite(): Action? = null
