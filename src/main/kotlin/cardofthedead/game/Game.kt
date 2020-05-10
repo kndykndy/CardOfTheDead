@@ -140,7 +140,7 @@ class Game private constructor(builder: Builder) {
                     it.addSurvivalPoints(5)
                 }
 
-                publishEvent(WonRoundCauseOneAlive(winner))
+                publishEvent(WonRoundCauseOneAlive(winner, players.plus(deadPlayers)))
 
                 listOf(winner)
             }
@@ -149,7 +149,7 @@ class Game private constructor(builder: Builder) {
                     .map { it.addSurvivalPoints(it.getMovementPoints()); it }
                     .first { it.getMovementPoints() >= getMovementPointsToEscape() }
 
-                publishEvent(WonRoundCauseEscaped(winner))
+                publishEvent(WonRoundCauseEscaped(winner, players.plus(deadPlayers)))
 
                 listOf(winner)
             }
@@ -160,7 +160,7 @@ class Game private constructor(builder: Builder) {
                     .map { it.addSurvivalPoints(it.getMovementPoints()); it }
                     .filter { it.getMovementPoints() == maxMovementPoints }
 
-                publishEvent(WonRoundCauseDeckOver(winners))
+                publishEvent(WonRoundCauseDeckOver(winners, players.plus(deadPlayers)))
 
                 winners
             }

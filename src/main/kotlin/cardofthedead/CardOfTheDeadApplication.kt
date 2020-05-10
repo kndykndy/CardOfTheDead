@@ -33,6 +33,7 @@ import cardofthedead.game.EventsFacade.Game.EventCards.PlayedMobs
 import cardofthedead.game.EventsFacade.Game.EventCards.PlayedRingtone
 import cardofthedead.game.Game
 import cardofthedead.players.Level
+import cardofthedead.players.Player
 import cardofthedead.players.PlayerDescriptor
 import cardofthedead.players.Sex
 import cardofthedead.players.getPronoun
@@ -64,25 +65,27 @@ fun main() {
     game.getEventQueue()
         .ofType(AnnouncedGameWinners::class.java)
         .subscribe { msg ->
-            println(
-                "Player scores: " +
-                        msg.players.joinToString { it.name + " (${it.getSurvivalPoints()})" }
-            )
+            println()
+            println("The game is over!")
+            printScores(msg.players)
 
             if (msg.winners.size == 1) {
                 val winner = msg.winners.first()
-                println("The winner is ${winner.name + " (${winner.getSurvivalPoints()})"}")
+                println("The winner is ${winner.name + " (${winner.getSurvivalPoints()})"}.")
             } else {
                 println(
                     "The winners are " +
-                            msg.winners.joinToString { it.name + " (${it.getSurvivalPoints()})" }
+                            msg.winners.joinToString { it.name + " (${it.getSurvivalPoints()})." }
                 )
             }
         }
 
     game.getEventQueue()
         .ofType(StartedNewRound::class.java)
-        .subscribe { msg -> println("Starting round #${msg.withNumber}") }
+        .subscribe { msg ->
+            println("Starting round #${msg.withNumber}!")
+            println()
+        }
 
     game.getEventQueue()
         .ofType(ChoseFirstPlayer::class.java)
@@ -147,23 +150,27 @@ fun main() {
     game.getEventQueue()
         .ofType(WonRoundCauseOneAlive::class.java)
         .subscribe { msg ->
-            println("Oops... This round is over as ${msg.player.name}'s the only player left alive!")
+            println()
+            println("This round is over as ${msg.winner.name}'s the only player left alive!")
+            printScores(msg.players)
         }
     game.getEventQueue()
         .ofType(WonRoundCauseEscaped::class.java)
         .subscribe { msg ->
-            println("Oops... This round is over as ${msg.player.name} escaped!")
+            println()
+            println("This round is over as ${msg.winner.name} escaped!")
+            printScores(msg.players)
         }
     game.getEventQueue()
         .ofType(WonRoundCauseDeckOver::class.java)
         .subscribe { msg ->
-            if (msg.players.isEmpty()) throw IllegalStateException()
-
-            println("Oops... This round is over as there's no cards left in the deck!")
-            if (msg.players.size == 1) {
-                println("${msg.players[0].name} is the winner!")
+            println()
+            println("This round is over as there's no cards left in the deck!")
+            printScores(msg.players)
+            if (msg.winners.size == 1) {
+                println("${msg.winners[0].name} is the winner!")
             } else {
-                println("Winners are: ${msg.players.joinToString { it.name }}.")
+                println("Winners are: ${msg.winners.joinToString { it.name }}.")
             }
         }
 
@@ -173,7 +180,7 @@ fun main() {
             val playerPronoun = msg.player.getPronoun().capitalize()
             val decision = if (msg.putBittenOnBottom) "" else " did not"
 
-            println("${msg.player.name} plays Armored.")
+            print("${msg.player.name} plays Armored. ")
             println("$playerPronoun $decision puts Bitten on the bottom of the deck.")
         }
     game.getEventQueue()
@@ -189,7 +196,7 @@ fun main() {
         .subscribe { msg ->
             val playerPronoun = msg.player.getPronoun().capitalize()
 
-            println("${msg.player.name} plays Chainsaw.")
+            print("${msg.player.name} plays Chainsaw. ")
             if (msg.discardedZombies.isNotEmpty()) {
                 val zombies = msg.discardedZombies.joinToString { it.title }
                 val zombiesAroundCount = msg.player.getZombiesAroundCount()
@@ -210,7 +217,7 @@ fun main() {
                 if (msg.andDiscardedMovementCard != null) msg.andDiscardedMovementCard.title
                 else "no"
 
-            println("${msg.player.name} plays Dynamite.")
+            print("${msg.player.name} plays Dynamite. ")
             if (msg.discardedZombies.isNotEmpty()) {
                 val zombies = msg.discardedZombies.joinToString { it.title }
                 val zombiesAroundCount = msg.player.getZombiesAroundCount()
@@ -228,22 +235,77 @@ fun main() {
         }
     game.getEventQueue()
         .ofType(PlayedHide::class.java)
-        .subscribe {} // todo
+        .subscribe { msg ->
+            val playerPronoun = msg.player.getPronoun().capitalize()
+            val decision =
+                if (msg.andDecidedToDrawNoCardsNextTurn) "will be drawing"
+                else "decides not to draw"
+
+            print("${msg.player.name} plays Hide. ")
+            if (msg.gaveZombie != null && msg.toPlayer != null) {
+                println(
+                    "$playerPronoun gives ${msg.gaveZombie.title} " +
+                            "to the next player, ${msg.toPlayer.name}, " +
+                            "and $decision cards next turn."
+                )
+            } else {
+                println("$playerPronoun gives no zombies and $decision cards next turn.")
+            }
+        }
     game.getEventQueue()
         .ofType(PlayedLure::class.java)
-        .subscribe {} // todo
+        .subscribe { msg ->
+            val playerPronoun = msg.player.getPronoun().capitalize()
+
+            print("${msg.player.name} plays Lure. ")
+            if (msg.gaveZombie != null && msg.toPlayer != null) {
+                println("$playerPronoun gives ${msg.gaveZombie.title} to ${msg.toPlayer.name}.")
+            } else {
+                println("$playerPronoun gives no zombies.")
+            }
+        }
     game.getEventQueue()
         .ofType(PlayedNukes::class.java)
-        .subscribe {} // todo
+        .subscribe { msg ->
+            print("${msg.player.name} plays Nukes! ")
+            println(
+                "It discards all zombie cards and all cards in hand from all players, " +
+                        "even from ${msg.player.name}!"
+            )
+        }
     game.getEventQueue()
         .ofType(PlayedPillage::class.java)
-        .subscribe {} // todo
+        .subscribe { msg ->
+            print("${msg.player.name} plays Pillage. ")
+            println(
+                "${msg.player.getPronoun().capitalize()} drew ${msg.pillagedCards.size} " +
+                        "cards from other players."
+            )
+        }
     game.getEventQueue()
         .ofType(PlayedSlugger::class.java)
-        .subscribe {} // todo
+        .subscribe { msg ->
+            val playerPronoun = msg.player.getPronoun().capitalize()
+
+            print("${msg.player.name} plays Slugger. ")
+            if (msg.discardedZombie != null) {
+                println("$playerPronoun decides to discard ${msg.discardedZombie.title}.")
+            } else {
+                println(
+                    "$playerPronoun decides to take ${msg.orTookCard?.title} " +
+                            "from ${msg.fromPlayer?.name}."
+                )
+            }
+        }
     game.getEventQueue()
         .ofType(PlayedTripped::class.java)
-        .subscribe {} // todo
+        .subscribe { msg ->
+            print("${msg.player.name} plays Tripped. ")
+            println(
+                "${msg.fromPlayer.name} discards his ${msg.discardedMovementCards.size} " +
+                        "latest movement cards."
+            )
+        }
 
     game.getEventQueue()
         .ofType(PlayedCornered::class.java)
@@ -262,4 +324,9 @@ fun main() {
         .subscribe {} // todo
 
     game.play()
+}
+
+fun printScores(players: List<Player>) {
+    val score = players.joinToString { it.name + " (${it.getSurvivalPoints()})" }
+    println("Score: $score.")
 }

@@ -48,9 +48,18 @@ class EventsFacade {
 
             data class Died(val player: Player) : Event
 
-            data class WonRoundCauseOneAlive(val player: Player) : Event
-            data class WonRoundCauseEscaped(val player: Player) : Event
-            data class WonRoundCauseDeckOver(val players: List<Player>) : Event
+            data class WonRoundCauseOneAlive(
+                val winner: Player,
+                val players: List<Player>
+            ) : Event
+            data class WonRoundCauseEscaped(
+                val winner: Player,
+                val players: List<Player>
+            ) : Event
+            data class WonRoundCauseDeckOver(
+                val winners: List<Player>,
+                val players: List<Player>
+            ) : Event
         }
 
         class ActionCards {
