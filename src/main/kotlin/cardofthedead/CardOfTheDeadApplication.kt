@@ -96,9 +96,7 @@ fun main() {
 
     game.getEventQueue()
         .ofType(DrewAction::class.java)
-        .subscribe { msg ->
-            println("${msg.player.name} draws ${msg.drewAction.title} to hand.")
-        }
+        .subscribe { /*msg -> println("${msg.player.name} draws ${msg.drewAction.title} to hand.")*/ }
     game.getEventQueue()
         .ofType(DrewZombie::class.java)
         .subscribe { msg ->
@@ -110,9 +108,7 @@ fun main() {
         }
     game.getEventQueue()
         .ofType(DrewEvent::class.java)
-        .subscribe { msg ->
-            println("${msg.player.name} draws ${msg.drewEvent.title}.")
-        }
+        .subscribe { /*msg -> println("${msg.player.name} draws ${msg.drewEvent.title}.")*/ }
     game.getEventQueue()
         .ofType(DrewNoCard::class.java)
         .subscribe { msg ->
@@ -128,11 +124,11 @@ fun main() {
         .ofType(DecidedToPlayFromHandAsMp::class.java)
         .subscribe { msg ->
             print(
-                "${msg.player.name} decides to play ${msg.card.title} as Movement Points. "
+                "${msg.player.name} decides to play ${msg.card.title} as Movement Points, "
             )
             println(
-                "${msg.player.getPronoun().capitalize()} has " +
-                        "${msg.player.getMovementPoints()} Movement Points now."
+                " now ${msg.player.getPronoun()} has " +
+                        "${msg.player.getMovementPoints()} MP total."
             )
         }
     game.getEventQueue()
@@ -178,10 +174,13 @@ fun main() {
         .ofType(PlayedArmored::class.java)
         .subscribe { msg ->
             val playerPronoun = msg.player.getPronoun().capitalize()
-            val decision = if (msg.putBittenOnBottom) "" else " did not"
 
-            print("${msg.player.name} plays Armored. ")
-            println("$playerPronoun $decision puts Bitten on the bottom of the deck.")
+            print("${msg.player.name} plays Armored")
+            if (msg.putBittenOnBottom) {
+                println(" and puts Bitten on the bottom of the deck.")
+            } else {
+                println(". $playerPronoun does not have Bitten to put it on the bottom of the deck.")
+            }
         }
     game.getEventQueue()
         .ofType(PlayedBarricade::class.java)
@@ -236,32 +235,29 @@ fun main() {
     game.getEventQueue()
         .ofType(PlayedHide::class.java)
         .subscribe { msg ->
-            val playerPronoun = msg.player.getPronoun().capitalize()
             val decision =
-                if (msg.andDecidedToDrawNoCardsNextTurn) "will be drawing"
+                if (msg.andDecidedToDrawNoCardsNextTurn) "will draw"
                 else "decides not to draw"
 
-            print("${msg.player.name} plays Hide. ")
+            print("${msg.player.name} plays Hide")
             if (msg.gaveZombie != null && msg.toPlayer != null) {
                 println(
-                    "$playerPronoun gives ${msg.gaveZombie.title} " +
+                    " and gives ${msg.gaveZombie.title} " +
                             "to the next player, ${msg.toPlayer.name}, " +
                             "and $decision cards next turn."
                 )
             } else {
-                println("$playerPronoun gives no zombies and $decision cards next turn.")
+                println(" and gives no zombies to anyone and $decision cards next turn.")
             }
         }
     game.getEventQueue()
         .ofType(PlayedLure::class.java)
         .subscribe { msg ->
-            val playerPronoun = msg.player.getPronoun().capitalize()
-
-            print("${msg.player.name} plays Lure. ")
+            print("${msg.player.name} plays Lure")
             if (msg.gaveZombie != null && msg.toPlayer != null) {
-                println("$playerPronoun gives ${msg.gaveZombie.title} to ${msg.toPlayer.name}.")
+                println(" and gives ${msg.gaveZombie.title} to ${msg.toPlayer.name}.")
             } else {
-                println("$playerPronoun gives no zombies.")
+                println(" and gives no zombies to anyone.")
             }
         }
     game.getEventQueue()
@@ -276,25 +272,17 @@ fun main() {
     game.getEventQueue()
         .ofType(PlayedPillage::class.java)
         .subscribe { msg ->
-            print("${msg.player.name} plays Pillage. ")
-            println(
-                "${msg.player.getPronoun().capitalize()} drew ${msg.pillagedCards.size} " +
-                        "cards from other players."
-            )
+            print("${msg.player.name} plays Pillage")
+            println(" and draws ${msg.pillagedCards.size} cards from other players.")
         }
     game.getEventQueue()
         .ofType(PlayedSlugger::class.java)
         .subscribe { msg ->
-            val playerPronoun = msg.player.getPronoun().capitalize()
-
-            print("${msg.player.name} plays Slugger. ")
+            print("${msg.player.name} plays Slugger")
             if (msg.discardedZombie != null) {
-                println("$playerPronoun decides to discard ${msg.discardedZombie.title}.")
+                println(" and discards ${msg.discardedZombie.title}.")
             } else {
-                println(
-                    "$playerPronoun decides to take ${msg.orTookCard?.title} " +
-                            "from ${msg.fromPlayer?.name}."
-                )
+                println(" and takes a card from ${msg.fromPlayer?.name}.")
             }
         }
     game.getEventQueue()
@@ -302,26 +290,64 @@ fun main() {
         .subscribe { msg ->
             print("${msg.player.name} plays Tripped. ")
             println(
-                "${msg.fromPlayer.name} discards his ${msg.discardedMovementCards.size} " +
+                "${msg.fromPlayer.name} discards their ${msg.discardedMovementCards.size} " +
                         "latest movement cards."
             )
         }
 
     game.getEventQueue()
         .ofType(PlayedCornered::class.java)
-        .subscribe {} // todo
+        .subscribe { msg ->
+            print("${msg.player.name} got Cornered. ")
+            println("All their movement cards are discarded!")
+        }
     game.getEventQueue()
         .ofType(PlayedFog::class.java)
-        .subscribe {} // todo
+        .subscribe { msg ->
+            print("${msg.player.name} got into Fog. ")
+            val zombieSituation = msg.newPlayersToZombiesAroundMap.entries.joinToString {
+                "${it.key.name} by ${it.value}"
+            }
+            println("Players have exchanged cards and now are chased by zombies: $zombieSituation")
+        }
     game.getEventQueue()
         .ofType(PlayedHorde::class.java)
-        .subscribe {} // todo
+        .subscribe { msg ->
+            print("${msg.player.name} encounters Horde. ")
+            println("Every survivor draws two cards in their turn till the end of a round.")
+        }
     game.getEventQueue()
         .ofType(PlayedMobs::class.java)
-        .subscribe {} // todo
+        .subscribe { msg ->
+            print("${msg.player.name} got off on Mobs. ")
+            for (entry in msg.playersWereMobbedMap.entries) {
+                if (!entry.value) {
+                    print("${entry.key.name} had Slugger and Mobs went for the next player. ")
+                } else {
+                    print("${entry.key.name} had no Slugger and was mobbed. ")
+                    break
+                }
+                println()
+            }
+        }
     game.getEventQueue()
         .ofType(PlayedRingtone::class.java)
-        .subscribe {} // todo
+        .subscribe { msg ->
+            val playerPronoun = msg.player.getPronoun().capitalize()
+
+            print("${msg.player.name} has a loud Ringtone. ")
+            if (msg.hadZombiesAround != msg.nowHasZombiesAround) {
+                println(
+                    "$playerPronoun used to be chased by ${msg.hadZombiesAround} zombies " +
+                            "and now there're ${msg.nowHasZombiesAround} zombies around!"
+                )
+            } else {
+                println(
+                    "$playerPronoun was so lucky their are still chased by " +
+                            "${msg.player.getPronoun()} zombies!"
+                )
+            }
+        }
 
     game.play()
 }

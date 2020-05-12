@@ -185,13 +185,27 @@ class Game private constructor(builder: Builder) {
         repeat(cardsToPlay) {
             when (val drawnCard = player.drawTopCard()) {
                 is Action -> drewAction(player, drawnCard)
-                is Zombie -> if (drewZombie(player, drawnCard)) return
+                is Zombie -> drewZombie(player, drawnCard)
                 is Event -> drewEvent(player, drawnCard)
                 null -> drewNoCard(player)
             }
+
+            if (isEaten(player)) return
         }
 
         playCardFromHand(player)
+    }
+
+    private fun isEaten(player: Player): Boolean {
+        if (player.getZombiesAroundCount() >= getZombiesCountToBeEaten()) {
+            player.die()
+            removePlayer(player)
+
+            publishEvent(Died(player))
+
+            return true
+        }
+        return false
     }
 
     private fun drewAction(player: Player, action: Action) {
@@ -200,20 +214,10 @@ class Game private constructor(builder: Builder) {
         publishEvent(DrewAction(player, action))
     }
 
-    private fun drewZombie(player: Player, zombie: Zombie): Boolean {
+    private fun drewZombie(player: Player, zombie: Zombie) {
         player.chasedByZombie(zombie)
 
         publishEvent(DrewZombie(player, zombie))
-
-        val isEaten = player.getZombiesAroundCount() >= getZombiesCountToBeEaten()
-        if (isEaten) {
-            player.die()
-            removePlayer(player)
-
-            publishEvent(Died(player))
-        }
-
-        return isEaten
     }
 
     private fun drewEvent(player: Player, event: Event) {

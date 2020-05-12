@@ -99,6 +99,7 @@ class EventsFacade {
             ) : Event
 
             data class PlayedNukes(val player: Player) : Event
+
             data class PlayedPillage(
                 val player: Player,
                 val pillagedCards: List<Action>
@@ -121,12 +122,14 @@ class EventsFacade {
         class EventCards {
 
             data class PlayedCornered(val player: Player) : Event
+
             data class PlayedFog(
                 val player: Player,
                 val newPlayersToZombiesAroundMap: Map<Player, Int>
             ) : Event
 
             data class PlayedHorde(val player: Player) : Event
+
             data class PlayedMobs(
                 val player: Player,
                 val playersWereMobbedMap: Map<Player, Boolean>

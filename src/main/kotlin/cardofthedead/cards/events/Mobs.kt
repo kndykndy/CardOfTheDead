@@ -32,7 +32,7 @@ class Mobs(
 
                 playersWereMobbedMap[currentPlayer] = true
 
-                return
+                break
             }
 
             playersWereMobbedMap[currentPlayer] = false

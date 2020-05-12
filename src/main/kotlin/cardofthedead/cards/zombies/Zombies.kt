@@ -7,7 +7,7 @@ class Zombies(
     game: Game
 ) : Zombie(
     game,
-    "Zombies...",
+    "Zombies",
     "counts as two zombie cards. " +
             "cannot be discarded with slugger",
     2
