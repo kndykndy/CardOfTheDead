@@ -185,38 +185,33 @@ fun main() {
     game.getEventQueue()
         .ofType(PlayedBarricade::class.java)
         .subscribe { msg ->
-            val playerPronoun = msg.player.getPronoun().capitalize()
-
-            print("${msg.player.name} plays Barricade. ")
-            println("$playerPronoun takes ${msg.tookCardsToHand} cards to hand.")
+            print("${msg.player.name} plays Barricade")
+            println(" and decides to take ${msg.tookCardsToHand} cards to hand.")
         }
     game.getEventQueue()
         .ofType(PlayedChainsaw::class.java)
         .subscribe { msg ->
-            val playerPronoun = msg.player.getPronoun().capitalize()
-
-            print("${msg.player.name} plays Chainsaw. ")
+            print("${msg.player.name} plays Chainsaw")
             if (msg.discardedZombies.isNotEmpty()) {
                 val zombies = msg.discardedZombies.joinToString { it.title }
                 val zombiesAroundCount = msg.player.getZombiesAroundCount()
-                val decision =
+                val zombieSituation =
                     if (zombiesAroundCount == 0) "not followed by"
                     else "followed by $zombiesAroundCount"
 
-                println("$playerPronoun discards $zombies and now is $decision zombies!")
+                println(" and discards $zombies and now is $zombieSituation zombies!")
             } else {
-                println("$playerPronoun discards no zombies.")
+                println(" and discards no zombies.")
             }
         }
     game.getEventQueue()
         .ofType(PlayedDynamite::class.java)
         .subscribe { msg ->
-            val playerPronoun = msg.player.getPronoun().capitalize()
             val discardCard =
                 if (msg.andDiscardedMovementCard != null) msg.andDiscardedMovementCard.title
                 else "no"
 
-            print("${msg.player.name} plays Dynamite. ")
+            print("${msg.player.name} plays Dynamite")
             if (msg.discardedZombies.isNotEmpty()) {
                 val zombies = msg.discardedZombies.joinToString { it.title }
                 val zombiesAroundCount = msg.player.getZombiesAroundCount()
@@ -225,11 +220,11 @@ fun main() {
                     else "followed by $zombiesAroundCount"
 
                 println(
-                    "$playerPronoun discards $zombies and $discardCard movement card " +
+                    " and discards $zombies and $discardCard movement card " +
                             "and now is $decision zombies!"
                 )
             } else {
-                println("$playerPronoun discards no zombies but $discardCard movement card.")
+                println(" and discards no zombies but $discardCard movement card.")
             }
         }
     game.getEventQueue()
@@ -266,14 +261,14 @@ fun main() {
             print("${msg.player.name} plays Nukes! ")
             println(
                 "It discards all zombie cards and all cards in hand from all players, " +
-                        "even from ${msg.player.name}!"
+                        "even from ${msg.player.name} themself!"
             )
         }
     game.getEventQueue()
         .ofType(PlayedPillage::class.java)
         .subscribe { msg ->
             print("${msg.player.name} plays Pillage")
-            println(" and draws ${msg.pillagedCards.size} cards from other players.")
+            println(" and takes ${msg.pillagedCards.size} cards from other players.")
         }
     game.getEventQueue()
         .ofType(PlayedSlugger::class.java)
@@ -288,9 +283,9 @@ fun main() {
     game.getEventQueue()
         .ofType(PlayedTripped::class.java)
         .subscribe { msg ->
-            print("${msg.player.name} plays Tripped. ")
+            print("${msg.player.name} plays Tripped")
             println(
-                "${msg.fromPlayer.name} discards their ${msg.discardedMovementCards.size} " +
+                " and discards their ${msg.discardedMovementCards.size} " +
                         "latest movement cards."
             )
         }
