@@ -6,6 +6,7 @@ import cardofthedead.cards.PlayCardDecision
 import cardofthedead.cards.Zombie
 import cardofthedead.decks.Deck
 import cardofthedead.decks.DeckType
+import cardofthedead.game.EventsFacade
 import cardofthedead.game.Game
 import cardofthedead.players.EasyPlayer
 import cardofthedead.players.HardPlayer
@@ -33,6 +34,13 @@ object TestUtils {
     fun gameWithStandardDeck() = gameWithDeck(PlayerDescriptor("C3PO"), DeckType.STANDARD)
 
     fun Game.getDummy() = this.players.last()
+
+    fun Game.assertEvent(event: EventsFacade.Event) {
+        val observer = this.getEventQueueTestObserver()
+        observer.assertNoErrors()
+        observer.assertValueCount(1)
+        observer.assertValueAt(0) { it == event }
+    }
 
     // Players
 

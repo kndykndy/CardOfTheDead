@@ -32,6 +32,7 @@ import cardofthedead.players.Level
 import cardofthedead.players.Player
 import cardofthedead.players.PlayerDescriptor
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.observers.TestObserver
 import io.reactivex.rxjava3.subjects.PublishSubject
 import kotlin.random.Random
 
@@ -41,6 +42,11 @@ class Game private constructor(builder: Builder) {
      * Events superqueue, combines all the subqueues from players and game queue.
      */
     private var eventQueue: Observable<EventsFacade.Event>
+
+    /**
+     * Internal observer used for test purposes.
+     */
+    private var eventQueueTestObserver: TestObserver<EventsFacade.Event>
 
     /**
      * Game queue.
@@ -82,11 +88,13 @@ class Game private constructor(builder: Builder) {
         }
 
         eventQueue = Observable.merge(players.map { it.getEvents() }.plus(events))
+        eventQueueTestObserver = eventQueue.test()
 
         winners.add(listOf(lastPlayerWentToShoppingMall()))
     }
 
     fun getEventQueue(): Observable<EventsFacade.Event> = eventQueue
+    fun getEventQueueTestObserver(): TestObserver<EventsFacade.Event> = eventQueueTestObserver
 
     fun publishEvent(event: EventsFacade.Event) = events.onNext(event)
 
