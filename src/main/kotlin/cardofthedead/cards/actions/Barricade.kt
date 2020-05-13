@@ -28,13 +28,12 @@ class Barricade(
 
         repeat(2) {
             when (val candidateTopHand = playedBy.candidatesToHand.pickTopCard()) {
-                null -> return
-                is Zombie -> playedBy.chasedByZombie(candidateTopHand)
-                is Event -> playedBy.play(candidateTopHand)
-                else -> {
+                is Action -> {
                     playedBy.takeToHand(candidateTopHand)
                     tookCardsToHand++
                 }
+                is Zombie -> playedBy.chasedByZombie(candidateTopHand)
+                is Event -> playedBy.play(candidateTopHand)
             }
         }
 

@@ -1,12 +1,14 @@
 package cardofthedead.cards.actions
 
 import cardofthedead.TestUtils.addCards
+import cardofthedead.TestUtils.assertEvent
 import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.TestUtils.gameWithStandardDeck
 import cardofthedead.TestUtils.getDummy
 import cardofthedead.cards.zombies.RedneckZombie
 import cardofthedead.cards.zombies.Zombies
 import cardofthedead.cards.zombies.`Zombies!!!`
+import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedBarricade
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
@@ -38,6 +40,8 @@ class BarricadeTest : StringSpec({
 
         game.playDeck.size() shouldBe gameDeckSize - 2 // Armored, Nukes!
         game.playDeck.cards.first() shouldBe bitten
+
+        game.assertEvent(PlayedBarricade(player, 2))
     }
 
     "should discard 1 card and take 2 cards even if those are Zombies" {
@@ -65,6 +69,8 @@ class BarricadeTest : StringSpec({
 
         game.playDeck.size() shouldBe gameDeckSize - 2 // Zombies, RedneckZombie
         game.playDeck.cards.first() shouldBe zombiesExcl
+
+        game.assertEvent(PlayedBarricade(player, 0))
     }
 
     "should discard 1 card and take 2 cards if 3 cards left in deck" {
@@ -91,6 +97,8 @@ class BarricadeTest : StringSpec({
 
         game.playDeck.size() shouldBe 1 // Bitten
         game.playDeck.cards.first() shouldBe bitten
+
+        game.assertEvent(PlayedBarricade(player, 2))
     }
 
     "should discard 1 card and take no cards if 1 card left in deck" {
@@ -113,5 +121,7 @@ class BarricadeTest : StringSpec({
 
         game.playDeck.size() shouldBe 1 // Bitten
         game.playDeck.cards.first() shouldBe nukes
+
+        game.assertEvent(PlayedBarricade(player, 0))
     }
 })
