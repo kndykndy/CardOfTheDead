@@ -30,17 +30,18 @@ class BarricadeTest : StringSpec({
         val gameDeckSize = game.playDeck.size()
 
         // when
+
         player.play(Barricade(game))
 
         // then
 
-        player.hand.size() shouldBe 2 // Armored, Nukes!
-        listOf(armored, nukes).forEach { player.hand.hasCard(it) shouldBe true }
-        player.hand.hasCard(bitten) shouldBe false
-
         game.playDeck.size() shouldBe gameDeckSize - 2 // Armored, Nukes!
         game.playDeck.cards.first() shouldBe bitten
         game.assertEvent(PlayedBarricade(player, 2))
+
+        player.hand.size() shouldBe 2 // Armored, Nukes!
+        listOf(armored, nukes).forEach { player.hand.hasCard(it) shouldBe true }
+        player.hand.hasCard(bitten) shouldBe false
     }
 
     "should discard 1 card and take 2 cards even if those are Zombies" {
@@ -59,16 +60,17 @@ class BarricadeTest : StringSpec({
         val gameDeckSize = game.playDeck.size()
 
         // when
+
         player.play(Barricade(game))
 
         // then
 
-        player.hand.isEmpty() shouldBe true
-        player.getZombiesAroundCount() shouldBe 3 // Zombies, RedneckZombie
-
         game.playDeck.size() shouldBe gameDeckSize - 2 // Zombies, RedneckZombie
         game.playDeck.cards.first() shouldBe zombiesExcl
         game.assertEvent(PlayedBarricade(player, 0))
+
+        player.hand.isEmpty() shouldBe true
+        player.getZombiesAroundCount() shouldBe 3 // Zombies, RedneckZombie
     }
 
     "should discard 1 card and take 2 cards if 3 cards left in deck" {
@@ -85,17 +87,18 @@ class BarricadeTest : StringSpec({
         val player = game.getDummy()
 
         // when
+
         player.play(Barricade(game))
 
         // then
 
-        player.hand.size() shouldBe 2 // Armored, Nukes!
-        listOf(armored, nukes).forEach { player.hand.hasCard(it) shouldBe true }
-        player.hand.hasCard(bitten) shouldBe false
-
         game.playDeck.size() shouldBe 1 // Bitten
         game.playDeck.cards.first() shouldBe bitten
         game.assertEvent(PlayedBarricade(player, 2))
+
+        player.hand.size() shouldBe 2 // Armored, Nukes!
+        listOf(armored, nukes).forEach { player.hand.hasCard(it) shouldBe true }
+        player.hand.hasCard(bitten) shouldBe false
     }
 
     "should discard 1 card and take no cards if 1 card left in deck" {
@@ -110,14 +113,15 @@ class BarricadeTest : StringSpec({
         val player = game.getDummy()
 
         // when
+
         player.play(Barricade(game))
 
         // then
 
-        player.hand.isEmpty() shouldBe true
-
         game.playDeck.size() shouldBe 1 // Bitten
         game.playDeck.cards.first() shouldBe nukes
         game.assertEvent(PlayedBarricade(player, 0))
+
+        player.hand.isEmpty() shouldBe true
     }
 })

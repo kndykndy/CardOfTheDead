@@ -25,13 +25,14 @@ class SluggerTest : StringSpec({
         every { player1.decideToDiscardZombieOrTakeCardForSlugger() } returns true
 
         // when
+
         player1.play(Slugger(game))
 
         // then
 
-        player1.getZombiesAroundCount() shouldBe 2 // Any 2 Zombies
-
         game.discardDeck.size() shouldBe 1
+
+        player1.getZombiesAroundCount() shouldBe 2 // Any 2 Zombies
     }
 
     "should discard no Zombies if no zombies at hand" {
@@ -43,13 +44,14 @@ class SluggerTest : StringSpec({
         every { player1.decideToDiscardZombieOrTakeCardForSlugger() } returns true
 
         // when
+
         player1.play(Slugger(game))
 
         // then
 
-        player1.getZombiesAroundCount() shouldBe 0
-
         game.discardDeck.size() shouldBe 0
+
+        player1.getZombiesAroundCount() shouldBe 0
     }
 
     "should pick random card from another player" {
@@ -67,6 +69,7 @@ class SluggerTest : StringSpec({
         every { player1.choosePlayerToTakeCardFromForSlugger() } returns player2
 
         // when
+
         player1.play(Slugger(game))
 
         // then
@@ -88,6 +91,7 @@ class SluggerTest : StringSpec({
         every { player1.choosePlayerToTakeCardFromForSlugger() } returns player2
 
         // when
+        
         player1.play(Slugger(game))
 
         // then

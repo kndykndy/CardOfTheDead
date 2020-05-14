@@ -24,13 +24,14 @@ class TrippedTest : StringSpec({
         every { player1.choosePlayerToDiscardMovementCardsFromForTripped() } returns player2
 
         // when
+
         player1.play(Tripped(game))
 
         // then
 
-        player1.getMovementPoints() shouldBe 0
-
         game.discardDeck.size() shouldBe 2 // Armored, Dynamite
+
+        player1.getMovementPoints() shouldBe 0
     }
 
     "should not discard any cards if no escape cards" {
@@ -45,12 +46,13 @@ class TrippedTest : StringSpec({
         every { player1.choosePlayerToDiscardMovementCardsFromForTripped() } returns player2
 
         // when
+
         player1.play(Tripped(game))
 
         // then
 
-        player1.getMovementPoints() shouldBe 0
-
         game.discardDeck.size() shouldBe 0
+
+        player1.getMovementPoints() shouldBe 0
     }
 })

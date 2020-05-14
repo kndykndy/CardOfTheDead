@@ -27,6 +27,7 @@ class DynamiteTest : StringSpec({
         val ladZombie = LadZombie(game)
         val brideZombie = BrideZombie(game)
         val armored = Armored(game)
+
         val player = spyk(game.getDummy()).apply {
             chasedByZombies(
                 RedneckZombie(game),
@@ -39,17 +40,18 @@ class DynamiteTest : StringSpec({
         every { player.chooseWorstMovementCardForDynamite() } returns armored
 
         // when
+
         player.play(Dynamite(game))
 
         // then
-
-        player.getZombiesAroundCount() shouldBe 1
-        player.getMovementPoints() shouldBe 1
 
         game.discardDeck.size() shouldBe 4 // 3 zombies, 1 Armored
         game.assertEvent(
             PlayedDynamite(player, listOf(redneckZombie, ladZombie, brideZombie), armored)
         )
+
+        player.getZombiesAroundCount() shouldBe 1
+        player.getMovementPoints() shouldBe 1
     }
 
     "should discard 1 movement card and no zombies as no zombies around"{
@@ -62,14 +64,15 @@ class DynamiteTest : StringSpec({
         }
 
         // when
+
         player.play(Dynamite(game))
 
         // then
 
+        game.discardDeck.size() shouldBe 1
+
         player.getZombiesAroundCount() shouldBe 0
         player.getMovementPoints() shouldBe 0
-
-        game.discardDeck.size() shouldBe 1
     }
 
     "should discard 1 zombie and no movement cards as no movement cards on hand"{
@@ -82,14 +85,15 @@ class DynamiteTest : StringSpec({
         }
 
         // when
+
         player.play(Dynamite(game))
 
         // then
 
+        game.discardDeck.size() shouldBe 1 // 1 zombie
+
         player.getZombiesAroundCount() shouldBe 0
         player.getMovementPoints() shouldBe 0
-
-        game.discardDeck.size() shouldBe 1 // 1 zombie
     }
 
     "should discard Zombies!!! and 1 movement card"{
@@ -103,14 +107,15 @@ class DynamiteTest : StringSpec({
         }
 
         // when
+
         player.play(Dynamite(game))
 
         // then
 
+        game.discardDeck.size() shouldBe 2 // Zombies!!!, Armored
+
         player.getZombiesAroundCount() shouldBe 0
         player.getMovementPoints() shouldBe 0
-
-        game.discardDeck.size() shouldBe 2 // Zombies!!!, Armored
     }
 
     "should discard Zombies and zombie and 1 movement card"{
@@ -124,13 +129,14 @@ class DynamiteTest : StringSpec({
         }
 
         // when
+        
         player.play(Dynamite(game))
 
         // then
 
+        game.discardDeck.size() shouldBe 3 // Zombies, LadZombie, Armored
+
         player.getZombiesAroundCount() shouldBe 0
         player.getMovementPoints() shouldBe 0
-
-        game.discardDeck.size() shouldBe 3 // Zombies, LadZombie, Armored
     }
 })

@@ -11,9 +11,11 @@ class StandardDeckTest : StringSpec({
 
     "should " {
         // given
+
         val game = gameWithEmptyDeck()
 
         // when
+
         val deck = StandardDeck(game)
 
         // then

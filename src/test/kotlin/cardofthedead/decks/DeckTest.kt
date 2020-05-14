@@ -42,9 +42,11 @@ class DeckTest : StringSpec({
         }
 
         // when
+
         deck.addCard(armored)
 
         // then
+
         deck.size() shouldBe 2
     }
 
@@ -58,9 +60,11 @@ class DeckTest : StringSpec({
         val deck = Deck<Card>(game)
 
         // when
+
         deck.addCardOnBottom(dynamite)
 
         // then
+
         deck.pickTopCard() shouldBe dynamite
     }
 
@@ -77,6 +81,7 @@ class DeckTest : StringSpec({
             .apply { addCards(chainsaw, dynamite) }
 
         // when
+
         deck.addCardOnBottom(bitten)
 
         // then
@@ -95,6 +100,7 @@ class DeckTest : StringSpec({
         val deck2 = Deck<Card>(game)
 
         // when
+
         deck1.merge(deck2)
 
         // then
@@ -112,6 +118,7 @@ class DeckTest : StringSpec({
         val deck2 = Deck<Card>(game)
 
         // when
+
         deck1.merge(deck2)
 
         // then
@@ -129,6 +136,7 @@ class DeckTest : StringSpec({
         val deck2 = Deck<Card>(game).apply { addCard(Lure(game)) }
 
         // when
+
         deck1.merge(deck2)
 
         // then
@@ -146,6 +154,7 @@ class DeckTest : StringSpec({
         val deck2 = Deck<Card>(game).apply { addCard(Lure(game)) }
 
         // when
+
         deck1.merge(deck2)
 
         // then
@@ -163,9 +172,11 @@ class DeckTest : StringSpec({
         val deck = Deck<Card>(game).apply { addCard(hide) }
 
         // when
+
         val hasCard = deck.hasCard(hide)
 
         // then
+
         hasCard shouldBe true
     }
 
@@ -177,9 +188,11 @@ class DeckTest : StringSpec({
         val deck = Deck<Card>(game).apply { addCard(Hide(game)) }
 
         // when
+
         val hasCard = deck.hasCard(Slugger(game))
 
         // then
+
         hasCard shouldBe false
     }
 
@@ -191,9 +204,11 @@ class DeckTest : StringSpec({
         val deck = Deck<Card>(game).apply { addCard(Hide(game)) }
 
         // when
+
         val hasCard = deck.hasCardOfClass(Hide::class.java)
 
         // then
+
         hasCard shouldBe true
     }
 
@@ -205,9 +220,11 @@ class DeckTest : StringSpec({
         val deck = Deck<Card>(game).apply { addCard(Hide(game)) }
 
         // when
+
         val hasCard = deck.hasCardOfClass(Slugger::class.java)
 
         // then
+
         hasCard shouldBe false
     }
 
@@ -242,9 +259,11 @@ class DeckTest : StringSpec({
         val deck = Deck<Card>(game)
 
         // when
+
         val pickedCard = deck.pickTopCard()
 
         // then
+
         pickedCard shouldBe null
     }
 
@@ -258,6 +277,7 @@ class DeckTest : StringSpec({
         val deck = Deck<Card>(game).apply { addCard(slugger) }
 
         // when
+
         val pickedCard = deck.pickCard(slugger)
 
         // then
@@ -277,6 +297,7 @@ class DeckTest : StringSpec({
         val deck = Deck<Card>(game).apply { addCard(tripped) }
 
         // when
+
         val pickedCard = deck.pickCard(slugger)
 
         // then
@@ -296,6 +317,7 @@ class DeckTest : StringSpec({
             .apply { addCards(armored, Barricade(game)) }
 
         // when
+
         val pickedCardOfClass = deck.pickCardOfClass(Action::class.java)
 
         // then
@@ -312,9 +334,11 @@ class DeckTest : StringSpec({
         val deck = Deck<Card>(game)
 
         // when
+
         val pickedCardOfClass = deck.pickCardOfClass(Action::class.java)
 
         // then
+
         pickedCardOfClass shouldBe null
     }
 
@@ -327,6 +351,7 @@ class DeckTest : StringSpec({
             .apply { addCards(Armored(game), Barricade(game)) }
 
         // when
+
         val pickedCardOfClass = deck.pickCardOfClass(Zombie::class.java)
 
         // then
@@ -347,6 +372,7 @@ class DeckTest : StringSpec({
             .apply { addCards(hide, lure) }
 
         // when
+
         val pickedRandomCard = deck.pickRandomCard()
 
         // then
@@ -363,9 +389,11 @@ class DeckTest : StringSpec({
         val deck = Deck<Card>(game)
 
         // when
+
         val pickedRandomCard = deck.pickRandomCard()
 
         // then
+
         pickedRandomCard shouldBe null
     }
 
@@ -381,6 +409,7 @@ class DeckTest : StringSpec({
             .apply { addCards(nukes, pillage, GrannyZombie(game)) }
 
         // when
+
         val actions = deck.getActions()
 
         // then
@@ -399,6 +428,7 @@ class DeckTest : StringSpec({
             .apply { addCards(Fog(game), `Zombies!!!`(game)) }
 
         // when
+
         val actions = deck.getActions()
 
         // then
@@ -417,6 +447,7 @@ class DeckTest : StringSpec({
                 .apply { addCards(Slugger(game), Dynamite(game), Pillage(game)) }
 
         // when
+
         val movementPoints = deck.getMovementPoints()
 
         // then
@@ -433,6 +464,7 @@ class DeckTest : StringSpec({
         val deck = Deck<Action>(game)
 
         // when
+
         val movementPoints = deck.getMovementPoints()
 
         // then
@@ -454,6 +486,7 @@ class DeckTest : StringSpec({
                 .apply { addCards(granny, lad, Zombies(game), `Zombies!!!`(game)) }
 
         // when
+
         val singleZombies = deck.getSingleZombies()
 
         // then
@@ -471,6 +504,7 @@ class DeckTest : StringSpec({
         val deck = Deck<Zombie>(game)
 
         // when
+
         val singleZombies = deck.getSingleZombies()
 
         // then

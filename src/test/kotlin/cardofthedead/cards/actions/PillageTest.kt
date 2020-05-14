@@ -24,6 +24,7 @@ class PillageTest : StringSpec({
         }
 
         // when
+
         player1.play(Pillage(game))
 
         // then

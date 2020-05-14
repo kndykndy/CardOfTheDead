@@ -32,6 +32,7 @@ class FogTest : StringSpec({
         }
 
         // when
+
         player1.play(Fog(game))
 
         // then

@@ -28,6 +28,7 @@ class LureTest : StringSpec({
         every { player1.choosePlayerToGiveZombieToForLure() } returns player2
 
         // when
+
         player1.play(Lure(game))
 
         // then
@@ -49,6 +50,7 @@ class LureTest : StringSpec({
         every { player1.choosePlayerToGiveZombieToForLure() } returns player2
 
         // when
+
         player1.play(Lure(game))
 
         // then

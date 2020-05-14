@@ -29,16 +29,17 @@ class MobsTest : StringSpec({
         }
 
         // when
+
         player1.play(Mobs(game))
 
         // then
 
-        player1.hand.size() shouldBe 1 // Slugger
-        player1.hand.hasCard(slugger) shouldBe true
-
-        player2.hand.isEmpty() shouldBe true
         game.playDeck.cards.first() shouldBe dynamite
         game.playDeck.cards[1] shouldBe chainsaw
+
+        player1.hand.size() shouldBe 1 // Slugger
+        player1.hand.hasCard(slugger) shouldBe true
+        player2.hand.isEmpty() shouldBe true
     }
 
     "should put hand on bottom of the deck if have no Slugger on hand" {
@@ -53,12 +54,14 @@ class MobsTest : StringSpec({
         }
 
         // when
+
         player1.play(Mobs(game))
 
         // then
 
-        player1.hand.isEmpty() shouldBe true
         game.playDeck.cards.first() shouldBe dynamite
         game.playDeck.cards[1] shouldBe chainsaw
+
+        player1.hand.isEmpty() shouldBe true
     }
 })

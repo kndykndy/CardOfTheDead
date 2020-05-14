@@ -39,6 +39,7 @@ class PlayerTest : ShouldSpec({
             val player = testPlayer(game)
 
             // when
+
             player.pickCandidateCards(2)
 
             // then
@@ -53,17 +54,21 @@ class PlayerTest : ShouldSpec({
 
         should("get no cards if no cards available") {
             // given
+
             val player = testPlayer(gameWithEmptyDeck())
 
             // when
+
             player.pickCandidateCards(1)
 
             // then
+
             player.candidatesToHand.isEmpty() shouldBe true
         }
 
         should("not attempt to pick less than zero cards") {
             // given
+
             val player = testPlayer(gameWithEmptyDeck())
 
             // when-then
@@ -86,6 +91,7 @@ class PlayerTest : ShouldSpec({
             }
 
             // when
+
             val topCard = player.drawTopCard()
 
             // then
@@ -102,9 +108,11 @@ class PlayerTest : ShouldSpec({
             every { player.decideToDrawNoCardsNextTurnForHide() } returns false
 
             // when
+
             val topCard = player.drawTopCard()
 
             // then
+
             topCard shouldBe null
         }
     }
@@ -121,9 +129,11 @@ class PlayerTest : ShouldSpec({
             val lure = Lure(game)
 
             // when
+
             player.takeToHand(lure)
 
             // then
+
             player.hand.hasCard(lure) shouldBe true
         }
 
@@ -139,6 +149,7 @@ class PlayerTest : ShouldSpec({
             }
 
             // when
+
             player.takeToHand(lure)
 
             // then
@@ -161,6 +172,7 @@ class PlayerTest : ShouldSpec({
             val lure = Lure(game)
 
             // when
+
             player.putOnBottom(lure)
 
             // then
@@ -179,6 +191,7 @@ class PlayerTest : ShouldSpec({
             val lure = Lure(game)
 
             // when
+
             player.putOnBottom(lure)
 
             // then
@@ -199,9 +212,11 @@ class PlayerTest : ShouldSpec({
             val player = testPlayer(game)
 
             // when
+
             player.chasedByZombie(`Zombies!!!`(game))
 
             // then
+
             player.getZombiesAroundCount() shouldBe 3
         }
 
@@ -215,9 +230,11 @@ class PlayerTest : ShouldSpec({
             }
 
             // when
+
             player.chasedByZombie(`Zombies!!!`(game))
 
             // then
+
             player.getZombiesAroundCount() shouldBe 6
         }
 
@@ -229,9 +246,11 @@ class PlayerTest : ShouldSpec({
             val player = testPlayer(game)
 
             // when
+
             player.addMovementPoints(Hide(game))
 
             // then
+
             player.getMovementPoints() shouldBe 1
         }
 
@@ -245,9 +264,11 @@ class PlayerTest : ShouldSpec({
             }
 
             // when
+
             player.addMovementPoints(Dynamite(game))
 
             // then
+
             player.getMovementPoints() shouldBe 3
         }
 
@@ -259,41 +280,50 @@ class PlayerTest : ShouldSpec({
             val player = testPlayer(game)
 
             // when
+
             val exception = shouldThrow<IllegalArgumentException> {
                 player.addMovementPoints(Bitten(game))
             }
 
             // then
+
             exception.message shouldBe "Cannot add movement points for Bitten"
             player.escapeCards.isEmpty() shouldBe true
         }
 
         should("add survival points") {
             // given
+
             val player = testPlayer(gameWithEmptyDeck())
 
             // when
+
             player.addSurvivalPoints(5)
 
             // then
+
             player.getSurvivalPoints() shouldBe 5
         }
 
         should("add more survival points") {
             // given
+
             val player = testPlayer(gameWithEmptyDeck()).apply {
                 addSurvivalPoints(3)
             }
 
             // when
+
             player.addSurvivalPoints(5)
 
             // then
+
             player.getSurvivalPoints() shouldBe 8
         }
 
         should("not add negative survival points") {
             // given
+
             val player = testPlayer(gameWithEmptyDeck())
 
             // when-then
@@ -316,9 +346,11 @@ class PlayerTest : ShouldSpec({
             val lure = Lure(game)
 
             // when
+
             player.discard(lure)
 
             // then
+
             game.discardDeck.hasCard(lure) shouldBe true
         }
 
@@ -336,6 +368,7 @@ class PlayerTest : ShouldSpec({
             }
 
             // when
+
             player.discardHand()
 
             // then
@@ -358,6 +391,7 @@ class PlayerTest : ShouldSpec({
             }
 
             // when
+
             player.discardCandidatesCards()
 
             // then
@@ -381,6 +415,7 @@ class PlayerTest : ShouldSpec({
             }
 
             // when
+
             player.discardZombiesAround()
 
             // then
@@ -404,6 +439,7 @@ class PlayerTest : ShouldSpec({
             }
 
             // when
+
             player.discardEscapeCards()
 
             // then
@@ -432,6 +468,7 @@ class PlayerTest : ShouldSpec({
             }
 
             // when
+
             player.discardAllCards()
 
             // then
@@ -459,6 +496,7 @@ class PlayerTest : ShouldSpec({
         }
 
         // when
+        
         player.die()
 
         // then

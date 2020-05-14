@@ -25,16 +25,17 @@ class ArmoredTest : StringSpec({
         }
 
         // when
+
         player.play(Armored(game))
 
         // then
 
-        player.hand.size() shouldBe 0
-        player.hand.hasCard(bitten) shouldBe false
         game.playDeck.size() shouldBe 3 // Bitten, Armored, Nukes!
         game.playDeck.cards.first() shouldBe bitten
-
         game.assertEvent(PlayedArmored(player, true))
+
+        player.hand.size() shouldBe 0
+        player.hand.hasCard(bitten) shouldBe false
     }
 
     "should do nothing if no Bitten on hand" {
@@ -47,14 +48,15 @@ class ArmoredTest : StringSpec({
         }
 
         // when
+
         player.play(Armored(game))
 
         // then
 
-        player.hand.size() shouldBe 2 // Armored, Nukes!
-        player.hand.hasCardOfClass(Bitten::class.java) shouldBe false
-
         game.playDeck.size() shouldBe 0
         game.assertEvent(PlayedArmored(player, false))
+
+        player.hand.size() shouldBe 2 // Armored, Nukes!
+        player.hand.hasCardOfClass(Bitten::class.java) shouldBe false
     }
 })

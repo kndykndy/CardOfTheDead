@@ -16,11 +16,13 @@ class BittenTest : StringSpec({
         val player = game.getDummy()
 
         // when
+
         val exception = shouldThrow<IllegalStateException> {
             player.play(Bitten(game))
         }
 
         // then
+
         exception.message shouldBe "Bitten cannot be played directly."
     }
 })

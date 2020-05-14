@@ -40,6 +40,7 @@ class EasyPlayerTest : ShouldSpec({
             }
 
             // when
+
             player.chooseSinglePointCardsFromCandidates(2)
 
             // then
@@ -64,6 +65,7 @@ class EasyPlayerTest : ShouldSpec({
             }
 
             // when
+
             player.chooseSinglePointCardsFromCandidates(3)
 
             // then
@@ -84,6 +86,7 @@ class EasyPlayerTest : ShouldSpec({
             }
 
             // when
+
             player.chooseSinglePointCardsFromCandidates(-1)
 
             // then
@@ -103,6 +106,7 @@ class EasyPlayerTest : ShouldSpec({
             val player = testEasyPlayer(game)
 
             // when
+
             val decision = player.decideToPlayCardFromHand()
 
             // then
@@ -121,6 +125,7 @@ class EasyPlayerTest : ShouldSpec({
             }
 
             // when
+
             val decision = player.decideToPlayCardFromHand()
 
             // then
@@ -141,6 +146,7 @@ class EasyPlayerTest : ShouldSpec({
             every { player.throwCoin() } returns false
 
             // when
+
             val decision = player.decideToPlayCardFromHand()
 
             // then
@@ -166,6 +172,7 @@ class EasyPlayerTest : ShouldSpec({
             every { player.getZombiesAroundCount() } returns 0
 
             // when
+
             val decision = player.decideToPlayCardFromHand()
 
             // then
@@ -194,6 +201,7 @@ class EasyPlayerTest : ShouldSpec({
             every { player.getZombiesAroundCount() } returns 3
 
             // when
+
             val decision = player.decideToPlayCardFromHand()
 
             // then
@@ -219,6 +227,7 @@ class EasyPlayerTest : ShouldSpec({
             every { player.getZombiesAroundCount() } returns 3
 
             // when
+
             val decision = player.decideToPlayCardFromHand()
 
             // then
@@ -232,12 +241,15 @@ class EasyPlayerTest : ShouldSpec({
 
         should("not pick any card if Candidates empty") {
             // given
+
             val player = testEasyPlayer(gameWithEmptyDeck())
 
             // when
+
             val card = player.chooseWorstCandidateForBarricade()
 
             // then
+
             card shouldBe null
         }
 
@@ -253,9 +265,11 @@ class EasyPlayerTest : ShouldSpec({
             }
 
             // when
+
             val card = player.chooseWorstCandidateForBarricade()
 
             // then
+
             card shouldBe lure
         }
 
@@ -273,9 +287,11 @@ class EasyPlayerTest : ShouldSpec({
             }
 
             // when
+
             val card = player.chooseWorstCandidateForBarricade()
 
             // then
+
             card shouldBeOneOf listOf(lure, hide, pillage)
         }
     }
@@ -284,12 +300,15 @@ class EasyPlayerTest : ShouldSpec({
 
         should("not pick card if Escape empty") {
             // given
+
             val player = testEasyPlayer(gameWithEmptyDeck())
 
             // when
+
             val card = player.chooseWorstMovementCardForDynamite()
 
             // then
+
             card shouldBe null
         }
 
@@ -305,9 +324,11 @@ class EasyPlayerTest : ShouldSpec({
             }
 
             // when
+
             val card = player.chooseWorstMovementCardForDynamite()
 
             // then
+
             card shouldBe lure
         }
 
@@ -325,9 +346,11 @@ class EasyPlayerTest : ShouldSpec({
             }
 
             // when
+
             val card = player.chooseWorstMovementCardForDynamite()
 
             // then
+
             card shouldBeOneOf listOf(lure, hide, pillage)
         }
     }
@@ -346,9 +369,11 @@ class EasyPlayerTest : ShouldSpec({
             every { game.getZombiesCountToBeSurrounded() } returns 3
 
             // when
+
             val decision = player.decideToDiscardZombieOrTakeCardForSlugger()
 
             // then
+
             decision shouldBe true
         }
 
@@ -362,9 +387,11 @@ class EasyPlayerTest : ShouldSpec({
             every { game.getZombiesCountToBeSurrounded() } returns 3
 
             // when
+
             val decision = player.decideToDiscardZombieOrTakeCardForSlugger()
 
             // then
+
             decision shouldBe false
         }
 
@@ -380,9 +407,11 @@ class EasyPlayerTest : ShouldSpec({
             every { game.getZombiesCountToBeSurrounded() } returns 3
 
             // when
+
             val decision = player.decideToDiscardZombieOrTakeCardForSlugger()
 
             // then
+
             decision shouldBe false
         }
     }

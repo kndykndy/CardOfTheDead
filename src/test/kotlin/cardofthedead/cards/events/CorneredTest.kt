@@ -20,13 +20,14 @@ class CorneredTest : StringSpec({
         }
 
         // when
+
         player.play(Cornered(game))
 
         // then
 
-        player.getMovementPoints() shouldBe 0
-
         game.discardDeck.size() shouldBe 2 // Armored, Dynamite
+
+        player.getMovementPoints() shouldBe 0
     }
 
     "should not discard any cards if no escape cards" {
@@ -37,12 +38,13 @@ class CorneredTest : StringSpec({
         val player = game.getDummy()
 
         // when
+
         player.play(Cornered(game))
 
         // then
 
-        player.getMovementPoints() shouldBe 0
-
         game.discardDeck.size() shouldBe 0
+
+        player.getMovementPoints() shouldBe 0
     }
 })

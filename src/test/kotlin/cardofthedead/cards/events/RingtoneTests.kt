@@ -29,6 +29,7 @@ class RingtoneTests : StringSpec({
         }
 
         // when
+
         player1.play(Ringtone(game))
 
         // then

@@ -27,14 +27,15 @@ class ChainsawTest : StringSpec({
         }
 
         // when
+
         player.play(Chainsaw(game))
 
         // then
 
-        player.getZombiesAroundCount() shouldBe 1 // Any Zombie
-
         game.discardDeck.size() shouldBe 2 // Any 2 Zombie
         game.assertEvent(PlayedChainsaw(player, listOf(ladZombie, brideZombie)))
+
+        player.getZombiesAroundCount() shouldBe 1 // Any Zombie
     }
 
     "should do nothing when no zombies around" {
@@ -45,14 +46,15 @@ class ChainsawTest : StringSpec({
         val player = game.getDummy()
 
         // when
+
         player.play(Chainsaw(game))
 
         // then
 
-        player.getZombiesAroundCount() shouldBe 0
-
         game.discardDeck.size() shouldBe 0
         game.assertEvent(PlayedChainsaw(player, listOf()))
+
+        player.getZombiesAroundCount() shouldBe 0
     }
 
     "should discard 1 of 1 zombies" {
@@ -66,14 +68,15 @@ class ChainsawTest : StringSpec({
         }
 
         // when
+
         player.play(Chainsaw(game))
 
         // then
 
-        player.getZombiesAroundCount() shouldBe 0
-
         game.discardDeck.size() shouldBe 1 // RedneckZombie
         game.assertEvent(PlayedChainsaw(player, listOf(redneckZombie)))
+
+        player.getZombiesAroundCount() shouldBe 0
     }
 
     "should discard Zombies card when Zombies plus single zombie around" {
@@ -87,14 +90,15 @@ class ChainsawTest : StringSpec({
         }
 
         // when
+
         player.play(Chainsaw(game))
 
         // then
 
-        player.getZombiesAroundCount() shouldBe 1 // RedneckZombie
-
         game.discardDeck.size() shouldBe 1 // Zombies
         game.assertEvent(PlayedChainsaw(player, listOf(zombies)))
+
+        player.getZombiesAroundCount() shouldBe 1 // RedneckZombie
     }
 
     "should do nothing when only Zombies!!! around" {
@@ -107,13 +111,14 @@ class ChainsawTest : StringSpec({
         }
 
         // when
+
         player.play(Chainsaw(game))
 
         // then
 
-        player.getZombiesAroundCount() shouldBe 3 // Zombies!!!
-
         game.discardDeck.size() shouldBe 0
         game.assertEvent(PlayedChainsaw(player, listOf()))
+
+        player.getZombiesAroundCount() shouldBe 3 // Zombies!!!
     }
 })

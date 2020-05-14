@@ -25,6 +25,7 @@ class HideTest : StringSpec({
         val player2 = game.getNextPlayer(player1)
 
         // when
+
         player1.play(Hide(game))
 
         // then
@@ -45,6 +46,7 @@ class HideTest : StringSpec({
         val player2 = game.getNextPlayer(player1)
 
         // when
+
         player1.play(Hide(game))
 
         // then
