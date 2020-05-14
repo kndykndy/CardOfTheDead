@@ -14,13 +14,10 @@ class Dynamite(
 ) : Action(
     game,
     "Dynamite",
-    "discard three zombie cards & one of your movement cards",
+    "Discard three zombie cards & one of your movement cards.",
     2
 ) {
 
-    /**
-     * Discard three zombie cards & one of your movement cards.
-     */
     override fun play(playedBy: Player) {
         val discardedZombies = mutableListOf<Zombie>()
 

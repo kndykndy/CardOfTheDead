@@ -11,13 +11,10 @@ class `Nukes!`(
 ) : Action(
     game,
     "Nukes!",
-    "discard all zombie cards and all cards in hand from all players (including yourself)",
+    "Discard all zombie cards and all cards in hand from all players (including yourself).",
     2
 ) {
 
-    /**
-     * Discard all zombie cards and all cards in hand from all players (including yourself).
-     */
     override fun play(playedBy: Player) {
         game
             .players

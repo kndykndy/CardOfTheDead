@@ -10,13 +10,10 @@ class Pillage(
 ) : Action(
     game,
     "Pillage",
-    "blindly draw a card from every other player",
+    "Blindly draw a card from every other player.",
     2
 ) {
-
-    /**
-     * Blindly draw a card from every other player.
-     */
+    
     override fun play(playedBy: Player) {
         val pillagedCards = mutableListOf<Action>()
 

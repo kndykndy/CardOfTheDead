@@ -12,12 +12,9 @@ class Slugger(
 ) : Action(
     game,
     "Slugger",
-    "discard a zombie or take a card from another players hand"
+    "Discard a zombie or take a card from another players hand."
 ) {
 
-    /**
-     * Discard a zombie or take a card from another players hand.
-     */
     override fun play(playedBy: Player) {
         if (playedBy.decideToDiscardZombieOrTakeCardForSlugger()) { // discard a zombie
             var discardedZombie: Zombie? = null

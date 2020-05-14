@@ -11,14 +11,10 @@ class Mobs(
 ) : Event(
     game,
     "Mobs",
-    "if you have a slugger at hand, ignore the event and pass it to the next player to the left. " +
-            "otherwise put all your hand on the bottom of the deck"
+    "If you have a slugger at hand, ignore the event and pass it to the next player to the left. " +
+            "Otherwise put all your hand on the bottom of the deck."
 ) {
 
-    /**
-     * If you have a slugger at hand, ignore the event and pass it to the next player to the left.
-     * Otherwise put all your hand on the bottom of the deck.
-     */
     override fun play(playedBy: Player) {
         val playersWereMobbedMap = mutableMapOf<Player, Boolean>()
 

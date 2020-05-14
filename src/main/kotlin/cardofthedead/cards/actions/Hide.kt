@@ -12,14 +12,10 @@ class Hide(
 ) : Action(
     game,
     "Hide",
-    "give one of your Zombie cards to the next player. " +
-            "you may choose to draw no cards on your next turn."
+    "Give one of your Zombie cards to the next player. " +
+            "You may choose to draw no cards on your next turn."
 ) {
 
-    /**
-     * Give one of your Zombie cards to the next player.
-     * You may choose to draw no cards on your next turn.
-     */
     override fun play(playedBy: Player) {
         var toPlayer: Player? = null
         var gaveZombie: Zombie? = null

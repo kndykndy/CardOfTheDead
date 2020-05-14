@@ -10,12 +10,9 @@ class Horde(
 ) : Event(
     game,
     "Horde",
-    "every survivor draws two cards in their turn till the end of a round"
+    "Every survivor draws two cards in their turn till the end of a round."
 ) {
 
-    /**
-     * Every survivor draws two cards in their turn till the end of a round.
-     */
     override fun play(playedBy: Player) {
         game.cardsToPlay = 2
 

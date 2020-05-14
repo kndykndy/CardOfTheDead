@@ -13,12 +13,9 @@ class Chainsaw(
 ) : Action(
     game,
     "Chainsaw",
-    "discard two zombie cards"
+    "Discard two zombie cards."
 ) {
 
-    /**
-     * Discard two zombie cards.
-     */
     override fun play(playedBy: Player) {
         val discardedZombies = mutableListOf<Zombie>()
 

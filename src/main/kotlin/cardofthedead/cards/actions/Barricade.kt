@@ -12,7 +12,7 @@ class Barricade(
 ) : Action(
     game,
     "Barricade",
-    "Draw three cards. Choose one and put it on the bottom of the deck"
+    "Draw three cards. Choose one and put it on the bottom of the deck."
 ) {
 
     override fun play(playedBy: Player) {

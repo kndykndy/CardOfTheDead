@@ -11,12 +11,9 @@ class Ringtone(
 ) : Event(
     game,
     "Ringtone",
-    "take one zombie card from every other player"
+    "Take one zombie card from every other player."
 ) {
 
-    /**
-     * Take one zombie card from every other player.
-     */
     override fun play(playedBy: Player) {
         val initialZombiesAroundCount = playedBy.getZombiesAroundCount()
 

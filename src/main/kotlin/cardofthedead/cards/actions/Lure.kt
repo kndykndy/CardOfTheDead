@@ -12,12 +12,9 @@ class Lure(
 ) : Action(
     game,
     "Lure",
-    "give one of your zombie cards to any player"
+    "Give one of your zombie cards to any player."
 ) {
 
-    /**
-     * Give one of your zombie cards to any player.
-     */
     override fun play(playedBy: Player) {
         var gaveZombie: Zombie? = null
         var toPlayer: Player? = null

@@ -10,12 +10,9 @@ class Armored(
 ) : Action(
     game,
     "Armored",
-    "put bitten on the bottom of the deck from your hand"
+    "Put bitten on the bottom of the deck from your hand."
 ) {
 
-    /**
-     * Put bitten on the bottom of the deck from your hand.
-     */
     override fun play(playedBy: Player) {
         var putBittenOnBottom = false
 

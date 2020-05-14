@@ -251,22 +251,14 @@ class Game private constructor(builder: Builder) {
             val actionCardFromHand = decisionToPlayCardFromHand.card ?: return
 
             if (WayToPlayCard.PLAY_AS_ACTION == decisionToPlayCardFromHand.wayToPlayCard) {
-                publishEvent(
-                    DecidedToPlayFromHand(
-                        player, actionCardFromHand
-                    )
-                )
+                publishEvent(DecidedToPlayFromHand(player, actionCardFromHand))
 
                 player.play(actionCardFromHand)
                 player.discard(actionCardFromHand)
             } else { // as movement points
                 player.addMovementPoints(actionCardFromHand as Action)
 
-                publishEvent(
-                    DecidedToPlayFromHandAsMp(
-                        player, actionCardFromHand
-                    )
-                )
+                publishEvent(DecidedToPlayFromHandAsMp(player, actionCardFromHand))
             }
         } else {
             publishEvent(DecidedNotToPlayFromHand(player))

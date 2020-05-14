@@ -9,7 +9,7 @@ class `Zombies!!!`(
 ) : Zombie(
     game,
     "Zombies!!!",
-    "counts as three zombie cards. " +
-            "cannot be discarded with slugger or chainsaw",
+    "Counts as three zombie cards. " +
+            "Cannot be discarded with Slugger or Chainsaw.",
     3
 )

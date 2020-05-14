@@ -11,16 +11,12 @@ class Fog(
 ) : Event(
     game,
     "Fog",
-    "all survivors take their zombies at hand. " +
-            "turn by turn players draw a card from the player to the right. " +
-            "and then once more. " +
-            "survivors show their zombies."
+    "All survivors take their zombies at hand. " +
+            "Turn by turn players draw a card from the player to the right. " +
+            "And then once more. " +
+            "Survivors show their zombies."
 ) {
 
-    /**
-     * All survivors take their zombies at hand. Turn by turn players draw a card from the player
-     * to the right. And then once more. Survivors show their zombies.
-     */
     override fun play(playedBy: Player) {
         game.players
             .forEach { it.hand.merge(it.zombiesAround) }
