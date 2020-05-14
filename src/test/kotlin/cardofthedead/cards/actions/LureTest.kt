@@ -1,5 +1,6 @@
 package cardofthedead.cards.actions
 
+import cardofthedead.TestUtils.assertEvent
 import cardofthedead.TestUtils.chasedByZombies
 import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.TestUtils.getDummy
@@ -8,6 +9,7 @@ import cardofthedead.cards.zombies.GrannyZombie
 import cardofthedead.cards.zombies.LadZombie
 import cardofthedead.cards.zombies.Zombies
 import cardofthedead.cards.zombies.`Zombies!!!`
+import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedLure
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
@@ -33,6 +35,8 @@ class LureTest : StringSpec({
 
         // then
 
+        game.assertEvent(PlayedLure(player1, player2.zombiesAround.cards.first(), player2))
+
         player1.getZombiesAroundCount() shouldBe 2 // Any 2 Zombies
         player2.getZombiesAroundCount() shouldBe 1 // Any Zombie
     }
@@ -54,6 +58,8 @@ class LureTest : StringSpec({
         player1.play(Lure(game))
 
         // then
+
+        game.assertEvent(PlayedLure(player1, null, null))
 
         player1.getZombiesAroundCount() shouldBe 5 // Zombies, Zombies!!!
         player2.getZombiesAroundCount() shouldBe 0

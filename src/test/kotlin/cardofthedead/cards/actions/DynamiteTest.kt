@@ -59,8 +59,10 @@ class DynamiteTest : StringSpec({
 
         val game = gameWithEmptyDeck()
 
+        val armored = Armored(game)
+
         val player = game.getDummy().apply {
-            addMovementPoints(Armored(game))
+            addMovementPoints(armored)
         }
 
         // when
@@ -70,6 +72,7 @@ class DynamiteTest : StringSpec({
         // then
 
         game.discardDeck.size() shouldBe 1
+        game.assertEvent(PlayedDynamite(player, listOf(), armored))
 
         player.getZombiesAroundCount() shouldBe 0
         player.getMovementPoints() shouldBe 0
@@ -80,8 +83,10 @@ class DynamiteTest : StringSpec({
 
         val game = gameWithEmptyDeck()
 
+        val ladZombie = LadZombie(game)
+
         val player = game.getDummy().apply {
-            chasedByZombies(LadZombie(game))
+            chasedByZombies(ladZombie)
         }
 
         // when
@@ -91,6 +96,7 @@ class DynamiteTest : StringSpec({
         // then
 
         game.discardDeck.size() shouldBe 1 // 1 zombie
+        game.assertEvent(PlayedDynamite(player, listOf(ladZombie), null))
 
         player.getZombiesAroundCount() shouldBe 0
         player.getMovementPoints() shouldBe 0
@@ -101,9 +107,12 @@ class DynamiteTest : StringSpec({
 
         val game = gameWithEmptyDeck()
 
+        val zombiesExcl = `Zombies!!!`(game)
+        val armored = Armored(game)
+
         val player = game.getDummy().apply {
-            chasedByZombies(`Zombies!!!`(game))
-            addMovementPoints(Armored(game))
+            chasedByZombies(zombiesExcl)
+            addMovementPoints(armored)
         }
 
         // when
@@ -113,6 +122,7 @@ class DynamiteTest : StringSpec({
         // then
 
         game.discardDeck.size() shouldBe 2 // Zombies!!!, Armored
+        game.assertEvent(PlayedDynamite(player, listOf(zombiesExcl), armored))
 
         player.getZombiesAroundCount() shouldBe 0
         player.getMovementPoints() shouldBe 0
@@ -123,18 +133,23 @@ class DynamiteTest : StringSpec({
 
         val game = gameWithEmptyDeck()
 
+        val zombies = Zombies(game)
+        val ladZombie = LadZombie(game)
+        val armored = Armored(game)
+
         val player = game.getDummy().apply {
-            chasedByZombies(Zombies(game), LadZombie(game))
-            addMovementPoints(Armored(game))
+            chasedByZombies(zombies, ladZombie)
+            addMovementPoints(armored)
         }
 
         // when
-        
+
         player.play(Dynamite(game))
 
         // then
 
         game.discardDeck.size() shouldBe 3 // Zombies, LadZombie, Armored
+        game.assertEvent(PlayedDynamite(player, listOf(zombies, ladZombie), armored))
 
         player.getZombiesAroundCount() shouldBe 0
         player.getMovementPoints() shouldBe 0
