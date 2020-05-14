@@ -39,7 +39,13 @@ object TestUtils {
         val observer = this.getEventQueueTestObserver()
         observer.assertNoErrors()
         observer.assertValueCount(1)
-        observer.assertValueAt(0) { it == event }
+        try {
+            observer.assertValueAt(0) { it == event }
+        } catch (a: AssertionError) {
+            println("expected:$event")
+            println("actual:  ${observer.values().getOrNull(0)}")
+            throw a
+        }
     }
 
     // Players

@@ -1,5 +1,6 @@
 package cardofthedead.cards.actions
 
+import cardofthedead.TestUtils.assertEvent
 import cardofthedead.TestUtils.chasedByZombies
 import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.TestUtils.getDummy
@@ -8,6 +9,7 @@ import cardofthedead.cards.zombies.LadZombie
 import cardofthedead.cards.zombies.RedneckZombie
 import cardofthedead.cards.zombies.Zombies
 import cardofthedead.cards.zombies.`Zombies!!!`
+import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedChainsaw
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
@@ -18,8 +20,10 @@ class ChainsawTest : StringSpec({
 
         val game = gameWithEmptyDeck()
 
+        val ladZombie = LadZombie(game)
+        val brideZombie = BrideZombie(game)
         val player = game.getDummy().apply {
-            chasedByZombies(RedneckZombie(game), LadZombie(game), BrideZombie(game))
+            chasedByZombies(RedneckZombie(game), ladZombie, brideZombie)
         }
 
         // when
@@ -27,8 +31,10 @@ class ChainsawTest : StringSpec({
 
         // then
 
-        game.discardDeck.size() shouldBe 2 // Any 2 Zombie
         player.getZombiesAroundCount() shouldBe 1 // Any Zombie
+
+        game.discardDeck.size() shouldBe 2 // Any 2 Zombie
+        game.assertEvent(PlayedChainsaw(player, listOf(ladZombie, brideZombie)))
     }
 
     "should do nothing when no zombies around" {
@@ -43,8 +49,10 @@ class ChainsawTest : StringSpec({
 
         // then
 
-        game.discardDeck.size() shouldBe 0
         player.getZombiesAroundCount() shouldBe 0
+
+        game.discardDeck.size() shouldBe 0
+        game.assertEvent(PlayedChainsaw(player, listOf()))
     }
 
     "should discard 1 of 1 zombies" {
@@ -52,8 +60,9 @@ class ChainsawTest : StringSpec({
 
         val game = gameWithEmptyDeck()
 
+        val redneckZombie = RedneckZombie(game)
         val player = game.getDummy().apply {
-            chasedByZombies(RedneckZombie(game))
+            chasedByZombies(redneckZombie)
         }
 
         // when
@@ -61,8 +70,10 @@ class ChainsawTest : StringSpec({
 
         // then
 
-        game.discardDeck.size() shouldBe 1 // RedneckZombie
         player.getZombiesAroundCount() shouldBe 0
+
+        game.discardDeck.size() shouldBe 1 // RedneckZombie
+        game.assertEvent(PlayedChainsaw(player, listOf(redneckZombie)))
     }
 
     "should discard Zombies card when Zombies plus single zombie around" {
@@ -70,8 +81,9 @@ class ChainsawTest : StringSpec({
 
         val game = gameWithEmptyDeck()
 
+        val zombies = Zombies(game)
         val player = game.getDummy().apply {
-            chasedByZombies(Zombies(game), RedneckZombie(game))
+            chasedByZombies(zombies, RedneckZombie(game))
         }
 
         // when
@@ -79,8 +91,10 @@ class ChainsawTest : StringSpec({
 
         // then
 
-        game.discardDeck.size() shouldBe 1 // Zombies
         player.getZombiesAroundCount() shouldBe 1 // RedneckZombie
+
+        game.discardDeck.size() shouldBe 1 // Zombies
+        game.assertEvent(PlayedChainsaw(player, listOf(zombies)))
     }
 
     "should do nothing when only Zombies!!! around" {
@@ -97,7 +111,9 @@ class ChainsawTest : StringSpec({
 
         // then
 
-        game.discardDeck.size() shouldBe 0
         player.getZombiesAroundCount() shouldBe 3 // Zombies!!!
+
+        game.discardDeck.size() shouldBe 0
+        game.assertEvent(PlayedChainsaw(player, listOf()))
     }
 })

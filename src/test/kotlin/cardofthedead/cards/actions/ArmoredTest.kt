@@ -53,8 +53,8 @@ class ArmoredTest : StringSpec({
 
         player.hand.size() shouldBe 2 // Armored, Nukes!
         player.hand.hasCardOfClass(Bitten::class.java) shouldBe false
-        game.playDeck.size() shouldBe 0
 
+        game.playDeck.size() shouldBe 0
         game.assertEvent(PlayedArmored(player, false))
     }
 })

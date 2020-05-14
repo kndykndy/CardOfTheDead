@@ -59,14 +59,23 @@ abstract class Player(
 
     abstract fun decideToPlayCardFromHand(): PlayCardDecision
 
+    /**
+     * Function does not pick cards, just chooses them.
+     */
     abstract fun chooseWorstCandidateForBarricade(): Card?
 
+    /**
+     * Function does not pick cards, just chooses them.
+     */
     abstract fun chooseWorstMovementCardForDynamite(): Action?
 
     abstract fun decideToDrawNoCardsNextTurnForHide(): Boolean
 
     abstract fun choosePlayerToGiveZombieToForLure(): Player
 
+    /**
+     * @return true if decided to discard a zombie, false if taking player's card.
+     */
     abstract fun decideToDiscardZombieOrTakeCardForSlugger(): Boolean
 
     abstract fun choosePlayerToTakeCardFromForSlugger(): Player

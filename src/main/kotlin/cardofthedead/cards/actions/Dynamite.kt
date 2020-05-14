@@ -62,7 +62,7 @@ class Dynamite(
         playedBy
             .chooseWorstMovementCardForDynamite()
             ?.let {
-                playedBy.discard(it)
+                playedBy.escapeCards.pickCard(it)?.let(playedBy::discard)
                 discardedMovementCard = it
             }
 

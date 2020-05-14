@@ -12,17 +12,16 @@ class Barricade(
 ) : Action(
     game,
     "Barricade",
-    "draw three cards. choose one and put it on the bottom of the deck"
+    "Draw three cards. Choose one and put it on the bottom of the deck"
 ) {
 
-    /**
-     * Draw three cards. Choose one and put it on the bottom of the deck.
-     */
     override fun play(playedBy: Player) {
         playedBy.pickCandidateCards(3)
         playedBy
             .chooseWorstCandidateForBarricade()
-            ?.let(game.playDeck::addCardOnBottom)
+            ?.let {
+                playedBy.candidatesToHand.pickCard(it)?.let(game.playDeck::addCardOnBottom)
+            }
 
         var tookCardsToHand = 0
 
