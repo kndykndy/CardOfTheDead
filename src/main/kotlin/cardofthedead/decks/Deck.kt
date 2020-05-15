@@ -44,6 +44,8 @@ open class Deck<T : Card>(
     // Picking cards
 
     fun pickCard(card: T): T? = if (cards.remove(card)) card else null
+    fun pickCard(idx: Int): T? =
+        if (isNotEmpty() && idx >= 0 && idx < cards.size) cards.removeAt(idx) else null
 
     fun pickTopCard(): T? = if (isNotEmpty()) pickCard(cards.last()) else null
 
@@ -53,7 +55,7 @@ open class Deck<T : Card>(
             .firstOrNull()
             ?.let(::pickCard)
 
-    fun pickRandomCard(): T? = if (isNotEmpty()) pickCard(cards.random()) else null
+//    fun pickRandomCard(): T? = if (isNotEmpty()) pickCard(cards.random()) else null
 
     override fun toString(): String =
         "[${cards.joinToString(",") { it.title + it.hashCode() }}]"

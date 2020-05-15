@@ -13,7 +13,7 @@ class Pillage(
     "Blindly draw a card from every other player.",
     2
 ) {
-    
+
     override fun play(playedBy: Player) {
         val pillagedCards = mutableListOf<Action>()
 
@@ -21,7 +21,7 @@ class Pillage(
             .filterNot { it == playedBy }
             .forEach {
                 it.hand
-                    .pickRandomCard()
+                    .pickCard(it.throwDiceForHand())
                     ?.let { card ->
                         playedBy.takeToHand(card)
                         pillagedCards.add(card as Action)

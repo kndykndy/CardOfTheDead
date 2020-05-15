@@ -35,9 +35,8 @@ class Slugger(
             var tookCard: Action? = null
 
             val playerToTakeCardFrom = playedBy.choosePlayerToTakeCardFromForSlugger()
-            playerToTakeCardFrom
-                .hand
-                .pickRandomCard()
+            playerToTakeCardFrom.hand
+                .pickCard(playerToTakeCardFrom.throwDiceForHand())
                 ?.let {
                     playedBy.takeToHand(it)
                     tookCard = it as Action

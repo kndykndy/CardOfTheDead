@@ -23,7 +23,6 @@ import cardofthedead.cards.zombies.Zombies
 import cardofthedead.cards.zombies.`Zombies!!!`
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldBeEmpty
-import io.kotest.matchers.collections.shouldBeOneOf
 import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
@@ -306,6 +305,44 @@ class DeckTest : StringSpec({
         deck.size() shouldBe 1
     }
 
+    "should pick card by index if it exists in deck" {
+        // given
+
+        val game = gameWithEmptyDeck()
+
+        val slugger = Slugger(game)
+
+        val deck = Deck<Card>(game).apply { addCard(slugger) }
+
+        // when
+
+        val pickedCard = deck.pickCard(0)
+
+        // then
+
+        pickedCard shouldBe slugger
+        deck.isEmpty() shouldBe true
+    }
+
+    "should not pick card by index if index is outside of deck capacity" {
+        // given
+
+        val game = gameWithEmptyDeck()
+
+        val tripped = Tripped(game)
+
+        val deck = Deck<Card>(game).apply { addCard(tripped) }
+
+        // when
+
+        val pickedCard = deck.pickCard(5)
+
+        // then
+
+        pickedCard shouldBe null
+        deck.size() shouldBe 1
+    }
+
     "should pick card of class if it exists in deck" {
         // given
 
@@ -358,43 +395,6 @@ class DeckTest : StringSpec({
 
         pickedCardOfClass shouldBe null
         deck.size() shouldBe 2
-    }
-
-    "should pick random card from deck" {
-        // given
-
-        val game = gameWithEmptyDeck()
-
-        val hide = Hide(game)
-        val lure = Lure(game)
-
-        val deck = Deck<Card>(game)
-            .apply { addCards(hide, lure) }
-
-        // when
-
-        val pickedRandomCard = deck.pickRandomCard()
-
-        // then
-
-        pickedRandomCard shouldBeOneOf listOf(hide, lure)
-        deck.size() shouldBe 1
-    }
-
-    "should not pick random card if deck is empty" {
-        // given
-
-        val game = gameWithEmptyDeck()
-
-        val deck = Deck<Card>(game)
-
-        // when
-
-        val pickedRandomCard = deck.pickRandomCard()
-
-        // then
-
-        pickedRandomCard shouldBe null
     }
 
     "should get list of action cards from deck keeping them in deck" {

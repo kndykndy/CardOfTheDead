@@ -54,7 +54,7 @@ abstract class Player(
     protected var drawCardThisTurn: Boolean = true
 
     // Decisions
-    
+
     abstract fun chooseSinglePointCardsFromCandidates(n: Int)
 
     abstract fun decideToPlayCardFromHand(): PlayCardDecision
@@ -181,6 +181,7 @@ abstract class Player(
 
     fun throwCoin(): Boolean = Random.nextBoolean()
     fun throwDice(n: Int): Int = Random.nextInt(1, n + 1)
+    fun throwDiceForHand(): Int = if (hand.isNotEmpty()) Random.nextInt(hand.size()) else -1
 
     override fun toString(): String {
         return "$name: " +
