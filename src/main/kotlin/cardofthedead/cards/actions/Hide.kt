@@ -26,6 +26,7 @@ class Hide(
             if (singleZombies.isNotEmpty()) {
                 zombiesAround
                     .pickCard(singleZombies.random())
+//                    .pickCard(playedBy.throwDice())
                     ?.let {
                         val nextPlayer = game.getNextPlayer(playedBy)
                         nextPlayer.chasedByZombie(it)
