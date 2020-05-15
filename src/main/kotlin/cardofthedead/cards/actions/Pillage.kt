@@ -19,9 +19,9 @@ class Pillage(
 
         game.players
             .filterNot { it == playedBy }
-            .forEach { player ->
-                player.hand
-                    .pickCard(player.throwDice(player.hand))
+            .forEach {
+                it.hand
+                    .pickCard(it.throwDiceForHand())
                     ?.let { card ->
                         playedBy.takeToHand(card)
                         pillagedCards.add(card as Action)
