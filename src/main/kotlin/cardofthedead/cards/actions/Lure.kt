@@ -24,7 +24,7 @@ class Lure(
             val singleZombies = zombiesAround.getSingleZombies()
             if (singleZombies.isNotEmpty()) {
                 zombiesAround
-                    .pickCard(singleZombies.random())
+                    .pickCard(singleZombies[playedBy.throwDice(singleZombies)])
                     ?.let {
                         val playerToGiveZombieTo = playedBy.choosePlayerToGiveZombieToForLure()
                         playerToGiveZombieTo.chasedByZombie(it)

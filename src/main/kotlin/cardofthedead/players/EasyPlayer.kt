@@ -94,7 +94,7 @@ class EasyPlayer(
                 PlayCardDecision(
                     if (playAsMovementPoints) WayToPlayCard.PLAY_AS_MOVEMENT_POINTS
                     else WayToPlayCard.PLAY_AS_ACTION,
-                    hand.pickCard(playableActionCards.random())
+                    hand.pickCard(playableActionCards[throwDice(playableActionCards)])
                 )
             } else {
                 PlayCardDecision.doNotPlay()
@@ -112,7 +112,7 @@ class EasyPlayer(
 
     override fun chooseWorstMovementCardForDynamite(): Action? =
         if (escapeCards.isNotEmpty()) {
-            escapeCards.cards.random()
+            escapeCards.cards[throwDice(escapeCards)]
         } else {
             null
         }

@@ -23,7 +23,7 @@ class Slugger(
             val singleZombies = zombiesAround.getSingleZombies()
             if (singleZombies.isNotEmpty()) {
                 zombiesAround
-                    .pickCard(singleZombies.random())
+                    .pickCard(singleZombies[playedBy.throwDice(singleZombies)])
                     ?.let {
                         playedBy.discard(it)
                         discardedZombie = it

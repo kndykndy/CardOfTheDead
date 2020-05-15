@@ -23,7 +23,7 @@ class Ringtone(
                 val zombiesAround = player.zombiesAround
                 val singleZombies = zombiesAround.getSingleZombies()
                 if (singleZombies.isNotEmpty()) {
-                    zombiesAround.pickCard(singleZombies.random())
+                    zombiesAround.pickCard(singleZombies[player.throwDice(singleZombies)])
                         ?.let(playedBy::chasedByZombie)
                 }
             }
