@@ -1,5 +1,6 @@
 package cardofthedead.cards.actions
 
+import cardofthedead.TestUtils.assertEvent
 import cardofthedead.TestUtils.chasedByZombies
 import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.TestUtils.getDummy
@@ -7,6 +8,7 @@ import cardofthedead.TestUtils.takeToHand
 import cardofthedead.cards.zombies.BrideZombie
 import cardofthedead.cards.zombies.LadZombie
 import cardofthedead.cards.zombies.`Zombies!!!`
+import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedNukes
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
@@ -29,12 +31,13 @@ class `Nukes!Test` : StringSpec({
         val player3 = game.getNextPlayer(player2)
 
         // when
-        
+
         player1.play(`Nukes!`(game))
 
         // then
 
         game.discardDeck.size() shouldBe 7 // all cards from hands and all zombie cards
+        game.assertEvent(PlayedNukes(player1))
 
         setOf(player1, player2, player3).forEach { player ->
             player.hand.isEmpty() shouldBe true

@@ -16,8 +16,7 @@ class `Nukes!`(
 ) {
 
     override fun play(playedBy: Player) {
-        game
-            .players
+        game.players
             .forEach { player ->
                 player.discardZombiesAround()
                 player.discardHand()
