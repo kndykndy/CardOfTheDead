@@ -13,6 +13,7 @@ import cardofthedead.players.HardPlayer
 import cardofthedead.players.Player
 import cardofthedead.players.PlayerDescriptor
 import cardofthedead.players.Sex
+import io.mockk.spyk
 
 object TestUtils {
 
@@ -21,19 +22,23 @@ object TestUtils {
     private fun gameWithDeck(
         playerDescriptor: PlayerDescriptor,
         deckType: DeckType
-    ) =
-        Game.Builder(
-            PlayerDescriptor("Luke Skywalker"),
-            PlayerDescriptor("Obi Van Kenobi"),
-            deckType
-        )
-            .withPlayer(playerDescriptor)
-            .build()
+    ) = Game.Builder(
+        PlayerDescriptor("Luke Skywalker"),
+        PlayerDescriptor("Obi Van Kenobi"),
+        deckType
+    )
+        .withPlayer(playerDescriptor)
+        .build()
 
     fun gameWithEmptyDeck() = gameWithDeck(PlayerDescriptor("C3PO"), DeckType.EMPTY)
     fun gameWithStandardDeck() = gameWithDeck(PlayerDescriptor("C3PO"), DeckType.STANDARD)
 
-    fun Game.getDummy() = this.players.last()
+    fun Game.promotePlayersToSpies(): Game {
+        this.players.replaceAll { spyk(it) }
+        return this
+    }
+
+    fun Game.getDummy() = this.players.first()
 
     fun Game.assertEvent(event: EventsFacade.Event) {
         val observer = this.getEventQueueTestObserver()
@@ -42,8 +47,8 @@ object TestUtils {
         try {
             observer.assertValueAt(0) { it == event }
         } catch (a: AssertionError) {
-            println("expected:$event")
-            println("actual:  ${observer.values().getOrNull(0)}")
+            println("expected: $event")
+            println("actual:   ${observer.values().getOrNull(0)}")
             throw a
         }
     }

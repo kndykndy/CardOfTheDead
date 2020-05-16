@@ -73,6 +73,14 @@ class Game private constructor(builder: Builder) {
     private val playersToMovementPointsToEscape = mapOf(2 to 7, 3 to 6, 4 to 6, 5 to 5)
 
     init {
+        if (builder.playerDescriptors
+                .map { player -> player.name }
+                .groupingBy { it }
+                .eachCount()
+                .filter { it.value > 1 }
+                .isNotEmpty()
+        ) throw IllegalStateException("Names must be unique!")
+
         builder.playerDescriptors
             .map { player ->
                 when (player.level) {
@@ -307,8 +315,10 @@ class Game private constructor(builder: Builder) {
     }
 
     internal fun getNextPlayer(afterPlayer: Player): Player {
-        if (players.isEmpty() || (players.size == 1 && players.first() == afterPlayer))
-            throw IllegalStateException()
+        if (players.isEmpty()
+            || (players.size == 1 && players.first() == afterPlayer)
+            || !players.contains(afterPlayer)
+        ) throw IllegalStateException()
 
         val iterator = players.iterator()
         while (iterator.hasNext()) {
