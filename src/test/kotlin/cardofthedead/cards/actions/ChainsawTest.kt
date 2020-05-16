@@ -3,7 +3,7 @@ package cardofthedead.cards.actions
 import cardofthedead.TestUtils.assertEvent
 import cardofthedead.TestUtils.chasedByZombies
 import cardofthedead.TestUtils.gameWithEmptyDeck
-import cardofthedead.TestUtils.getDummy
+import cardofthedead.TestUtils.getFirstPlayer
 import cardofthedead.cards.zombies.BrideZombie
 import cardofthedead.cards.zombies.LadZombie
 import cardofthedead.cards.zombies.RedneckZombie
@@ -22,7 +22,7 @@ class ChainsawTest : StringSpec({
 
         val ladZombie = LadZombie(game)
         val brideZombie = BrideZombie(game)
-        val player = game.getDummy().apply {
+        val player = game.getFirstPlayer().apply {
             chasedByZombies(RedneckZombie(game), ladZombie, brideZombie)
         }
 
@@ -43,7 +43,7 @@ class ChainsawTest : StringSpec({
 
         val game = gameWithEmptyDeck()
 
-        val player = game.getDummy()
+        val player = game.getFirstPlayer()
 
         // when
 
@@ -63,7 +63,7 @@ class ChainsawTest : StringSpec({
         val game = gameWithEmptyDeck()
 
         val redneckZombie = RedneckZombie(game)
-        val player = game.getDummy().apply {
+        val player = game.getFirstPlayer().apply {
             chasedByZombies(redneckZombie)
         }
 
@@ -85,7 +85,7 @@ class ChainsawTest : StringSpec({
         val game = gameWithEmptyDeck()
 
         val zombies = Zombies(game)
-        val player = game.getDummy().apply {
+        val player = game.getFirstPlayer().apply {
             chasedByZombies(zombies, RedneckZombie(game))
         }
 
@@ -106,7 +106,7 @@ class ChainsawTest : StringSpec({
 
         val game = gameWithEmptyDeck()
 
-        val player = game.getDummy().apply {
+        val player = game.getFirstPlayer().apply {
             chasedByZombies(`Zombies!!!`(game))
         }
 

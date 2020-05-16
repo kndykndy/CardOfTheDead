@@ -4,7 +4,7 @@ import cardofthedead.TestUtils.addCards
 import cardofthedead.TestUtils.assertEvent
 import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.TestUtils.gameWithStandardDeck
-import cardofthedead.TestUtils.getDummy
+import cardofthedead.TestUtils.getFirstPlayer
 import cardofthedead.cards.zombies.RedneckZombie
 import cardofthedead.cards.zombies.Zombies
 import cardofthedead.cards.zombies.`Zombies!!!`
@@ -25,7 +25,7 @@ class BarricadeTest : StringSpec({
 
         game.playDeck.addCards(bitten, armored, nukes)
 
-        val player = game.getDummy()
+        val player = game.getFirstPlayer()
 
         val gameDeckSize = game.playDeck.size()
 
@@ -55,7 +55,7 @@ class BarricadeTest : StringSpec({
 
         game.playDeck.addCards(zombiesExcl, zombies, redneckZombie)
 
-        val player = game.getDummy()
+        val player = game.getFirstPlayer()
 
         val gameDeckSize = game.playDeck.size()
 
@@ -84,7 +84,7 @@ class BarricadeTest : StringSpec({
 
         game.playDeck.addCards(bitten, armored, nukes)
 
-        val player = game.getDummy()
+        val player = game.getFirstPlayer()
 
         // when
 
@@ -110,7 +110,7 @@ class BarricadeTest : StringSpec({
 
         game.playDeck.addCard(nukes)
 
-        val player = game.getDummy()
+        val player = game.getFirstPlayer()
 
         // when
 

@@ -1,7 +1,7 @@
 package cardofthedead.cards.events
 
 import cardofthedead.TestUtils.gameWithStandardDeck
-import cardofthedead.TestUtils.getDummy
+import cardofthedead.TestUtils.getFirstPlayer
 import cardofthedead.TestUtils.takeToHand
 import cardofthedead.cards.actions.Chainsaw
 import cardofthedead.cards.actions.Dynamite
@@ -18,7 +18,7 @@ class MobsTest : StringSpec({
 
         val slugger = Slugger(game)
 
-        val player1 = game.getDummy().apply {
+        val player1 = game.getFirstPlayer().apply {
             takeToHand(slugger)
         }
 
@@ -49,7 +49,7 @@ class MobsTest : StringSpec({
 
         val chainsaw = Chainsaw(game)
         val dynamite = Dynamite(game)
-        val player1 = game.getDummy().apply {
+        val player1 = game.getFirstPlayer().apply {
             takeToHand(chainsaw, dynamite)
         }
 

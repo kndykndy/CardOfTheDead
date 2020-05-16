@@ -2,7 +2,7 @@ package cardofthedead.cards.events
 
 import cardofthedead.TestUtils.addMovementPoints
 import cardofthedead.TestUtils.gameWithEmptyDeck
-import cardofthedead.TestUtils.getDummy
+import cardofthedead.TestUtils.getFirstPlayer
 import cardofthedead.cards.actions.Armored
 import cardofthedead.cards.actions.Dynamite
 import io.kotest.core.spec.style.StringSpec
@@ -15,7 +15,7 @@ class CorneredTest : StringSpec({
 
         val game = gameWithEmptyDeck()
 
-        val player = game.getDummy().apply {
+        val player = game.getFirstPlayer().apply {
             addMovementPoints(Armored(game), Dynamite(game))
         }
 
@@ -35,7 +35,7 @@ class CorneredTest : StringSpec({
 
         val game = gameWithEmptyDeck()
 
-        val player = game.getDummy()
+        val player = game.getFirstPlayer()
 
         // when
 

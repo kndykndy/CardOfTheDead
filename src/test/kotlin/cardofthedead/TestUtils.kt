@@ -38,7 +38,7 @@ object TestUtils {
         return this
     }
 
-    fun Game.getDummy() = this.players.first()
+    fun Game.getFirstPlayer() = this.players.first()
 
     fun Game.assertEvent(event: EventsFacade.Event) {
         val observer = this.getEventQueueTestObserver()

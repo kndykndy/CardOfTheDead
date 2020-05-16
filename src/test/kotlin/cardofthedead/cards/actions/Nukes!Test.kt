@@ -3,7 +3,7 @@ package cardofthedead.cards.actions
 import cardofthedead.TestUtils.assertEvent
 import cardofthedead.TestUtils.chasedByZombies
 import cardofthedead.TestUtils.gameWithEmptyDeck
-import cardofthedead.TestUtils.getDummy
+import cardofthedead.TestUtils.getFirstPlayer
 import cardofthedead.TestUtils.takeToHand
 import cardofthedead.cards.zombies.BrideZombie
 import cardofthedead.cards.zombies.LadZombie
@@ -20,7 +20,7 @@ class `Nukes!Test` : StringSpec({
 
         val game = gameWithEmptyDeck()
 
-        val player1 = game.getDummy().apply {
+        val player1 = game.getFirstPlayer().apply {
             takeToHand(Slugger(game), Hide(game))
             chasedByZombies(LadZombie(game), BrideZombie(game), `Zombies!!!`(game))
         }

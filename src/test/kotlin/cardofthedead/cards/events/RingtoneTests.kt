@@ -2,7 +2,7 @@ package cardofthedead.cards.events
 
 import cardofthedead.TestUtils.chasedByZombies
 import cardofthedead.TestUtils.gameWithEmptyDeck
-import cardofthedead.TestUtils.getDummy
+import cardofthedead.TestUtils.getFirstPlayer
 import cardofthedead.cards.zombies.BrideZombie
 import cardofthedead.cards.zombies.GrannyZombie
 import cardofthedead.cards.zombies.LadZombie
@@ -18,7 +18,7 @@ class RingtoneTests : StringSpec({
 
         val game = gameWithEmptyDeck()
 
-        val player1 = game.getDummy().apply {
+        val player1 = game.getFirstPlayer().apply {
             chasedByZombie(LadZombie(game))
         }
         val player2 = game.getNextPlayer(player1).apply {

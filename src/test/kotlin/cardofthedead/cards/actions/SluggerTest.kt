@@ -2,7 +2,7 @@ package cardofthedead.cards.actions
 
 import cardofthedead.TestUtils.chasedByZombies
 import cardofthedead.TestUtils.gameWithEmptyDeck
-import cardofthedead.TestUtils.getDummy
+import cardofthedead.TestUtils.getFirstPlayer
 import cardofthedead.TestUtils.promotePlayersToSpies
 import cardofthedead.TestUtils.takeToHand
 import cardofthedead.cards.zombies.BrideZombie
@@ -19,7 +19,7 @@ class SluggerTest : StringSpec({
 
         val game = gameWithEmptyDeck().promotePlayersToSpies()
 
-        val player1 = game.getDummy().apply {
+        val player1 = game.getFirstPlayer().apply {
             chasedByZombies(LadZombie(game), BrideZombie(game), GrannyZombie(game))
         }
 
@@ -41,7 +41,7 @@ class SluggerTest : StringSpec({
 
         val game = gameWithEmptyDeck().promotePlayersToSpies()
 
-        val player1 = game.getDummy()
+        val player1 = game.getFirstPlayer()
 
         every { player1.decideToDiscardZombieOrTakeCardForSlugger() } returns true
 
@@ -61,7 +61,7 @@ class SluggerTest : StringSpec({
 
         val game = gameWithEmptyDeck().promotePlayersToSpies()
 
-        val player1 = game.getDummy()
+        val player1 = game.getFirstPlayer()
         val player2 = game.getNextPlayer(player1).apply {
             takeToHand(Chainsaw(game), Dynamite(game))
         }
@@ -84,7 +84,7 @@ class SluggerTest : StringSpec({
 
         val game = gameWithEmptyDeck().promotePlayersToSpies()
 
-        val player1 = game.getDummy()
+        val player1 = game.getFirstPlayer()
         val player2 = game.getNextPlayer(player1)
 
         every { player1.decideToDiscardZombieOrTakeCardForSlugger() } returns false

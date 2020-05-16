@@ -4,7 +4,7 @@ import cardofthedead.TestUtils.addMovementPoints
 import cardofthedead.TestUtils.assertEvent
 import cardofthedead.TestUtils.chasedByZombies
 import cardofthedead.TestUtils.gameWithEmptyDeck
-import cardofthedead.TestUtils.getDummy
+import cardofthedead.TestUtils.getFirstPlayer
 import cardofthedead.cards.zombies.BrideZombie
 import cardofthedead.cards.zombies.LadZombie
 import cardofthedead.cards.zombies.RedneckZombie
@@ -28,7 +28,7 @@ class DynamiteTest : StringSpec({
         val brideZombie = BrideZombie(game)
         val armored = Armored(game)
 
-        val player = spyk(game.getDummy()).apply {
+        val player = spyk(game.getFirstPlayer()).apply {
             chasedByZombies(
                 RedneckZombie(game),
                 redneckZombie,
@@ -61,7 +61,7 @@ class DynamiteTest : StringSpec({
 
         val armored = Armored(game)
 
-        val player = game.getDummy().apply {
+        val player = game.getFirstPlayer().apply {
             addMovementPoints(armored)
         }
 
@@ -85,7 +85,7 @@ class DynamiteTest : StringSpec({
 
         val ladZombie = LadZombie(game)
 
-        val player = game.getDummy().apply {
+        val player = game.getFirstPlayer().apply {
             chasedByZombies(ladZombie)
         }
 
@@ -110,7 +110,7 @@ class DynamiteTest : StringSpec({
         val zombiesExcl = `Zombies!!!`(game)
         val armored = Armored(game)
 
-        val player = game.getDummy().apply {
+        val player = game.getFirstPlayer().apply {
             chasedByZombies(zombiesExcl)
             addMovementPoints(armored)
         }
@@ -137,7 +137,7 @@ class DynamiteTest : StringSpec({
         val ladZombie = LadZombie(game)
         val armored = Armored(game)
 
-        val player = game.getDummy().apply {
+        val player = game.getFirstPlayer().apply {
             chasedByZombies(zombies, ladZombie)
             addMovementPoints(armored)
         }

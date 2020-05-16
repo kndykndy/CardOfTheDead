@@ -2,7 +2,7 @@ package cardofthedead.cards.actions
 
 import cardofthedead.TestUtils.assertEvent
 import cardofthedead.TestUtils.gameWithEmptyDeck
-import cardofthedead.TestUtils.getDummy
+import cardofthedead.TestUtils.getFirstPlayer
 import cardofthedead.TestUtils.promotePlayersToSpies
 import cardofthedead.TestUtils.takeToHand
 import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedPillage
@@ -20,7 +20,7 @@ class PillageTest : StringSpec({
         val chainsaw = Chainsaw(game)
         val bitten = Bitten(game)
 
-        val player1 = game.getDummy().apply {
+        val player1 = game.getFirstPlayer().apply {
             takeToHand(Slugger(game), Hide(game), Lure(game))
         }
         every { player1.throwDice(deck = any()) } returns 0

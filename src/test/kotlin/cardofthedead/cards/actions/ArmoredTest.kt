@@ -3,7 +3,7 @@ package cardofthedead.cards.actions
 import cardofthedead.TestUtils.addCards
 import cardofthedead.TestUtils.assertEvent
 import cardofthedead.TestUtils.gameWithEmptyDeck
-import cardofthedead.TestUtils.getDummy
+import cardofthedead.TestUtils.getFirstPlayer
 import cardofthedead.TestUtils.takeToHand
 import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedArmored
 import io.kotest.core.spec.style.StringSpec
@@ -20,7 +20,7 @@ class ArmoredTest : StringSpec({
 
         val bitten = Bitten(game)
 
-        val player = game.getDummy().apply {
+        val player = game.getFirstPlayer().apply {
             takeToHand(bitten)
         }
 
@@ -43,7 +43,7 @@ class ArmoredTest : StringSpec({
 
         val game = gameWithEmptyDeck()
 
-        val player = game.getDummy().apply {
+        val player = game.getFirstPlayer().apply {
             takeToHand(Armored(game), `Nukes!`(game))
         }
 
