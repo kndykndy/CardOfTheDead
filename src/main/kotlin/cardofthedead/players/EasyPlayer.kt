@@ -83,9 +83,9 @@ class EasyPlayer(
     override fun decideToPlayCardFromHand(): PlayCardDecision {
         if (hand.isEmpty()) return PlayCardDecision.cannotPlay()
 
-        val playableActionCards = hand.getActions().filterNot { it is Bitten }
+        val playableActions = hand.getActions().filterNot { it is Bitten }
 
-        return if (playableActionCards.isNotEmpty()) {
+        return if (playableActions.isNotEmpty()) {
             if (throwCoin()) {
                 val notSurrounded = getZombiesAroundCount() < game.getZombiesCountToBeSurrounded()
                 val lotsOfCardsOnHand = hand.size() > 3
@@ -94,7 +94,7 @@ class EasyPlayer(
                 PlayCardDecision(
                     if (playAsMovementPoints) WayToPlayCard.PLAY_AS_MOVEMENT_POINTS
                     else WayToPlayCard.PLAY_AS_ACTION,
-                    hand.pickCard(playableActionCards[throwDice(playableActionCards)])
+                    hand.pickCard(playableActions[throwDice(playableActions)])
                 )
             } else {
                 PlayCardDecision.doNotPlay()

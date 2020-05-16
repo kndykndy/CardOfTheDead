@@ -25,7 +25,7 @@ class Fog(
             var currentPlayer = playedBy
             do {
                 val prevPlayer = game.getPrevPlayer(currentPlayer)
-                prevPlayer.hand.pickCard(prevPlayer.throwDiceForHand())
+                prevPlayer.hand.pickCard(currentPlayer.throwDice(prevPlayer.hand))
                     ?.let(currentPlayer::takeToHand)
 
                 currentPlayer = game.getNextPlayer(currentPlayer)

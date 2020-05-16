@@ -181,13 +181,12 @@ abstract class Player(
 
     fun throwCoin(): Boolean = Random.nextBoolean()
     fun throwDice(n: Int): Int = Random.nextInt(1, n + 1)
+
     fun throwDice(listOfCards: List<Card>): Int =
         if (listOfCards.isNotEmpty()) Random.nextInt(listOfCards.size) else -1
 
     fun throwDice(deck: Deck<out Card>): Int =
         if (deck.isNotEmpty()) Random.nextInt(deck.size()) else -1
-
-    fun throwDiceForHand(): Int = throwDice(hand)
 
     override fun toString(): String {
         return "$name: " +
