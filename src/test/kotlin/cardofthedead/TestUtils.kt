@@ -56,7 +56,7 @@ object TestUtils {
     // Players
 
     fun playerStub(game: Game): Player =
-        object : Player(game, "R2D2", Sex.MALE) {
+        object : Player(game, "R2D2", Sex.NONBINARY) {
             override fun chooseSinglePointCardsFromCandidates(n: Int) {}
             override fun decideToPlayCardFromHand() = PlayCardDecision.doNotPlay()
             override fun chooseWorstCandidateForBarricade(): Card? = null

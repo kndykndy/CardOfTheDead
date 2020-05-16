@@ -55,6 +55,9 @@ abstract class Player(
 
     // Decisions
 
+    /**
+     * Picks random N cards from the candidates deck.
+     */
     abstract fun chooseSinglePointCardsFromCandidates(n: Int)
 
     abstract fun decideToPlayCardFromHand(): PlayCardDecision
@@ -205,6 +208,11 @@ data class PlayerDescriptor(
 )
 
 enum class Level { EASY, HARD }
-enum class Sex { MALE, FEMALE }
+enum class Sex { MALE, FEMALE, NONBINARY }
 
-fun Player.getPronoun(): String = if (Sex.MALE == this.sex) "he" else "she"
+fun Player.getPronoun(): String =
+    when (this.sex) {
+        Sex.MALE -> "he"
+        Sex.FEMALE -> "she"
+        else -> "they"
+    }

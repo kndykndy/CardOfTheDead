@@ -37,7 +37,7 @@ class EasyPlayer(
 ) : Player(game, name, sex) {
 
     /**
-     * Worst cards rating. The bigger the better.
+     * Worst card rating. The less the worse.
      */
     private val cardTypeToRating = mapOf(
         Bitten::class to 0,
@@ -64,9 +64,6 @@ class EasyPlayer(
         `Nukes!`::class to 9
     )
 
-    /**
-     * Picks random N cards from the candidates deck.
-     */
     override fun chooseSinglePointCardsFromCandidates(n: Int) {
         if (n <= 0) return
         val actionCards = candidatesToHand.getActions().filter { it.movementPoints == 1 }
