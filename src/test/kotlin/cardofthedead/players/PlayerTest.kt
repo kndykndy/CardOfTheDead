@@ -5,7 +5,7 @@ import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.TestUtils.gameWithStandardDeck
 import cardofthedead.TestUtils.takeToCandidates
 import cardofthedead.TestUtils.takeToHand
-import cardofthedead.TestUtils.testPlayer
+import cardofthedead.TestUtils.playerStub
 import cardofthedead.cards.actions.Bitten
 import cardofthedead.cards.actions.Chainsaw
 import cardofthedead.cards.actions.Dynamite
@@ -36,7 +36,7 @@ class PlayerTest : ShouldSpec({
             val topCard = game.playDeck.cards.last()
             val playDeckSize = game.playDeck.size()
 
-            val player = testPlayer(game)
+            val player = playerStub(game)
 
             // when
 
@@ -55,7 +55,7 @@ class PlayerTest : ShouldSpec({
         should("get no cards if no cards available") {
             // given
 
-            val player = testPlayer(gameWithEmptyDeck())
+            val player = playerStub(gameWithEmptyDeck())
 
             // when
 
@@ -69,7 +69,7 @@ class PlayerTest : ShouldSpec({
         should("not attempt to pick less than zero cards") {
             // given
 
-            val player = testPlayer(gameWithEmptyDeck())
+            val player = playerStub(gameWithEmptyDeck())
 
             // when-then
 
@@ -86,7 +86,7 @@ class PlayerTest : ShouldSpec({
 
             val game = gameWithStandardDeck()
 
-            val player = spyk(testPlayer(game)).also {
+            val player = spyk(playerStub(game)).also {
                 every { it.decideToDrawNoCardsNextTurnForHide() } returns true
             }
 
@@ -103,7 +103,7 @@ class PlayerTest : ShouldSpec({
         should("not get any cards if no cards available") {
             // given
 
-            val player = spyk(testPlayer(gameWithEmptyDeck()))
+            val player = spyk(playerStub(gameWithEmptyDeck()))
 
             every { player.decideToDrawNoCardsNextTurnForHide() } returns false
 
@@ -124,7 +124,7 @@ class PlayerTest : ShouldSpec({
 
             val game = gameWithEmptyDeck()
 
-            val player = testPlayer(game)
+            val player = playerStub(game)
 
             val lure = Lure(game)
 
@@ -144,7 +144,7 @@ class PlayerTest : ShouldSpec({
 
             val lure = Lure(game)
 
-            val player = testPlayer(game).apply {
+            val player = playerStub(game).apply {
                 takeToHand(lure)
             }
 
@@ -167,7 +167,7 @@ class PlayerTest : ShouldSpec({
             val game = gameWithStandardDeck()
             val playDeckSize = game.playDeck.size()
 
-            val player = testPlayer(game)
+            val player = playerStub(game)
 
             val lure = Lure(game)
 
@@ -186,7 +186,7 @@ class PlayerTest : ShouldSpec({
 
             val game = gameWithEmptyDeck()
 
-            val player = testPlayer(game)
+            val player = playerStub(game)
 
             val lure = Lure(game)
 
@@ -209,7 +209,7 @@ class PlayerTest : ShouldSpec({
 
             val game = gameWithEmptyDeck()
 
-            val player = testPlayer(game)
+            val player = playerStub(game)
 
             // when
 
@@ -225,7 +225,7 @@ class PlayerTest : ShouldSpec({
 
             val game = gameWithEmptyDeck()
 
-            val player = testPlayer(game).apply {
+            val player = playerStub(game).apply {
                 chasedByZombies(LadZombie(game), Zombies(game))
             }
 
@@ -243,7 +243,7 @@ class PlayerTest : ShouldSpec({
 
             val game = gameWithEmptyDeck()
 
-            val player = testPlayer(game)
+            val player = playerStub(game)
 
             // when
 
@@ -259,7 +259,7 @@ class PlayerTest : ShouldSpec({
 
             val game = gameWithEmptyDeck()
 
-            val player = testPlayer(game).apply {
+            val player = playerStub(game).apply {
                 addMovementPoints(Hide(game))
             }
 
@@ -277,7 +277,7 @@ class PlayerTest : ShouldSpec({
 
             val game = gameWithEmptyDeck()
 
-            val player = testPlayer(game)
+            val player = playerStub(game)
 
             // when
 
@@ -294,7 +294,7 @@ class PlayerTest : ShouldSpec({
         should("add survival points") {
             // given
 
-            val player = testPlayer(gameWithEmptyDeck())
+            val player = playerStub(gameWithEmptyDeck())
 
             // when
 
@@ -308,7 +308,7 @@ class PlayerTest : ShouldSpec({
         should("add more survival points") {
             // given
 
-            val player = testPlayer(gameWithEmptyDeck()).apply {
+            val player = playerStub(gameWithEmptyDeck()).apply {
                 addSurvivalPoints(3)
             }
 
@@ -324,7 +324,7 @@ class PlayerTest : ShouldSpec({
         should("not add negative survival points") {
             // given
 
-            val player = testPlayer(gameWithEmptyDeck())
+            val player = playerStub(gameWithEmptyDeck())
 
             // when-then
 
@@ -341,7 +341,7 @@ class PlayerTest : ShouldSpec({
 
             val game = gameWithEmptyDeck()
 
-            val player = testPlayer(game)
+            val player = playerStub(game)
 
             val lure = Lure(game)
 
@@ -363,7 +363,7 @@ class PlayerTest : ShouldSpec({
             val dynamite = Dynamite(game)
             val pillage = Pillage(game)
 
-            val player = testPlayer(game).apply {
+            val player = playerStub(game).apply {
                 takeToHand(lure, dynamite, pillage)
             }
 
@@ -386,7 +386,7 @@ class PlayerTest : ShouldSpec({
             val lure = Lure(game)
             val chainsaw = Chainsaw(game)
 
-            val player = testPlayer(game).apply {
+            val player = playerStub(game).apply {
                 takeToCandidates(lure, chainsaw)
             }
 
@@ -410,7 +410,7 @@ class PlayerTest : ShouldSpec({
             val zombie = LadZombie(game)
             val zombies = Zombies(game)
 
-            val player = testPlayer(game).apply {
+            val player = playerStub(game).apply {
                 chasedByZombies(zombie, zombies)
             }
 
@@ -433,7 +433,7 @@ class PlayerTest : ShouldSpec({
             val lure = Lure(game)
             val nukes = `Nukes!`(game)
 
-            val player = testPlayer(game).apply {
+            val player = playerStub(game).apply {
                 addMovementPoints(lure)
                 addMovementPoints(nukes)
             }
@@ -460,7 +460,7 @@ class PlayerTest : ShouldSpec({
             val zombie = GrannyZombie(game)
             val nukes = `Nukes!`(game)
 
-            val player = testPlayer(game).apply {
+            val player = playerStub(game).apply {
                 takeToHand(lure)
                 takeToCandidates(hide)
                 chasedByZombie(zombie)
@@ -487,7 +487,7 @@ class PlayerTest : ShouldSpec({
 
         val game = gameWithEmptyDeck()
 
-        val player = testPlayer(game).apply {
+        val player = playerStub(game).apply {
             takeToHand(Lure(game))
             takeToCandidates(Hide(game))
             chasedByZombie(GrannyZombie(game))

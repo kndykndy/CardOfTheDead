@@ -55,7 +55,7 @@ object TestUtils {
 
     // Players
 
-    fun testPlayer(game: Game): Player =
+    fun playerStub(game: Game): Player =
         object : Player(game, "R2D2", Sex.MALE) {
             override fun chooseSinglePointCardsFromCandidates(n: Int) {}
             override fun decideToPlayCardFromHand() = PlayCardDecision.doNotPlay()
@@ -69,8 +69,8 @@ object TestUtils {
             override fun decideHowManyMovementCardsToDiscardForTripped(): Int = 0
         }
 
-    fun testEasyPlayer(game: Game): EasyPlayer = EasyPlayer(game, "Kylo Ren", Sex.FEMALE)
-    fun testHardPlayer(game: Game): HardPlayer = HardPlayer(game, "Darth Vader", Sex.MALE)
+    fun easyPlayerStub(game: Game): EasyPlayer = EasyPlayer(game, "Kylo Ren", Sex.FEMALE)
+    fun hardPlayerStub(game: Game): HardPlayer = HardPlayer(game, "Darth Vader", Sex.MALE)
 
     fun Player.takeToHand(vararg listOfCards: Card) =
         listOfCards.forEach { this.takeToHand(it) }

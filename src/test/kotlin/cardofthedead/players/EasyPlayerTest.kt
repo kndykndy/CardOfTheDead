@@ -5,7 +5,7 @@ import cardofthedead.TestUtils.chasedByZombies
 import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.TestUtils.takeToCandidates
 import cardofthedead.TestUtils.takeToHand
-import cardofthedead.TestUtils.testEasyPlayer
+import cardofthedead.TestUtils.easyPlayerStub
 import cardofthedead.cards.WayToPlayCard
 import cardofthedead.cards.actions.Bitten
 import cardofthedead.cards.actions.Dynamite
@@ -35,7 +35,7 @@ class EasyPlayerTest : ShouldSpec({
             val lure = Lure(game)
             val hide = Hide(game)
 
-            val player = testEasyPlayer(game).apply {
+            val player = easyPlayerStub(game).apply {
                 takeToCandidates(lure, hide, Dynamite(game), GrannyZombie(game))
             }
 
@@ -60,7 +60,7 @@ class EasyPlayerTest : ShouldSpec({
 
             val lure = Lure(game)
 
-            val player = testEasyPlayer(game).apply {
+            val player = easyPlayerStub(game).apply {
                 takeToCandidates(lure)
             }
 
@@ -81,7 +81,7 @@ class EasyPlayerTest : ShouldSpec({
 
             val lure = Lure(game)
 
-            val player = testEasyPlayer(game).apply {
+            val player = easyPlayerStub(game).apply {
                 takeToCandidates(lure)
             }
 
@@ -103,7 +103,7 @@ class EasyPlayerTest : ShouldSpec({
 
             val game = gameWithEmptyDeck()
 
-            val player = testEasyPlayer(game)
+            val player = easyPlayerStub(game)
 
             // when
 
@@ -120,7 +120,7 @@ class EasyPlayerTest : ShouldSpec({
 
             val game = gameWithEmptyDeck()
 
-            val player = testEasyPlayer(game).apply {
+            val player = easyPlayerStub(game).apply {
                 takeToHand(Bitten(game))
             }
 
@@ -139,7 +139,7 @@ class EasyPlayerTest : ShouldSpec({
 
             val game = gameWithEmptyDeck()
 
-            val player = spyk(testEasyPlayer(game)).apply {
+            val player = spyk(easyPlayerStub(game)).apply {
                 takeToHand(Lure(game))
             }
 
@@ -162,7 +162,7 @@ class EasyPlayerTest : ShouldSpec({
 
             val lure = Lure(game)
 
-            val player = spyk(testEasyPlayer(game)).apply {
+            val player = spyk(easyPlayerStub(game)).apply {
                 takeToHand(lure)
             }
 
@@ -191,7 +191,7 @@ class EasyPlayerTest : ShouldSpec({
             val hide = Hide(game)
             val pillage = Pillage(game)
 
-            val player = spyk(testEasyPlayer(game)).apply {
+            val player = spyk(easyPlayerStub(game)).apply {
                 takeToHand(lure, slugger, hide, pillage)
             }
 
@@ -217,7 +217,7 @@ class EasyPlayerTest : ShouldSpec({
 
             val dynamite = Dynamite(game)
 
-            val player = spyk(testEasyPlayer(game)).apply {
+            val player = spyk(easyPlayerStub(game)).apply {
                 takeToHand(dynamite)
             }
 
@@ -242,7 +242,7 @@ class EasyPlayerTest : ShouldSpec({
         should("not pick any card if Candidates empty") {
             // given
 
-            val player = testEasyPlayer(gameWithEmptyDeck())
+            val player = easyPlayerStub(gameWithEmptyDeck())
 
             // when
 
@@ -260,7 +260,7 @@ class EasyPlayerTest : ShouldSpec({
 
             val lure = Lure(game)
 
-            val player = testEasyPlayer(game).apply {
+            val player = easyPlayerStub(game).apply {
                 takeToCandidates(lure)
             }
 
@@ -282,7 +282,7 @@ class EasyPlayerTest : ShouldSpec({
             val hide = Hide(game)
             val pillage = Pillage(game)
 
-            val player = testEasyPlayer(game).apply {
+            val player = easyPlayerStub(game).apply {
                 takeToCandidates(lure, hide, pillage)
             }
 
@@ -301,7 +301,7 @@ class EasyPlayerTest : ShouldSpec({
         should("not pick card if Escape empty") {
             // given
 
-            val player = testEasyPlayer(gameWithEmptyDeck())
+            val player = easyPlayerStub(gameWithEmptyDeck())
 
             // when
 
@@ -319,7 +319,7 @@ class EasyPlayerTest : ShouldSpec({
 
             val lure = Lure(game)
 
-            val player = testEasyPlayer(game).apply {
+            val player = easyPlayerStub(game).apply {
                 addMovementPoints(lure)
             }
 
@@ -341,7 +341,7 @@ class EasyPlayerTest : ShouldSpec({
             val hide = Hide(game)
             val pillage = Pillage(game)
 
-            val player = testEasyPlayer(game).apply {
+            val player = easyPlayerStub(game).apply {
                 addMovementPoints(lure, hide, pillage)
             }
 
@@ -362,7 +362,7 @@ class EasyPlayerTest : ShouldSpec({
 
             val game = spyk(gameWithEmptyDeck())
 
-            val player = testEasyPlayer(game).apply {
+            val player = easyPlayerStub(game).apply {
                 chasedByZombies(LadZombie(game), `Zombies!!!`(game), Zombies(game))
             }
 
@@ -382,7 +382,7 @@ class EasyPlayerTest : ShouldSpec({
 
             val game = spyk(gameWithEmptyDeck())
 
-            val player = testEasyPlayer(game)
+            val player = easyPlayerStub(game)
 
             every { game.getZombiesCountToBeSurrounded() } returns 3
 
@@ -400,7 +400,7 @@ class EasyPlayerTest : ShouldSpec({
 
             val game = spyk(gameWithEmptyDeck())
 
-            val player = testEasyPlayer(game).apply {
+            val player = easyPlayerStub(game).apply {
                 chasedByZombies(`Zombies!!!`(game), Zombies(game))
             }
 
