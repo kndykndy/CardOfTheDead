@@ -25,8 +25,8 @@ class LureTest : StringSpec({
         val player1 = game.getFirstPlayer().apply {
             chasedByZombies(LadZombie(game), BrideZombie(game), GrannyZombie(game))
         }
-
         val player2 = game.getNextPlayer(player1)
+
         every { player1.choosePlayerToGiveZombieToForLure() } returns player2
 
         // when
@@ -49,8 +49,8 @@ class LureTest : StringSpec({
         val player1 = game.getFirstPlayer().apply {
             chasedByZombies(Zombies(game), `Zombies!!!`(game))
         }
-
         val player2 = game.getNextPlayer(player1)
+
         every { player1.choosePlayerToGiveZombieToForLure() } returns player2
 
         // when

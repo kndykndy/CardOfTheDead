@@ -25,9 +25,9 @@ class HideTest : StringSpec({
         val player1 = game.getFirstPlayer().apply {
             chasedByZombies(LadZombie(game), BrideZombie(game), GrannyZombie(game))
         }
-        every { player1.decideToDrawNoCardsNextTurnForHide() } returns true
-
         val player2 = game.getNextPlayer(player1)
+
+        every { player1.decideToDrawNoCardsNextTurnForHide() } returns true
 
         // when
 
@@ -49,9 +49,9 @@ class HideTest : StringSpec({
         val player1 = game.getFirstPlayer().apply {
             chasedByZombies(Zombies(game), `Zombies!!!`(game))
         }
-        every { player1.decideToDrawNoCardsNextTurnForHide() } returns true
-
         val player2 = game.getNextPlayer(player1)
+
+        every { player1.decideToDrawNoCardsNextTurnForHide() } returns true
 
         // when
 

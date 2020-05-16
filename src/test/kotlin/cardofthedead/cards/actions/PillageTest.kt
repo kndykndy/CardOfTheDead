@@ -3,8 +3,8 @@ package cardofthedead.cards.actions
 import cardofthedead.TestUtils.assertEvent
 import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.TestUtils.getFirstPlayer
-import cardofthedead.TestUtils.wrapPlayersAsSpyKs
 import cardofthedead.TestUtils.takeToHand
+import cardofthedead.TestUtils.wrapPlayersAsSpyKs
 import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedPillage
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
@@ -23,13 +23,14 @@ class PillageTest : StringSpec({
         val player1 = game.getFirstPlayer().apply {
             takeToHand(Slugger(game), Hide(game), Lure(game))
         }
-        every { player1.throwDice(deck = any()) } returns 0
         val player2 = game.getNextPlayer(player1).apply {
             takeToHand(chainsaw, Dynamite(game))
         }
         val player3 = game.getNextPlayer(player2).apply {
             takeToHand(bitten)
         }
+
+        every { player1.throwDice(deck = any()) } returns 0
 
         // when
 
