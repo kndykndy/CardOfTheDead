@@ -3,7 +3,7 @@ package cardofthedead.cards.actions
 import cardofthedead.TestUtils.addMovementPoints
 import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.TestUtils.getFirstPlayer
-import cardofthedead.TestUtils.promotePlayersToSpies
+import cardofthedead.TestUtils.wrapPlayersAsSpyKs
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
@@ -13,7 +13,7 @@ class TrippedTest : StringSpec({
     "should discard 2 escape cards" {
         // given
 
-        val game = gameWithEmptyDeck().promotePlayersToSpies()
+        val game = gameWithEmptyDeck().wrapPlayersAsSpyKs()
 
         val player1 = game.getFirstPlayer()
         val player2 = game.getNextPlayer(player1).apply {
@@ -37,7 +37,7 @@ class TrippedTest : StringSpec({
     "should not discard any cards if no escape cards" {
         // given
 
-        val game = gameWithEmptyDeck().promotePlayersToSpies()
+        val game = gameWithEmptyDeck().wrapPlayersAsSpyKs()
 
         val player1 = game.getFirstPlayer()
         val player2 = game.getNextPlayer(player1)

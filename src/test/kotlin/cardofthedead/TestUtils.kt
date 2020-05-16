@@ -33,7 +33,7 @@ object TestUtils {
     fun gameWithEmptyDeck() = gameWithDeck(PlayerDescriptor("C3PO"), DeckType.EMPTY)
     fun gameWithStandardDeck() = gameWithDeck(PlayerDescriptor("C3PO"), DeckType.STANDARD)
 
-    fun Game.promotePlayersToSpies(): Game {
+    fun Game.wrapPlayersAsSpyKs(): Game {
         this.players.replaceAll { spyk(it) }
         return this
     }

@@ -3,7 +3,7 @@ package cardofthedead.cards.actions
 import cardofthedead.TestUtils.assertEvent
 import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.TestUtils.getFirstPlayer
-import cardofthedead.TestUtils.promotePlayersToSpies
+import cardofthedead.TestUtils.wrapPlayersAsSpyKs
 import cardofthedead.TestUtils.takeToHand
 import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedPillage
 import io.kotest.core.spec.style.StringSpec
@@ -15,7 +15,7 @@ class PillageTest : StringSpec({
     "should take one card from every other player" {
         // given
 
-        val game = gameWithEmptyDeck().promotePlayersToSpies()
+        val game = gameWithEmptyDeck().wrapPlayersAsSpyKs()
 
         val chainsaw = Chainsaw(game)
         val bitten = Bitten(game)

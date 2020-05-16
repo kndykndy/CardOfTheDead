@@ -4,7 +4,7 @@ import cardofthedead.TestUtils.assertEvent
 import cardofthedead.TestUtils.chasedByZombies
 import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.TestUtils.getFirstPlayer
-import cardofthedead.TestUtils.promotePlayersToSpies
+import cardofthedead.TestUtils.wrapPlayersAsSpyKs
 import cardofthedead.cards.zombies.BrideZombie
 import cardofthedead.cards.zombies.GrannyZombie
 import cardofthedead.cards.zombies.LadZombie
@@ -20,7 +20,7 @@ class HideTest : StringSpec({
     "should give 1 out of 3 Zombie cards to next player" {
         // given
 
-        val game = gameWithEmptyDeck().promotePlayersToSpies()
+        val game = gameWithEmptyDeck().wrapPlayersAsSpyKs()
 
         val player1 = game.getFirstPlayer().apply {
             chasedByZombies(LadZombie(game), BrideZombie(game), GrannyZombie(game))
@@ -44,7 +44,7 @@ class HideTest : StringSpec({
     "should not give zombie cards if no Zombie cards" {
         // given
 
-        val game = gameWithEmptyDeck().promotePlayersToSpies()
+        val game = gameWithEmptyDeck().wrapPlayersAsSpyKs()
 
         val player1 = game.getFirstPlayer().apply {
             chasedByZombies(Zombies(game), `Zombies!!!`(game))

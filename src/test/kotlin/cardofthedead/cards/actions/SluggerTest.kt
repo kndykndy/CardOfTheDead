@@ -3,7 +3,7 @@ package cardofthedead.cards.actions
 import cardofthedead.TestUtils.chasedByZombies
 import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.TestUtils.getFirstPlayer
-import cardofthedead.TestUtils.promotePlayersToSpies
+import cardofthedead.TestUtils.wrapPlayersAsSpyKs
 import cardofthedead.TestUtils.takeToHand
 import cardofthedead.cards.zombies.BrideZombie
 import cardofthedead.cards.zombies.GrannyZombie
@@ -17,7 +17,7 @@ class SluggerTest : StringSpec({
     "should discard 1 Zombie" {
         // given
 
-        val game = gameWithEmptyDeck().promotePlayersToSpies()
+        val game = gameWithEmptyDeck().wrapPlayersAsSpyKs()
 
         val player1 = game.getFirstPlayer().apply {
             chasedByZombies(LadZombie(game), BrideZombie(game), GrannyZombie(game))
@@ -39,7 +39,7 @@ class SluggerTest : StringSpec({
     "should discard no Zombies if no zombies at hand" {
         // given
 
-        val game = gameWithEmptyDeck().promotePlayersToSpies()
+        val game = gameWithEmptyDeck().wrapPlayersAsSpyKs()
 
         val player1 = game.getFirstPlayer()
 
@@ -59,7 +59,7 @@ class SluggerTest : StringSpec({
     "should pick random card from another player" {
         // given
 
-        val game = gameWithEmptyDeck().promotePlayersToSpies()
+        val game = gameWithEmptyDeck().wrapPlayersAsSpyKs()
 
         val player1 = game.getFirstPlayer()
         val player2 = game.getNextPlayer(player1).apply {
@@ -82,7 +82,7 @@ class SluggerTest : StringSpec({
     "should pick random card from another player if no card on hand" {
         // given
 
-        val game = gameWithEmptyDeck().promotePlayersToSpies()
+        val game = gameWithEmptyDeck().wrapPlayersAsSpyKs()
 
         val player1 = game.getFirstPlayer()
         val player2 = game.getNextPlayer(player1)
