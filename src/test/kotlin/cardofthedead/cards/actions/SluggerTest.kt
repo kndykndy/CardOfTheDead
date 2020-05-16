@@ -3,6 +3,7 @@ package cardofthedead.cards.actions
 import cardofthedead.TestUtils.chasedByZombies
 import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.TestUtils.getDummy
+import cardofthedead.TestUtils.promotePlayersToSpies
 import cardofthedead.TestUtils.takeToHand
 import cardofthedead.cards.zombies.BrideZombie
 import cardofthedead.cards.zombies.GrannyZombie
@@ -10,18 +11,18 @@ import cardofthedead.cards.zombies.LadZombie
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
-import io.mockk.spyk
 
 class SluggerTest : StringSpec({
 
     "should discard 1 Zombie" {
         // given
 
-        val game = gameWithEmptyDeck()
+        val game = gameWithEmptyDeck().promotePlayersToSpies()
 
-        val player1 = spyk(game.getDummy()).apply {
+        val player1 = game.getDummy().apply {
             chasedByZombies(LadZombie(game), BrideZombie(game), GrannyZombie(game))
         }
+
         every { player1.decideToDiscardZombieOrTakeCardForSlugger() } returns true
 
         // when
@@ -38,9 +39,10 @@ class SluggerTest : StringSpec({
     "should discard no Zombies if no zombies at hand" {
         // given
 
-        val game = gameWithEmptyDeck()
+        val game = gameWithEmptyDeck().promotePlayersToSpies()
 
-        val player1 = spyk(game.getDummy())
+        val player1 = game.getDummy()
+
         every { player1.decideToDiscardZombieOrTakeCardForSlugger() } returns true
 
         // when
@@ -57,15 +59,14 @@ class SluggerTest : StringSpec({
     "should pick random card from another player" {
         // given
 
-        val game = gameWithEmptyDeck()
+        val game = gameWithEmptyDeck().promotePlayersToSpies()
 
-        val player1 = spyk(game.getDummy())
-        every { player1.decideToDiscardZombieOrTakeCardForSlugger() } returns false
-
+        val player1 = game.getDummy()
         val player2 = game.getNextPlayer(player1).apply {
             takeToHand(Chainsaw(game), Dynamite(game))
         }
 
+        every { player1.decideToDiscardZombieOrTakeCardForSlugger() } returns false
         every { player1.choosePlayerToTakeCardFromForSlugger() } returns player2
 
         // when
@@ -81,17 +82,16 @@ class SluggerTest : StringSpec({
     "should pick random card from another player if no card on hand" {
         // given
 
-        val game = gameWithEmptyDeck()
+        val game = gameWithEmptyDeck().promotePlayersToSpies()
 
-        val player1 = spyk(game.getDummy())
-        every { player1.decideToDiscardZombieOrTakeCardForSlugger() } returns false
-
+        val player1 = game.getDummy()
         val player2 = game.getNextPlayer(player1)
 
+        every { player1.decideToDiscardZombieOrTakeCardForSlugger() } returns false
         every { player1.choosePlayerToTakeCardFromForSlugger() } returns player2
 
         // when
-        
+
         player1.play(Slugger(game))
 
         // then
