@@ -1,14 +1,17 @@
 package cardofthedead.cards.actions
 
+import cardofthedead.TestUtils.assertEvent
 import cardofthedead.TestUtils.chasedByZombies
 import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.TestUtils.getFirstPlayer
-import cardofthedead.TestUtils.wrapPlayersAsSpyKs
 import cardofthedead.TestUtils.takeToHand
+import cardofthedead.TestUtils.wrapPlayersAsSpyKs
 import cardofthedead.cards.zombies.BrideZombie
 import cardofthedead.cards.zombies.GrannyZombie
 import cardofthedead.cards.zombies.LadZombie
+import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedSlugger
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 
@@ -19,11 +22,14 @@ class SluggerTest : StringSpec({
 
         val game = gameWithEmptyDeck().wrapPlayersAsSpyKs()
 
+        val ladZombie = LadZombie(game)
+
         val player1 = game.getFirstPlayer().apply {
-            chasedByZombies(LadZombie(game), BrideZombie(game), GrannyZombie(game))
+            chasedByZombies(ladZombie, BrideZombie(game), GrannyZombie(game))
         }
 
         every { player1.decideToDiscardZombieOrTakeCardForSlugger() } returns true
+        every { player1.throwDice(listOfCards = any()) } returns 0 // pick LadZombie
 
         // when
 
@@ -31,7 +37,9 @@ class SluggerTest : StringSpec({
 
         // then
 
-        game.discardDeck.size() shouldBe 1
+        game.discardDeck.size() shouldBe 1 // LadZombie
+        game.discardDeck.cards shouldContain ladZombie
+        game.assertEvent(PlayedSlugger(player1, ladZombie, null, null))
 
         player1.getZombiesAroundCount() shouldBe 2 // Any 2 Zombies
     }
@@ -52,6 +60,7 @@ class SluggerTest : StringSpec({
         // then
 
         game.discardDeck.size() shouldBe 0
+        game.assertEvent(PlayedSlugger(player1, null, null, null))
 
         player1.getZombiesAroundCount() shouldBe 0
     }
@@ -61,13 +70,17 @@ class SluggerTest : StringSpec({
 
         val game = gameWithEmptyDeck().wrapPlayersAsSpyKs()
 
+        val chainsaw = Chainsaw(game)
+        val dynamite = Dynamite(game)
+
         val player1 = game.getFirstPlayer()
         val player2 = game.getNextPlayer(player1).apply {
-            takeToHand(Chainsaw(game), Dynamite(game))
+            takeToHand(chainsaw, dynamite)
         }
 
         every { player1.decideToDiscardZombieOrTakeCardForSlugger() } returns false
         every { player1.choosePlayerToTakeCardFromForSlugger() } returns player2
+        every { player1.throwDice(deck = any()) } returns 1 // pick Dynamite
 
         // when
 
@@ -75,11 +88,15 @@ class SluggerTest : StringSpec({
 
         // then
 
-        player1.hand.size() shouldBe 1 // Any of Chainsaw/Dynamite
-        player2.hand.size() shouldBe 1 // Any of Chainsaw/Dynamite
+        game.assertEvent(PlayedSlugger(player1, null, dynamite, player2))
+
+        player1.hand.size() shouldBe 1 // Dynamite
+        player1.hand.cards shouldContain dynamite
+        player2.hand.size() shouldBe 1 // Chainsaw
+        player2.hand.cards shouldContain chainsaw
     }
 
-    "should pick random card from another player if no card on hand" {
+    "should not pick any cards from another player if no card on their hand" {
         // given
 
         val game = gameWithEmptyDeck().wrapPlayersAsSpyKs()
@@ -95,6 +112,8 @@ class SluggerTest : StringSpec({
         player1.play(Slugger(game))
 
         // then
+
+        game.assertEvent(PlayedSlugger(player1, null, null, player2))
 
         player1.hand.size() shouldBe 0
         player2.hand.size() shouldBe 0

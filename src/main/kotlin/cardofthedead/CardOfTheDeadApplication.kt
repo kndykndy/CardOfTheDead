@@ -283,10 +283,12 @@ fun main() {
     game.getEventQueue()
         .ofType(PlayedTripped::class.java)
         .subscribe { msg ->
+            val mpSum = msg.discardedMovementCards.map { it.movementPoints }.sum()
+
             print("${msg.player.name} plays Tripped")
             println(
                 " and discards their ${msg.discardedMovementCards.size} " +
-                        "latest movement cards."
+                        "latest movement cards for $mpSum points total."
             )
         }
 

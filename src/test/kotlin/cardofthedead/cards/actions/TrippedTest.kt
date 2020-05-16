@@ -1,10 +1,13 @@
 package cardofthedead.cards.actions
 
 import cardofthedead.TestUtils.addMovementPoints
+import cardofthedead.TestUtils.assertEvent
 import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.TestUtils.getFirstPlayer
 import cardofthedead.TestUtils.wrapPlayersAsSpyKs
+import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedTripped
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 
@@ -15,9 +18,12 @@ class TrippedTest : StringSpec({
 
         val game = gameWithEmptyDeck().wrapPlayersAsSpyKs()
 
+        val armored = Armored(game)
+        val dynamite = Dynamite(game)
+
         val player1 = game.getFirstPlayer()
         val player2 = game.getNextPlayer(player1).apply {
-            addMovementPoints(Armored(game), Dynamite(game))
+            addMovementPoints(armored, dynamite)
         }
 
         every { player1.decideHowManyMovementCardsToDiscardForTripped() } returns 2
@@ -30,6 +36,8 @@ class TrippedTest : StringSpec({
         // then
 
         game.discardDeck.size() shouldBe 2 // Armored, Dynamite
+        game.discardDeck.cards shouldContainAll listOf(armored, dynamite)
+        game.assertEvent(PlayedTripped(player1, listOf(dynamite, armored), player2))
 
         player1.getMovementPoints() shouldBe 0
     }
@@ -52,6 +60,7 @@ class TrippedTest : StringSpec({
         // then
 
         game.discardDeck.size() shouldBe 0
+        game.assertEvent(PlayedTripped(player1, listOf(), player2))
 
         player1.getMovementPoints() shouldBe 0
     }

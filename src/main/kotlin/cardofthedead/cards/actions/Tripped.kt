@@ -20,8 +20,7 @@ class Tripped(
         val discardedMovementCards = mutableListOf<Action>()
 
         repeat(playedBy.decideHowManyMovementCardsToDiscardForTripped()) {
-            playerToDiscardMovementCardsFrom
-                .escapeCards
+            playerToDiscardMovementCardsFrom.escapeCards
                 .pickTopCard()
                 ?.let {
                     playerToDiscardMovementCardsFrom.discard(it)
