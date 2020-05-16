@@ -5,6 +5,7 @@ import cardofthedead.TestUtils.assertEvent
 import cardofthedead.TestUtils.chasedByZombies
 import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.TestUtils.getFirstPlayer
+import cardofthedead.TestUtils.wrapPlayersAsSpyKs
 import cardofthedead.cards.zombies.BrideZombie
 import cardofthedead.cards.zombies.LadZombie
 import cardofthedead.cards.zombies.RedneckZombie
@@ -14,21 +15,20 @@ import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedDynamite
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
-import io.mockk.spyk
 
 class DynamiteTest : StringSpec({
 
     "should discard 3 zombies and 1 movement card" {
         // given
 
-        val game = gameWithEmptyDeck()
+        val game = gameWithEmptyDeck().wrapPlayersAsSpyKs()
 
         val redneckZombie = RedneckZombie(game)
         val ladZombie = LadZombie(game)
         val brideZombie = BrideZombie(game)
         val armored = Armored(game)
 
-        val player = spyk(game.getFirstPlayer()).apply {
+        val player = game.getFirstPlayer().apply {
             chasedByZombies(
                 RedneckZombie(game),
                 redneckZombie,
@@ -37,6 +37,7 @@ class DynamiteTest : StringSpec({
             )
             addMovementPoints(armored, Hide(game))
         }
+
         every { player.chooseWorstMovementCardForDynamite() } returns armored
 
         // when
