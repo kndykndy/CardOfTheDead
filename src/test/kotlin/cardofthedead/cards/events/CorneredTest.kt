@@ -1,10 +1,12 @@
 package cardofthedead.cards.events
 
 import cardofthedead.TestUtils.addMovementPoints
+import cardofthedead.TestUtils.assertEvent
 import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.TestUtils.getFirstPlayer
 import cardofthedead.cards.actions.Armored
 import cardofthedead.cards.actions.Dynamite
+import cardofthedead.game.EventsFacade.Game.EventCards.PlayedCornered
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
@@ -26,6 +28,7 @@ class CorneredTest : StringSpec({
         // then
 
         game.discardDeck.size() shouldBe 2 // Armored, Dynamite
+        game.assertEvent(PlayedCornered(player))
 
         player.getMovementPoints() shouldBe 0
     }
@@ -44,6 +47,7 @@ class CorneredTest : StringSpec({
         // then
 
         game.discardDeck.size() shouldBe 0
+        game.assertEvent(PlayedCornered(player))
 
         player.getMovementPoints() shouldBe 0
     }

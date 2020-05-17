@@ -1,5 +1,6 @@
 package cardofthedead.cards.events
 
+import cardofthedead.TestUtils.assertEvent
 import cardofthedead.TestUtils.chasedByZombies
 import cardofthedead.TestUtils.gameWithEmptyDeck
 import cardofthedead.TestUtils.getFirstPlayer
@@ -8,6 +9,7 @@ import cardofthedead.cards.zombies.GrannyZombie
 import cardofthedead.cards.zombies.LadZombie
 import cardofthedead.cards.zombies.Zombies
 import cardofthedead.cards.zombies.`Zombies!!!`
+import cardofthedead.game.EventsFacade.Game.EventCards.PlayedRingtone
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
@@ -33,6 +35,8 @@ class RingtoneTests : StringSpec({
         player1.play(Ringtone(game))
 
         // then
+
+        game.assertEvent(PlayedRingtone(player1, 1, 3))
 
         player1.getZombiesAroundCount() shouldBe 3 // LadZombie, BrideZombie, GrannyZombie
         player2.getZombiesAroundCount() shouldBe 2 // Zombies
