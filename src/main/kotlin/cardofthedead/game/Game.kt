@@ -117,12 +117,7 @@ class Game private constructor(builder: Builder) {
 
     fun play() {
         publishEvent(
-            StartedNewGame(
-                playDeck.size(),
-                players.size,
-                players,
-                winners.first().first()
-            )
+            StartedNewGame(playDeck.size(), players.size, players, winners.first().first())
         )
 
         repeat(3) { i ->
@@ -317,7 +312,7 @@ class Game private constructor(builder: Builder) {
     internal fun getNextPlayer(afterPlayer: Player): Player {
         if (players.isEmpty()
             || (players.size == 1 && players.first() == afterPlayer)
-            || !players.contains(afterPlayer)
+            || (!players.contains(afterPlayer) && !deadPlayers.contains(afterPlayer))
         ) throw IllegalStateException()
 
         val iterator = players.iterator()

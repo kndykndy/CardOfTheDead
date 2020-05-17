@@ -41,7 +41,7 @@ import cardofthedead.players.getPronoun
 fun main() {
     val game = Game.Builder(
         PlayerDescriptor("Luke"),
-        PlayerDescriptor("Yoda")
+        PlayerDescriptor("Yoda", Level.EASY, Sex.NONBINARY)
     )
         .withPlayer(PlayerDescriptor("Rei", Level.EASY, Sex.FEMALE))
         .build()
@@ -96,7 +96,7 @@ fun main() {
 
     game.getEventQueue()
         .ofType(DrewAction::class.java)
-        .subscribe { /*msg -> println("${msg.player.name} draws ${msg.drewAction.title} to hand.")*/ }
+        .subscribe { msg -> println("${msg.player.name} draws Action to hand.") }
     game.getEventQueue()
         .ofType(DrewZombie::class.java)
         .subscribe { msg ->
@@ -127,7 +127,7 @@ fun main() {
                 "${msg.player.name} decides to play ${msg.card.title} as Movement Points, "
             )
             println(
-                " now ${msg.player.getPronoun()} has " +
+                "now ${msg.player.getPronoun()} has " +
                         "${msg.player.getMovementPoints()} MP total."
             )
         }
@@ -305,7 +305,7 @@ fun main() {
             val zombieSituation = msg.newPlayersToZombiesAroundMap.entries.joinToString {
                 "${it.key.name} by ${it.value}"
             }
-            println("Players have exchanged cards and now are chased by zombies: $zombieSituation")
+            println("Players have exchanged cards and now are chased by zombies: $zombieSituation.")
         }
     game.getEventQueue()
         .ofType(PlayedHorde::class.java)
