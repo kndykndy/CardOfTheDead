@@ -13,6 +13,7 @@ import cardofthedead.cards.zombies.Zombies
 import cardofthedead.cards.zombies.`Zombies!!!`
 import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedDynamite
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 
@@ -46,7 +47,8 @@ class DynamiteTest : StringSpec({
 
         // then
 
-        game.discardDeck.size() shouldBe 4 // 3 zombies, 1 Armored
+        game.discardDeck.cards shouldContainExactly
+                listOf(redneckZombie, ladZombie, brideZombie, armored)
         game.assertEvent(
             PlayedDynamite(player, listOf(redneckZombie, ladZombie, brideZombie), armored)
         )
@@ -72,8 +74,8 @@ class DynamiteTest : StringSpec({
 
         // then
 
-        game.discardDeck.size() shouldBe 1
-        game.assertEvent(PlayedDynamite(player, listOf(), armored))
+        game.discardDeck.cards shouldContainExactly listOf(armored)
+        game.assertEvent(PlayedDynamite(player, emptyList(), armored))
 
         player.getZombiesAroundCount() shouldBe 0
         player.getMovementPoints() shouldBe 0
@@ -96,7 +98,7 @@ class DynamiteTest : StringSpec({
 
         // then
 
-        game.discardDeck.size() shouldBe 1 // 1 zombie
+        game.discardDeck.cards shouldContainExactly listOf(ladZombie)
         game.assertEvent(PlayedDynamite(player, listOf(ladZombie), null))
 
         player.getZombiesAroundCount() shouldBe 0
@@ -122,7 +124,7 @@ class DynamiteTest : StringSpec({
 
         // then
 
-        game.discardDeck.size() shouldBe 2 // Zombies!!!, Armored
+        game.discardDeck.cards shouldContainExactly listOf(zombiesExcl, armored)
         game.assertEvent(PlayedDynamite(player, listOf(zombiesExcl), armored))
 
         player.getZombiesAroundCount() shouldBe 0
@@ -149,7 +151,7 @@ class DynamiteTest : StringSpec({
 
         // then
 
-        game.discardDeck.size() shouldBe 3 // Zombies, LadZombie, Armored
+        game.discardDeck.cards shouldContainExactly listOf(zombies, ladZombie, armored)
         game.assertEvent(PlayedDynamite(player, listOf(zombies, ladZombie), armored))
 
         player.getZombiesAroundCount() shouldBe 0

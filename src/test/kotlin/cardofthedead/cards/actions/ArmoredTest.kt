@@ -34,8 +34,7 @@ class ArmoredTest : StringSpec({
         game.playDeck.cards.first() shouldBe bitten
         game.assertEvent(PlayedArmored(player, true))
 
-        player.hand.size() shouldBe 0
-        player.hand.hasCard(bitten) shouldBe false
+        player.hand.size() shouldBe 0 // no Bitten
     }
 
     "should do nothing if no Bitten on hand" {

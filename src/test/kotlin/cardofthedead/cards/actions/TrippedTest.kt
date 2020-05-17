@@ -7,7 +7,7 @@ import cardofthedead.TestUtils.getFirstPlayer
 import cardofthedead.TestUtils.wrapPlayersAsSpyKs
 import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedTripped
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.collections.shouldContainAll
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 
@@ -35,8 +35,7 @@ class TrippedTest : StringSpec({
 
         // then
 
-        game.discardDeck.size() shouldBe 2 // Armored, Dynamite
-        game.discardDeck.cards shouldContainAll listOf(armored, dynamite)
+        game.discardDeck.cards shouldContainExactly listOf(dynamite, armored)
         game.assertEvent(PlayedTripped(player1, listOf(dynamite, armored), player2))
 
         player1.getMovementPoints() shouldBe 0
@@ -60,7 +59,7 @@ class TrippedTest : StringSpec({
         // then
 
         game.discardDeck.size() shouldBe 0
-        game.assertEvent(PlayedTripped(player1, listOf(), player2))
+        game.assertEvent(PlayedTripped(player1, emptyList(), player2))
 
         player1.getMovementPoints() shouldBe 0
     }

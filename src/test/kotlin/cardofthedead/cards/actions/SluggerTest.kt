@@ -11,7 +11,7 @@ import cardofthedead.cards.zombies.GrannyZombie
 import cardofthedead.cards.zombies.LadZombie
 import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedSlugger
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 
@@ -37,8 +37,7 @@ class SluggerTest : StringSpec({
 
         // then
 
-        game.discardDeck.size() shouldBe 1 // LadZombie
-        game.discardDeck.cards shouldContain ladZombie
+        game.discardDeck.cards shouldContainExactly listOf(ladZombie)
         game.assertEvent(PlayedSlugger(player1, ladZombie, null, null))
 
         player1.getZombiesAroundCount() shouldBe 2 // Any 2 Zombies
@@ -90,10 +89,8 @@ class SluggerTest : StringSpec({
 
         game.assertEvent(PlayedSlugger(player1, null, dynamite, player2))
 
-        player1.hand.size() shouldBe 1 // Dynamite
-        player1.hand.cards shouldContain dynamite
-        player2.hand.size() shouldBe 1 // Chainsaw
-        player2.hand.cards shouldContain chainsaw
+        player1.hand.cards shouldContainExactly listOf(dynamite)
+        player2.hand.cards shouldContainExactly listOf(chainsaw)
     }
 
     "should not pick any cards from another player if no card on their hand" {

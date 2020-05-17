@@ -11,6 +11,7 @@ import cardofthedead.cards.zombies.Zombies
 import cardofthedead.cards.zombies.`Zombies!!!`
 import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedChainsaw
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 
 class ChainsawTest : StringSpec({
@@ -32,7 +33,7 @@ class ChainsawTest : StringSpec({
 
         // then
 
-        game.discardDeck.size() shouldBe 2 // Any 2 Zombie
+        game.discardDeck.cards shouldContainExactly listOf(ladZombie, brideZombie)
         game.assertEvent(PlayedChainsaw(player, listOf(ladZombie, brideZombie)))
 
         player.getZombiesAroundCount() shouldBe 1 // Any Zombie
@@ -52,7 +53,7 @@ class ChainsawTest : StringSpec({
         // then
 
         game.discardDeck.size() shouldBe 0
-        game.assertEvent(PlayedChainsaw(player, listOf()))
+        game.assertEvent(PlayedChainsaw(player, emptyList()))
 
         player.getZombiesAroundCount() shouldBe 0
     }
@@ -73,7 +74,7 @@ class ChainsawTest : StringSpec({
 
         // then
 
-        game.discardDeck.size() shouldBe 1 // RedneckZombie
+        game.discardDeck.cards shouldContainExactly listOf(redneckZombie)
         game.assertEvent(PlayedChainsaw(player, listOf(redneckZombie)))
 
         player.getZombiesAroundCount() shouldBe 0
@@ -95,7 +96,7 @@ class ChainsawTest : StringSpec({
 
         // then
 
-        game.discardDeck.size() shouldBe 1 // Zombies
+        game.discardDeck.cards shouldContainExactly listOf(zombies)
         game.assertEvent(PlayedChainsaw(player, listOf(zombies)))
 
         player.getZombiesAroundCount() shouldBe 1 // RedneckZombie
@@ -117,7 +118,7 @@ class ChainsawTest : StringSpec({
         // then
 
         game.discardDeck.size() shouldBe 0
-        game.assertEvent(PlayedChainsaw(player, listOf()))
+        game.assertEvent(PlayedChainsaw(player, emptyList()))
 
         player.getZombiesAroundCount() shouldBe 3 // Zombies!!!
     }

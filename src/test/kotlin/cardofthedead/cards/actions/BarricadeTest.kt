@@ -10,6 +10,7 @@ import cardofthedead.cards.zombies.Zombies
 import cardofthedead.cards.zombies.`Zombies!!!`
 import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedBarricade
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 
 class BarricadeTest : StringSpec({
@@ -39,9 +40,7 @@ class BarricadeTest : StringSpec({
         game.playDeck.cards.first() shouldBe bitten
         game.assertEvent(PlayedBarricade(player, 2))
 
-        player.hand.size() shouldBe 2 // Armored, Nukes!
-        listOf(armored, nukes).forEach { player.hand.hasCard(it) shouldBe true }
-        player.hand.hasCard(bitten) shouldBe false
+        player.hand.cards shouldContainExactly listOf(armored, nukes) // and no Bitten
     }
 
     "should discard 1 card and take 2 cards even if those are Zombies" {
@@ -92,13 +91,10 @@ class BarricadeTest : StringSpec({
 
         // then
 
-        game.playDeck.size() shouldBe 1 // Bitten
-        game.playDeck.cards.first() shouldBe bitten
+        game.playDeck.cards shouldContainExactly listOf(bitten)
         game.assertEvent(PlayedBarricade(player, 2))
 
-        player.hand.size() shouldBe 2 // Armored, Nukes!
-        listOf(armored, nukes).forEach { player.hand.hasCard(it) shouldBe true }
-        player.hand.hasCard(bitten) shouldBe false
+        player.hand.cards shouldContainExactly listOf(armored, nukes) // and no Bitten
     }
 
     "should discard 1 card and take no cards if 1 card left in deck" {
@@ -118,8 +114,7 @@ class BarricadeTest : StringSpec({
 
         // then
 
-        game.playDeck.size() shouldBe 1 // Bitten
-        game.playDeck.cards.first() shouldBe nukes
+        game.playDeck.cards shouldContainExactly listOf(nukes)
         game.assertEvent(PlayedBarricade(player, 0))
 
         player.hand.isEmpty() shouldBe true

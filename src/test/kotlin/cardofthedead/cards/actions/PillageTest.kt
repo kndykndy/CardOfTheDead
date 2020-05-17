@@ -7,6 +7,7 @@ import cardofthedead.TestUtils.takeToHand
 import cardofthedead.TestUtils.wrapPlayersAsSpyKs
 import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedPillage
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 
@@ -40,8 +41,9 @@ class PillageTest : StringSpec({
 
         game.assertEvent(PlayedPillage(player1, listOf(chainsaw, bitten)))
 
-        player1.hand.size() shouldBe 5 // Slugger, Hide, Lure, any of Chainsaw/Dynamite, Bitten
-        player2.hand.size() shouldBe 1 // Any 1 of hand
+        player1.hand.size() shouldBe 5 // Slugger, Hide, Lure, plus Chainsaw and Bitten
+        player1.hand.cards shouldContainAll listOf(chainsaw, bitten)
+        player2.hand.size() shouldBe 1 // Dynamite
         player3.hand.size() shouldBe 0
     }
 })
