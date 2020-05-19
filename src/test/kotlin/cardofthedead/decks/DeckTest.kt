@@ -35,7 +35,8 @@ class DeckTest : StringSpec({
         val game = gameWithEmptyDeck()
 
         val armored = Armored(game)
-        val deck = Deck<Card>(game).apply {
+
+        val deck = EmptyDeck<Card>().apply {
             addCard(armored)
             addCard(Barricade(game))
         }
@@ -56,7 +57,7 @@ class DeckTest : StringSpec({
 
         val dynamite = Dynamite(game)
 
-        val deck = Deck<Card>(game)
+        val deck = EmptyDeck<Card>()
 
         // when
 
@@ -76,8 +77,7 @@ class DeckTest : StringSpec({
         val chainsaw = Chainsaw(game)
         val dynamite = Dynamite(game)
 
-        val deck = Deck<Card>(game)
-            .apply { addCards(chainsaw, dynamite) }
+        val deck = EmptyDeck<Card>().apply { addCards(chainsaw, dynamite) }
 
         // when
 
@@ -95,8 +95,8 @@ class DeckTest : StringSpec({
 
         val game = gameWithEmptyDeck()
 
-        val deck1 = Deck<Card>(game)
-        val deck2 = Deck<Card>(game)
+        val deck1 = EmptyDeck<Card>()
+        val deck2 = EmptyDeck<Card>()
 
         // when
 
@@ -113,8 +113,8 @@ class DeckTest : StringSpec({
 
         val game = gameWithEmptyDeck()
 
-        val deck1 = Deck<Card>(game).apply { addCard(Hide(game)) }
-        val deck2 = Deck<Card>(game)
+        val deck1 = EmptyDeck<Card>().apply { addCard(Hide(game)) }
+        val deck2 = EmptyDeck<Card>()
 
         // when
 
@@ -131,8 +131,8 @@ class DeckTest : StringSpec({
 
         val game = gameWithEmptyDeck()
 
-        val deck1 = Deck<Card>(game)
-        val deck2 = Deck<Card>(game).apply { addCard(Lure(game)) }
+        val deck1 = EmptyDeck<Card>()
+        val deck2 = EmptyDeck<Card>().apply { addCard(Lure(game)) }
 
         // when
 
@@ -149,8 +149,8 @@ class DeckTest : StringSpec({
 
         val game = gameWithEmptyDeck()
 
-        val deck1 = Deck<Card>(game).apply { addCard(Hide(game)) }
-        val deck2 = Deck<Card>(game).apply { addCard(Lure(game)) }
+        val deck1 = EmptyDeck<Card>().apply { addCard(Hide(game)) }
+        val deck2 = EmptyDeck<Card>().apply { addCard(Lure(game)) }
 
         // when
 
@@ -168,7 +168,7 @@ class DeckTest : StringSpec({
         val game = gameWithEmptyDeck()
 
         val hide = Hide(game)
-        val deck = Deck<Card>(game).apply { addCard(hide) }
+        val deck = EmptyDeck<Card>().apply { addCard(hide) }
 
         // when
 
@@ -184,7 +184,7 @@ class DeckTest : StringSpec({
 
         val game = gameWithEmptyDeck()
 
-        val deck = Deck<Card>(game).apply { addCard(Hide(game)) }
+        val deck = EmptyDeck<Card>().apply { addCard(Hide(game)) }
 
         // when
 
@@ -200,7 +200,7 @@ class DeckTest : StringSpec({
 
         val game = gameWithEmptyDeck()
 
-        val deck = Deck<Card>(game).apply { addCard(Hide(game)) }
+        val deck = EmptyDeck<Card>().apply { addCard(Hide(game)) }
 
         // when
 
@@ -216,7 +216,7 @@ class DeckTest : StringSpec({
 
         val game = gameWithEmptyDeck()
 
-        val deck = Deck<Card>(game).apply { addCard(Hide(game)) }
+        val deck = EmptyDeck<Card>().apply { addCard(Hide(game)) }
 
         // when
 
@@ -235,8 +235,7 @@ class DeckTest : StringSpec({
         val nukes = `Nukes!`(game)
         val pillage = Pillage(game)
 
-        val deck = Deck<Card>(game)
-            .apply { addCards(nukes, pillage) }
+        val deck = EmptyDeck<Card>().apply { addCards(nukes, pillage) }
 
         // when
 
@@ -255,7 +254,7 @@ class DeckTest : StringSpec({
 
         val game = gameWithEmptyDeck()
 
-        val deck = Deck<Card>(game)
+        val deck = EmptyDeck<Card>()
 
         // when
 
@@ -273,7 +272,7 @@ class DeckTest : StringSpec({
 
         val slugger = Slugger(game)
 
-        val deck = Deck<Card>(game).apply { addCard(slugger) }
+        val deck = EmptyDeck<Card>().apply { addCard(slugger) }
 
         // when
 
@@ -293,7 +292,7 @@ class DeckTest : StringSpec({
         val slugger = Slugger(game)
         val tripped = Tripped(game)
 
-        val deck = Deck<Card>(game).apply { addCard(tripped) }
+        val deck = EmptyDeck<Card>().apply { addCard(tripped) }
 
         // when
 
@@ -312,7 +311,7 @@ class DeckTest : StringSpec({
 
         val slugger = Slugger(game)
 
-        val deck = Deck<Card>(game).apply { addCard(slugger) }
+        val deck = EmptyDeck<Card>().apply { addCard(slugger) }
 
         // when
 
@@ -331,7 +330,7 @@ class DeckTest : StringSpec({
 
         val tripped = Tripped(game)
 
-        val deck = Deck<Card>(game).apply { addCard(tripped) }
+        val deck = EmptyDeck<Card>().apply { addCard(tripped) }
 
         // when
 
@@ -350,8 +349,7 @@ class DeckTest : StringSpec({
 
         val armored = Armored(game)
 
-        val deck = Deck<Card>(game)
-            .apply { addCards(armored, Barricade(game)) }
+        val deck = EmptyDeck<Card>().apply { addCards(armored, Barricade(game)) }
 
         // when
 
@@ -368,7 +366,7 @@ class DeckTest : StringSpec({
 
         val game = gameWithEmptyDeck()
 
-        val deck = Deck<Card>(game)
+        val deck = EmptyDeck<Card>()
 
         // when
 
@@ -384,8 +382,7 @@ class DeckTest : StringSpec({
 
         val game = gameWithEmptyDeck()
 
-        val deck = Deck<Card>(game)
-            .apply { addCards(Armored(game), Barricade(game)) }
+        val deck = EmptyDeck<Card>().apply { addCards(Armored(game), Barricade(game)) }
 
         // when
 
@@ -405,8 +402,7 @@ class DeckTest : StringSpec({
         val nukes = `Nukes!`(game)
         val pillage = Pillage(game)
 
-        val deck = Deck<Card>(game)
-            .apply { addCards(nukes, pillage, GrannyZombie(game)) }
+        val deck = EmptyDeck<Card>().apply { addCards(nukes, pillage, GrannyZombie(game)) }
 
         // when
 
@@ -424,8 +420,7 @@ class DeckTest : StringSpec({
 
         val game = gameWithEmptyDeck()
 
-        val deck = Deck<Card>(game)
-            .apply { addCards(Fog(game), `Zombies!!!`(game)) }
+        val deck = EmptyDeck<Card>().apply { addCards(Fog(game), `Zombies!!!`(game)) }
 
         // when
 
@@ -442,9 +437,8 @@ class DeckTest : StringSpec({
 
         val game = gameWithEmptyDeck()
 
-        val deck =
-            Deck<Action>(game)
-                .apply { addCards(Slugger(game), Dynamite(game), Pillage(game)) }
+        val deck = EmptyDeck<Action>()
+            .apply { addCards(Slugger(game), Dynamite(game), Pillage(game)) }
 
         // when
 
@@ -461,7 +455,7 @@ class DeckTest : StringSpec({
 
         val game = gameWithEmptyDeck()
 
-        val deck = Deck<Action>(game)
+        val deck = EmptyDeck<Action>()
 
         // when
 
@@ -481,9 +475,8 @@ class DeckTest : StringSpec({
         val granny = GrannyZombie(game)
         val lad = LadZombie(game)
 
-        val deck =
-            Deck<Zombie>(game)
-                .apply { addCards(granny, lad, Zombies(game), `Zombies!!!`(game)) }
+        val deck = EmptyDeck<Zombie>()
+            .apply { addCards(granny, lad, Zombies(game), `Zombies!!!`(game)) }
 
         // when
 
@@ -501,7 +494,7 @@ class DeckTest : StringSpec({
 
         val game = gameWithEmptyDeck()
 
-        val deck = Deck<Zombie>(game)
+        val deck = EmptyDeck<Zombie>()
 
         // when
 

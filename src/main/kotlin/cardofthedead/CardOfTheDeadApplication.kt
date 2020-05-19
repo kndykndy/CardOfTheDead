@@ -1,5 +1,6 @@
 package cardofthedead
 
+import cardofthedead.decks.StandardDeck
 import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedArmored
 import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedBarricade
 import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedChainsaw
@@ -10,8 +11,8 @@ import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedNukes
 import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedPillage
 import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedSlugger
 import cardofthedead.game.EventsFacade.Game.ActionCards.PlayedTripped
-import cardofthedead.game.EventsFacade.Game.Amid.ChoseFirstPlayer
-import cardofthedead.game.EventsFacade.Game.Amid.ChoseNextPlayer
+import cardofthedead.game.EventsFacade.Game.Amid.AppointedFirstPlayer
+import cardofthedead.game.EventsFacade.Game.Amid.AppointedNextPlayer
 import cardofthedead.game.EventsFacade.Game.Amid.DecidedNotToPlayFromHand
 import cardofthedead.game.EventsFacade.Game.Amid.DecidedToPlayFromHand
 import cardofthedead.game.EventsFacade.Game.Amid.DecidedToPlayFromHandAsMp
@@ -41,7 +42,8 @@ import cardofthedead.players.getPronoun
 fun main() {
     val game = Game.Builder(
         PlayerDescriptor("Luke"),
-        PlayerDescriptor("Yoda", Level.EASY, Sex.NONBINARY)
+        PlayerDescriptor("Yoda", Level.EASY, Sex.NONBINARY),
+        StandardDeck()
     )
         .withPlayer(PlayerDescriptor("Rei", Level.EASY, Sex.FEMALE))
         .build()
@@ -88,10 +90,10 @@ fun main() {
         }
 
     game.getEventQueue()
-        .ofType(ChoseFirstPlayer::class.java)
+        .ofType(AppointedFirstPlayer::class.java)
         .subscribe { msg -> println("${msg.player.name}'s starting!") }
     game.getEventQueue()
-        .ofType(ChoseNextPlayer::class.java)
+        .ofType(AppointedNextPlayer::class.java)
         .subscribe { msg -> println("${msg.player.name}'s turn now!") }
 
     game.getEventQueue()

@@ -5,7 +5,8 @@ import cardofthedead.cards.Card
 import cardofthedead.cards.PlayCardDecision
 import cardofthedead.cards.Zombie
 import cardofthedead.decks.Deck
-import cardofthedead.decks.DeckType
+import cardofthedead.decks.EmptyDeck
+import cardofthedead.decks.StandardDeck
 import cardofthedead.game.EventsFacade
 import cardofthedead.game.Game
 import cardofthedead.players.EasyPlayer
@@ -21,17 +22,17 @@ object TestUtils {
 
     private fun gameWithDeck(
         playerDescriptor: PlayerDescriptor,
-        deckType: DeckType
+        deck: Deck<Card>
     ) = Game.Builder(
         PlayerDescriptor("Luke Skywalker"),
         PlayerDescriptor("Obi Van Kenobi"),
-        deckType
+        deck
     )
         .withPlayer(playerDescriptor)
         .build()
 
-    fun gameWithEmptyDeck() = gameWithDeck(PlayerDescriptor("C3PO"), DeckType.EMPTY)
-    fun gameWithStandardDeck() = gameWithDeck(PlayerDescriptor("C3PO"), DeckType.STANDARD)
+    fun gameWithEmptyDeck() = gameWithDeck(PlayerDescriptor("C3PO"), EmptyDeck())
+    fun gameWithStandardDeck() = gameWithDeck(PlayerDescriptor("C3PO"), StandardDeck())
 
     fun Game.wrapPlayersAsSpyKs(): Game {
         this.players.replaceAll { spyk(it) }

@@ -26,9 +26,7 @@ import cardofthedead.cards.zombies.`Zombies!!!`
 import cardofthedead.game.Game
 import kotlin.reflect.KClass
 
-class StandardDeck(
-    game: Game
-) : Deck<Card>(game) {
+class StandardDeck : Deck<Card>() {
 
     /**
      * 56 cards in total
@@ -64,13 +62,15 @@ class StandardDeck(
         `Zombies!!!`::class to 1
     )
 
-    init {
+    override fun build(game: Game): Deck<Card> {
         cardTypeToCardAmountInDeck.keys
             .forEach { cardType ->
                 repeat(cardTypeToAmountInDeck(cardType)) {
                     cards.add(cardType.constructors.first().call(game))
                 }
             }
+
+        return this
     }
 
     private fun cardTypeToAmountInDeck(klass: KClass<out Card>): Int =

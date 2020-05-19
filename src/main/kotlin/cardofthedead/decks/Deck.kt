@@ -5,12 +5,12 @@ import cardofthedead.cards.Card
 import cardofthedead.cards.Zombie
 import cardofthedead.game.Game
 
-open class Deck<T : Card>(
-    val game: Game
-) {
+abstract class Deck<T : Card> {
 
     // todo think over removing internal modifier -- check if it's accessed from ui
     internal val cards: MutableList<T> = mutableListOf()
+
+    abstract fun build(game: Game): Deck<T>
 
     // Service funcs
 
@@ -59,9 +59,10 @@ open class Deck<T : Card>(
         "[${cards.joinToString(",") { it.title + it.hashCode() }}]"
 }
 
-class EmptyDeck(game: Game) : Deck<Card>(game)
+class EmptyDeck<T : Card> : Deck<T>() {
 
-enum class DeckType { STANDARD, EMPTY }
+    override fun build(game: Game): Deck<T> = this
+}
 
 fun Deck<Card>.getActions() = this.cards.filterIsInstance<Action>()
 fun Deck<Action>.getMovementPoints(): Int = this.cards.sumBy { it.movementPoints }

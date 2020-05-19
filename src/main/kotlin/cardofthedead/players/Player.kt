@@ -6,6 +6,7 @@ import cardofthedead.cards.PlayCardDecision
 import cardofthedead.cards.Zombie
 import cardofthedead.cards.actions.Bitten
 import cardofthedead.decks.Deck
+import cardofthedead.decks.EmptyDeck
 import cardofthedead.decks.getMovementPoints
 import cardofthedead.decks.getZombiesAroundCount
 import cardofthedead.game.EventsFacade
@@ -22,25 +23,25 @@ abstract class Player(
 
     private val events: PublishSubject<EventsFacade.Event> = PublishSubject.create()
 
-    internal val hand: Deck<Card> = Deck(game)
+    internal val hand: Deck<Card> = EmptyDeck()
 
     /**
      * Temporary cards that may transition to hand eventually.
      * For certain actions.
      */
-    internal val candidatesToHand: Deck<Card> = Deck(game)
+    internal val candidatesToHand: Deck<Card> = EmptyDeck()
 
     /**
      * Zombies that chase a player.
      * For this round.
      */
-    internal val zombiesAround: Deck<Zombie> = Deck(game)
+    internal val zombiesAround: Deck<Zombie> = EmptyDeck()
 
     /**
      * Action cards if gathered enough let player to escape from a round.
      * For this round.
      */
-    internal val escapeCards: Deck<Action> = Deck(game)
+    internal val escapeCards: Deck<Action> = EmptyDeck()
 
     /**
      * Sum of all movement points from all escape cards played today for the player.

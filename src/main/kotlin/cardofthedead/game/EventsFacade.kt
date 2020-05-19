@@ -32,8 +32,8 @@ class EventsFacade {
 
             data class StartedNewRound(val withNumber: Int) : Event
 
-            data class ChoseFirstPlayer(val player: Player) : Event
-            data class ChoseNextPlayer(val player: Player) : Event
+            data class AppointedFirstPlayer(val player: Player) : Event
+            data class AppointedNextPlayer(val player: Player) : Event
 
             data class DrewAction(val player: Player, val drewAction: Action) : Event
             data class DrewZombie(val player: Player, val drewZombie: Zombie) : Event

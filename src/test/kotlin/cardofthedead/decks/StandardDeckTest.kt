@@ -16,7 +16,7 @@ class StandardDeckTest : StringSpec({
 
         // when
 
-        val deck = StandardDeck(game)
+        val deck = StandardDeck().build(game)
 
         // then
 

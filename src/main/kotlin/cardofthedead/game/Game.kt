@@ -6,11 +6,9 @@ import cardofthedead.cards.Event
 import cardofthedead.cards.WayToPlayCard
 import cardofthedead.cards.Zombie
 import cardofthedead.decks.Deck
-import cardofthedead.decks.DeckType
 import cardofthedead.decks.EmptyDeck
-import cardofthedead.decks.StandardDeck
-import cardofthedead.game.EventsFacade.Game.Amid.ChoseFirstPlayer
-import cardofthedead.game.EventsFacade.Game.Amid.ChoseNextPlayer
+import cardofthedead.game.EventsFacade.Game.Amid.AppointedFirstPlayer
+import cardofthedead.game.EventsFacade.Game.Amid.AppointedNextPlayer
 import cardofthedead.game.EventsFacade.Game.Amid.DecidedNotToPlayFromHand
 import cardofthedead.game.EventsFacade.Game.Amid.DecidedToPlayFromHand
 import cardofthedead.game.EventsFacade.Game.Amid.DecidedToPlayFromHandAsMp
@@ -60,8 +58,8 @@ class Game private constructor(builder: Builder) {
 
     private var initialPlayersCount: Int = 0
 
-    internal val playDeck: Deck<Card> = EmptyDeck(this)
-    internal val discardDeck: Deck<Card> = EmptyDeck(this)
+    internal val playDeck: Deck<Card> = EmptyDeck()
+    internal val discardDeck: Deck<Card> = EmptyDeck()
 
     /**
      * Because of Horde cards per round taken by each turn will be two.
@@ -91,9 +89,8 @@ class Game private constructor(builder: Builder) {
             .forEach { players.add(it) }
         initialPlayersCount = players.size
 
-        if (DeckType.STANDARD == builder.deckType) {
-            playDeck.merge(StandardDeck(this))
-        }
+        builder.deck.build(this)
+        playDeck.merge(builder.deck)
 
         eventQueue = Observable.merge(players.map { it.getEvents() }.plus(events))
         eventQueueTestObserver = eventQueue.test()
@@ -132,13 +129,13 @@ class Game private constructor(builder: Builder) {
         prepareForRound()
 
         var currentPlayer = winners.last().random()
-        publishEvent(ChoseFirstPlayer(currentPlayer))
+        publishEvent(AppointedFirstPlayer(currentPlayer))
 
         while (isRoundRunning()) {
             playTurn(currentPlayer)
 
             currentPlayer = getNextPlayer(currentPlayer)
-            publishEvent(ChoseNextPlayer(currentPlayer))
+            publishEvent(AppointedNextPlayer(currentPlayer))
         }
 
         announceRoundWinners()
@@ -360,7 +357,7 @@ class Game private constructor(builder: Builder) {
     data class Builder(
         val player1: PlayerDescriptor,
         val player2: PlayerDescriptor,
-        val deckType: DeckType = DeckType.STANDARD
+        val deck: Deck<Card>
     ) {
 
         val playerDescriptors: MutableList<PlayerDescriptor> = mutableListOf()
