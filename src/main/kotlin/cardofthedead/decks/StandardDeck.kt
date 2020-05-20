@@ -23,7 +23,6 @@ import cardofthedead.cards.zombies.LadZombie
 import cardofthedead.cards.zombies.RedneckZombie
 import cardofthedead.cards.zombies.Zombies
 import cardofthedead.cards.zombies.`Zombies!!!`
-import cardofthedead.game.Game
 import kotlin.reflect.KClass
 
 class StandardDeck : Deck<Card>() {
@@ -62,17 +61,6 @@ class StandardDeck : Deck<Card>() {
         `Zombies!!!`::class to 1
     )
 
-    override fun build(game: Game): Deck<Card> {
-        cardTypeToCardAmountInDeck.keys
-            .forEach { cardType ->
-                repeat(cardTypeToAmountInDeck(cardType)) {
-                    cards.add(cardType.constructors.first().call(game))
-                }
-            }
-
-        return this
-    }
-
-    private fun cardTypeToAmountInDeck(klass: KClass<out Card>): Int =
-        cardTypeToCardAmountInDeck.getValue(klass)
+    override fun getCardTypeToCardAmountInDeck(): Map<KClass<out Card>, Int> =
+        cardTypeToCardAmountInDeck
 }

@@ -4,13 +4,27 @@ import cardofthedead.cards.Action
 import cardofthedead.cards.Card
 import cardofthedead.cards.Zombie
 import cardofthedead.game.Game
+import kotlin.reflect.KClass
 
 abstract class Deck<T : Card> {
 
     // todo think over removing internal modifier -- check if it's accessed from ui
     internal val cards: MutableList<T> = mutableListOf()
 
-    abstract fun build(game: Game): Deck<T>
+    fun build(game: Game): Deck<T> {
+        val cardTypeToCardAmountInDeck: Map<KClass<out T>, Int> = getCardTypeToCardAmountInDeck()
+
+        cardTypeToCardAmountInDeck.keys
+            .forEach { cardType ->
+                repeat(cardTypeToCardAmountInDeck.getValue(cardType)) {
+                    cards.add(cardType.constructors.first().call(game))
+                }
+            }
+
+        return this
+    }
+
+    abstract fun getCardTypeToCardAmountInDeck(): Map<KClass<out T>, Int>
 
     // Service funcs
 
@@ -50,8 +64,7 @@ abstract class Deck<T : Card> {
     fun pickTopCard(): T? = if (isNotEmpty()) pickCard(cards.last()) else null
 
     fun pickCardOfClass(cKlass: Class<out T>): T? =
-        cards
-            .filterIsInstance(cKlass)
+        cards.filterIsInstance(cKlass)
             .firstOrNull()
             ?.let(::pickCard)
 
@@ -61,7 +74,7 @@ abstract class Deck<T : Card> {
 
 class EmptyDeck<T : Card> : Deck<T>() {
 
-    override fun build(game: Game): Deck<T> = this
+    override fun getCardTypeToCardAmountInDeck(): Map<KClass<out T>, Int> = emptyMap()
 }
 
 fun Deck<Card>.getActions() = this.cards.filterIsInstance<Action>()
