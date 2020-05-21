@@ -123,6 +123,8 @@ class Game private constructor(builder: Builder) {
         }
 
         announceGameWinners()
+
+        events.onComplete()
     }
 
     private fun playRound() {

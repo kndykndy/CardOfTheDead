@@ -93,8 +93,6 @@ class DeckTest : StringSpec({
     "should merge two empty decks" {
         // given
 
-        val game = gameWithEmptyDeck()
-
         val deck1 = EmptyDeck<Card>()
         val deck2 = EmptyDeck<Card>()
 
@@ -252,8 +250,6 @@ class DeckTest : StringSpec({
     "should not pick card from empty deck" {
         // given
 
-        val game = gameWithEmptyDeck()
-
         val deck = EmptyDeck<Card>()
 
         // when
@@ -364,8 +360,6 @@ class DeckTest : StringSpec({
     "should not pick card of class from empty deck" {
         // given
 
-        val game = gameWithEmptyDeck()
-
         val deck = EmptyDeck<Card>()
 
         // when
@@ -453,8 +447,6 @@ class DeckTest : StringSpec({
     "should get 0 movement points if deck is empty" {
         // given
 
-        val game = gameWithEmptyDeck()
-
         val deck = EmptyDeck<Action>()
 
         // when
@@ -491,8 +483,6 @@ class DeckTest : StringSpec({
 
     "should get 0 single zombies if no such in deck" {
         // given
-
-        val game = gameWithEmptyDeck()
 
         val deck = EmptyDeck<Zombie>()
 

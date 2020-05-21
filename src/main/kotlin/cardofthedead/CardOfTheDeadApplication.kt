@@ -102,7 +102,7 @@ fun main() {
     game.getEventQueue()
         .ofType(DrewZombie::class.java)
         .subscribe { msg ->
-            print("${msg.player.name} is chased by ${msg.drewZombie.title}. ")
+            print("${msg.player.name} draws ${msg.drewZombie.title}. ")
             println(
                 "${msg.player.getPronoun().capitalize()}'s chased by " +
                         "${msg.player.getZombiesAroundCount()} zombies now."
@@ -110,7 +110,7 @@ fun main() {
         }
     game.getEventQueue()
         .ofType(DrewEvent::class.java)
-        .subscribe { /*msg -> println("${msg.player.name} draws ${msg.drewEvent.title}.")*/ }
+        .subscribe { msg -> print("${msg.player.name} draws Event. ") }
     game.getEventQueue()
         .ofType(DrewNoCard::class.java)
         .subscribe { msg ->
@@ -321,12 +321,11 @@ fun main() {
             print("${msg.player.name} got off on Mobs. ")
             for (entry in msg.playersWereMobbedMap.entries) {
                 if (!entry.value) {
-                    print("${entry.key.name} had Slugger and Mobs went for the next player. ")
+                    println("${entry.key.name} had Slugger and Mobs went for the next player.")
                 } else {
-                    print("${entry.key.name} had no Slugger and was mobbed. ")
+                    println("${entry.key.name} had no Slugger and was mobbed.")
                     break
                 }
-                println()
             }
         }
     game.getEventQueue()
