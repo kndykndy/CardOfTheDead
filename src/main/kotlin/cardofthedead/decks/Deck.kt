@@ -8,7 +8,6 @@ import kotlin.reflect.KClass
 
 abstract class Deck<T : Card> {
 
-    // todo think over removing internal modifier -- check if it's accessed from ui
     internal val cards: MutableList<T> = mutableListOf()
 
     fun build(game: Game): Deck<T> {

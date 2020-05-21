@@ -61,14 +61,53 @@ object TestUtils {
         eventKlass: KClass<out T>
     ): T {
 
-        for (value in this.values()) {
-            if (eventKlass.isInstance(value)) {
-                @Suppress("UNCHECKED_CAST")
-                return value as T
-            }
-        }
+        val first = this.values().firstOrNull { eventKlass.isInstance(it) }
+        @Suppress("UNCHECKED_CAST")
+        if (first != null)
+            return first as T
+        else
+            throw Failures.failure("Event with klass ${eventKlass.simpleName} has not occurred.")
+    }
 
-        throw Failures.failure("Event with klass ${eventKlass.simpleName} has not occurred.")
+    fun <T : EventsFacade.Event> TestObserver<EventsFacade.Event>.getValues(
+        eventKlass: KClass<out T>, count: Int, atLeast: Boolean = false
+    ): List<T> {
+
+        val list = this.values().filter { eventKlass.isInstance(it) }
+        if (!list.isNullOrEmpty()) {
+            @Suppress("UNCHECKED_CAST")
+            if (list.size == count || (atLeast && list.size >= count))
+                return list as List<T>
+            else {
+                val infix = if (atLeast) "at least " else ""
+                throw Failures.failure(
+                    "Expected $infix$count events of klass ${eventKlass.simpleName}, " +
+                            "got ${list.size}."
+                )
+            }
+        } else
+            throw Failures.failure("Events with klass ${eventKlass.simpleName} have not occurred.")
+    }
+
+    fun <T : EventsFacade.Event> TestObserver<EventsFacade.Event>.getAnyOfValues(
+        eventKlasses: List<KClass<out T>>, atLeastCount: Int
+    ): List<T> {
+
+        val list = this.values().filter { value ->
+            eventKlasses.mapNotNull { if (it.isInstance(value)) true else null }.isNotEmpty()
+        }
+        if (!list.isNullOrEmpty()) {
+            @Suppress("UNCHECKED_CAST")
+            if (list.size >= atLeastCount)
+                return list as List<T>
+            else {
+                throw Failures.failure(
+                    "Expected at least $atLeastCount events of ${eventKlasses.size} klasses, " +
+                            "got ${list.size}."
+                )
+            }
+        } else
+            throw Failures.failure("Events with given klasses have not occurred.")
     }
 
     // Players

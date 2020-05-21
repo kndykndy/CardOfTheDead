@@ -113,9 +113,7 @@ class Game private constructor(builder: Builder) {
     fun play() {
         val startingPlayer = lastPlayerWentToShoppingMall()
 
-        publishEvent(
-            StartedNewGame(playDeck.size(), players.size, players, startingPlayer)
-        )
+        publishEvent(StartedNewGame(playDeck.size(), players.size, players, startingPlayer))
 
         repeat(3) { i ->
             publishEvent(StartedNewRound(i + 1))
