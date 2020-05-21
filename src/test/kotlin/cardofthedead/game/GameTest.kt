@@ -49,7 +49,7 @@ class GameTest : StringSpec({
         val observer = game.getEventQueueTestObserver()
         observer.assertNoErrors()
         observer.assertComplete()
-        observer.assertValueCount(1)
+        observer.assertValueCount(21)
 
 
     }

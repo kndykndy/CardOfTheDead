@@ -94,8 +94,6 @@ class Game private constructor(builder: Builder) {
 
         eventQueue = Observable.merge(players.map { it.getEvents() }.plus(events))
         eventQueueTestObserver = eventQueue.test()
-
-        winners.add(listOf(lastPlayerWentToShoppingMall()))
     }
 
     fun getEventQueue(): Observable<EventsFacade.Event> = eventQueue
@@ -113,13 +111,15 @@ class Game private constructor(builder: Builder) {
         playersToMovementPointsToEscape.getValue(initialPlayersCount)
 
     fun play() {
+        val startingPlayer = lastPlayerWentToShoppingMall()
+
         publishEvent(
-            StartedNewGame(playDeck.size(), players.size, players, winners.first().first())
+            StartedNewGame(playDeck.size(), players.size, players, startingPlayer)
         )
 
         repeat(3) { i ->
             publishEvent(StartedNewRound(i + 1))
-            playRound()
+            playRound(if (i == 0) startingPlayer else winners.last().random())
         }
 
         announceGameWinners()
@@ -127,10 +127,10 @@ class Game private constructor(builder: Builder) {
         events.onComplete()
     }
 
-    private fun playRound() {
+    private fun playRound(startingPlayer: Player) {
         prepareForRound()
 
-        var currentPlayer = winners.last().random()
+        var currentPlayer = startingPlayer
         publishEvent(AppointedFirstPlayer(currentPlayer))
 
         while (isRoundRunning()) {
