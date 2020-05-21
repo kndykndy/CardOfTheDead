@@ -1,6 +1,6 @@
 package cardofthedead.game
 
-import cardofthedead.TestUtils.assertEvent
+import cardofthedead.TestUtils.getValue
 import cardofthedead.TestUtils.wrapPlayersAsSpyKs
 import cardofthedead.cards.Card
 import cardofthedead.cards.actions.Chainsaw
@@ -8,8 +8,11 @@ import cardofthedead.cards.actions.Hide
 import cardofthedead.cards.actions.Lure
 import cardofthedead.cards.actions.Slugger
 import cardofthedead.decks.Deck
+import cardofthedead.game.EventsFacade.Game.Amid.DrewZombie
+import cardofthedead.game.EventsFacade.Game.Around.StartedNewGame
 import cardofthedead.players.PlayerDescriptor
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.ints.shouldBeExactly
 import kotlin.reflect.KClass
 
 class GameTest : StringSpec({
@@ -49,8 +52,14 @@ class GameTest : StringSpec({
         val observer = game.getEventQueueTestObserver()
         observer.assertNoErrors()
         observer.assertComplete()
-        observer.assertValueCount(21)
 
+        observer.getValue(StartedNewGame::class).also {
+            it.cardsInDeck shouldBeExactly 4
+            it.playersCnt shouldBeExactly 2
+        }
+
+        observer.getValue(DrewZombie::class).also {
+        }
 
     }
 })

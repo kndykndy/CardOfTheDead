@@ -124,6 +124,7 @@ class Game private constructor(builder: Builder) {
 
         announceGameWinners()
 
+        players.map { it.getEvents() as PublishSubject }.forEach { it.onComplete() }
         events.onComplete()
     }
 

@@ -14,7 +14,10 @@ import cardofthedead.players.HardPlayer
 import cardofthedead.players.Player
 import cardofthedead.players.PlayerDescriptor
 import cardofthedead.players.Sex
+import io.kotest.assertions.Failures
 import io.mockk.spyk
+import io.reactivex.rxjava3.observers.TestObserver
+import kotlin.reflect.KClass
 
 object TestUtils {
 
@@ -52,6 +55,20 @@ object TestUtils {
             println("actual:   ${observer.values().getOrNull(0)}")
             throw a
         }
+    }
+
+    fun <T : EventsFacade.Event> TestObserver<EventsFacade.Event>.getValue(
+        eventKlass: KClass<out T>
+    ): T {
+
+        for (value in this.values()) {
+            if (eventKlass.isInstance(value)) {
+                @Suppress("UNCHECKED_CAST")
+                return value as T
+            }
+        }
+
+        throw Failures.failure("Event with klass ${eventKlass.simpleName} has not occurred.")
     }
 
     // Players
