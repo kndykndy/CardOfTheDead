@@ -56,15 +56,20 @@ class Game private constructor(builder: Builder) {
     private val deadPlayers: MutableList<Player> = mutableListOf()
     private val winners: MutableList<List<Player>> = mutableListOf()
 
-    private var initialPlayersCount: Int = 0
+    private var initialPlayersCount = 0
 
     internal val playDeck: Deck<Card> = EmptyDeck()
     internal val discardDeck: Deck<Card> = EmptyDeck()
 
     /**
-     * Because of Horde cards per round taken by each turn will be two.
+     * Horde changes cards taken per round on each turn to two.
      */
-    internal var cardsToPlay: Int = 1
+    internal var cardsToPlay = 1
+
+    /**
+     * Started with two because starting turn goes without a number.
+     */
+    private var turnNumber = 2
 
     private val playersToZombiesToBeSurrounded = mapOf(2 to 5, 3 to 4, 4 to 4, 5 to 3)
     private val playersToZombiesToBeEaten = mapOf(2 to 7, 3 to 6, 4 to 6, 5 to 5)
@@ -132,11 +137,12 @@ class Game private constructor(builder: Builder) {
         var currentPlayer = startingPlayer
         publishEvent(AppointedFirstPlayer(currentPlayer))
 
+
         while (isRoundRunning()) {
             playTurn(currentPlayer)
 
             currentPlayer = getNextPlayer(currentPlayer)
-            publishEvent(AppointedNextPlayer(currentPlayer))
+            publishEvent(AppointedNextPlayer(currentPlayer, turnNumber++))
         }
 
         announceRoundWinners()

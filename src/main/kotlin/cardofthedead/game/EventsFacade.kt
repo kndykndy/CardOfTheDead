@@ -33,7 +33,7 @@ class EventsFacade {
             data class StartedNewRound(val withNumber: Int) : Event
 
             data class AppointedFirstPlayer(val player: Player) : Event
-            data class AppointedNextPlayer(val player: Player) : Event
+            data class AppointedNextPlayer(val player: Player, val turnNumber: Int) : Event
 
             data class DrewAction(val player: Player, val drewAction: Action) : Event
             data class DrewZombie(val player: Player, val drewZombie: Zombie) : Event
@@ -52,10 +52,12 @@ class EventsFacade {
                 val winner: Player,
                 val players: List<Player>
             ) : Event
+
             data class WonRoundCauseEscaped(
                 val winner: Player,
                 val players: List<Player>
             ) : Event
+
             data class WonRoundCauseDeckOver(
                 val winners: List<Player>,
                 val players: List<Player>

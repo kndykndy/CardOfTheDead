@@ -91,10 +91,10 @@ fun main() {
 
     game.getEventQueue()
         .ofType(AppointedFirstPlayer::class.java)
-        .subscribe { msg -> println("${msg.player.name}'s starting!") }
+        .subscribe { msg -> println("${msg.player.name}'s starting (#1)!") }
     game.getEventQueue()
         .ofType(AppointedNextPlayer::class.java)
-        .subscribe { msg -> println("${msg.player.name}'s turn now!") }
+        .subscribe { msg -> println("${msg.player.name}'s turn (#${msg.turnNumber})!") }
 
     game.getEventQueue()
         .ofType(DrewAction::class.java)
