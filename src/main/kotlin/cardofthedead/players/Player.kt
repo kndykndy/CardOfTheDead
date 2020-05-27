@@ -208,7 +208,7 @@ data class PlayerDescriptor(
     val sex: Sex = Sex.MALE
 )
 
-enum class Level { EASY, HARD }
+enum class Level { EASY, HARD, HUMAN }
 enum class Sex { MALE, FEMALE, NONBINARY }
 
 fun Player.getPronoun(): String =

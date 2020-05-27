@@ -33,19 +33,22 @@ import cardofthedead.game.EventsFacade.Game.EventCards.PlayedHorde
 import cardofthedead.game.EventsFacade.Game.EventCards.PlayedMobs
 import cardofthedead.game.EventsFacade.Game.EventCards.PlayedRingtone
 import cardofthedead.game.Game
-import cardofthedead.players.Level
+import cardofthedead.players.Level.EASY
 import cardofthedead.players.Player
 import cardofthedead.players.PlayerDescriptor
-import cardofthedead.players.Sex
+import cardofthedead.players.Sex.FEMALE
+import cardofthedead.players.Sex.MALE
+import cardofthedead.players.Sex.NONBINARY
 import cardofthedead.players.getPronoun
 
 fun main() {
     val game = Game.Builder(
         PlayerDescriptor("Luke"),
-        PlayerDescriptor("Yoda", Level.EASY, Sex.NONBINARY),
+        PlayerDescriptor("Yoda", EASY, NONBINARY),
         StandardDeck()
     )
-        .withPlayer(PlayerDescriptor("Rei", Level.EASY, Sex.FEMALE))
+        .withPlayer(PlayerDescriptor("Rei", EASY, FEMALE))
+        .withHumanPlayer("Gene", MALE)
         .build()
 
     game.getEventQueue()

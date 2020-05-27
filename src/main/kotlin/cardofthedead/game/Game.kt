@@ -29,6 +29,7 @@ import cardofthedead.players.HardPlayer
 import cardofthedead.players.Level
 import cardofthedead.players.Player
 import cardofthedead.players.PlayerDescriptor
+import cardofthedead.players.Sex
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.observers.TestObserver
 import io.reactivex.rxjava3.subjects.PublishSubject
@@ -397,16 +398,27 @@ class Game private constructor(builder: Builder) {
             withPlayer(player2)
         }
 
-        fun withPlayer(player: PlayerDescriptor) {
+        fun withPlayer(player: PlayerDescriptor) = apply {
             playerDescriptors.add(player)
 
-            if (playerDescriptors
-                    .map { it.name }
-                    .groupingBy { it }
-                    .eachCount()
-                    .filter { it.value > 1 }
-                    .isNotEmpty()
-            ) throw IllegalStateException("Player names must be unique (${player.name})!")
+            if (!arePlayersWithUniqueNames())
+                throw IllegalStateException("Player name must be unique (${player.name})!")
+        }
+
+        fun withHumanPlayer(name: String, sex: Sex = Sex.NONBINARY) = apply {
+            playerDescriptors.add(PlayerDescriptor(name, Level.HUMAN, sex))
+
+            if (!arePlayersWithUniqueNames())
+                throw IllegalStateException("Player name must be unique (${name})!")
+        }
+
+        private fun arePlayersWithUniqueNames(): Boolean {
+            return playerDescriptors
+                .map { it.name }
+                .groupingBy { it }
+                .eachCount()
+                .filter { it.value > 1 }
+                .isEmpty()
         }
 
         fun build() = Game(this)
