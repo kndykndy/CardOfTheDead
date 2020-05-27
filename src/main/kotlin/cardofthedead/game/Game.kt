@@ -32,7 +32,9 @@ import cardofthedead.players.PlayerDescriptor
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.observers.TestObserver
 import io.reactivex.rxjava3.subjects.PublishSubject
+import java.util.concurrent.CompletableFuture
 import kotlin.random.Random
+
 
 class Game private constructor(builder: Builder) {
 
@@ -76,14 +78,6 @@ class Game private constructor(builder: Builder) {
     private val playersToMovementPointsToEscape = mapOf(2 to 7, 3 to 6, 4 to 6, 5 to 5)
 
     init {
-        if (builder.playerDescriptors
-                .map { player -> player.name }
-                .groupingBy { it }
-                .eachCount()
-                .filter { it.value > 1 }
-                .isNotEmpty()
-        ) throw IllegalStateException("Names must be unique!")
-
         builder.playerDescriptors
             .map { player ->
                 when (player.level) {
@@ -284,15 +278,44 @@ class Game private constructor(builder: Builder) {
         playDeck.shuffle() // before initial dealing
 
         // initial dealing
-        players.forEach { player ->
-            player.pickCandidateCards(10)
-            player.chooseSinglePointCardsFromCandidates(3)
-        }
+//        players.forEach { player ->
+//            player.pickCandidateCards(10)
+//            player.chooseSinglePointCardsFromCandidates(3)
+//        }
+        val map =
+            players.map { player ->
+                player.pickCandidateCards(10)
+                CompletableFuture.runAsync { player.chooseSinglePointCardsFromCandidates(3) }
+            }.toTypedArray()
+        CompletableFuture.allOf(*map).get()
+        /*
+            start completable future with timeout for each player
+            humanplayer sets command processor
+            humanplayer generates options via ComPr
+            humanplayer sends InputEvent with options
+            ui renders input and passes input to game input observable
+            humanplayer gets input into current comPr
+         */
         players.forEach { it.discardCandidatesCards() }
         playDeck.merge(discardDeck)
 
         playDeck.shuffle()
     }
+
+//    private fun p() {
+//
+//        try {
+//            events.timeout(100, TimeUnit.MILLISECONDS).blockingFirst()
+//            val run1 = CompletableFuture.runAsync(job1::execute)
+//            val run2 = CompletableFuture.runAsync(job2::execute)
+//            val p: Array<CompletableFuture<Void>> = arrayOf(run1, run2)
+//            CompletableFuture.allOf(*p).get()
+//        } catch (e: InterruptedException) {
+//            throw RuntimeException("Jobs execution failed", e)
+//        } catch (e: ExecutionException) {
+//            throw RuntimeException("Jobs execution failed", e)
+//        }
+//    }
 
     internal fun getPrevPlayer(beforePlayer: Player): Player {
         if (players.isEmpty() || (players.size == 1 && players.first() == beforePlayer))
@@ -374,7 +397,17 @@ class Game private constructor(builder: Builder) {
             withPlayer(player2)
         }
 
-        fun withPlayer(player: PlayerDescriptor) = apply { playerDescriptors.add(player) }
+        fun withPlayer(player: PlayerDescriptor) {
+            playerDescriptors.add(player)
+
+            if (playerDescriptors
+                    .map { it.name }
+                    .groupingBy { it }
+                    .eachCount()
+                    .filter { it.value > 1 }
+                    .isNotEmpty()
+            ) throw IllegalStateException("Player names must be unique (${player.name})!")
+        }
 
         fun build() = Game(this)
     }
