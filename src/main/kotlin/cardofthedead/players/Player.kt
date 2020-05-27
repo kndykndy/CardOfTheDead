@@ -11,6 +11,10 @@ import cardofthedead.decks.getMovementPoints
 import cardofthedead.decks.getZombiesAroundCount
 import cardofthedead.game.EventsFacade
 import cardofthedead.game.Game
+import cardofthedead.players.Level.EASY
+import cardofthedead.players.Level.HARD
+import cardofthedead.players.Sex.FEMALE
+import cardofthedead.players.Sex.MALE
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
 import kotlin.random.Random
@@ -204,16 +208,23 @@ abstract class Player(
 
 data class PlayerDescriptor(
     val name: String,
-    val level: Level = Level.EASY,
-    val sex: Sex = Sex.MALE
+    val level: Level = EASY,
+    val sex: Sex = MALE
 )
 
 enum class Level { EASY, HARD, HUMAN }
 enum class Sex { MALE, FEMALE, NONBINARY }
 
+fun PlayerDescriptor.toPlayer(game: Game): Player =
+    when (this.level) {
+        EASY -> EasyPlayer(game, this.name, this.sex)
+        HARD -> HardPlayer(game, this.name, this.sex)
+        else -> HumanPlayer(game, this.name, this.sex)
+    }
+
 fun Player.getPronoun(): String =
     when (this.sex) {
-        Sex.MALE -> "he"
-        Sex.FEMALE -> "she"
+        MALE -> "he"
+        FEMALE -> "she"
         else -> "they"
     }

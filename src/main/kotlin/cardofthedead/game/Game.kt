@@ -24,12 +24,11 @@ import cardofthedead.game.EventsFacade.Game.Amid.WonRoundCauseEscaped
 import cardofthedead.game.EventsFacade.Game.Amid.WonRoundCauseOneAlive
 import cardofthedead.game.EventsFacade.Game.Around.AnnouncedGameWinners
 import cardofthedead.game.EventsFacade.Game.Around.StartedNewGame
-import cardofthedead.players.EasyPlayer
-import cardofthedead.players.HardPlayer
 import cardofthedead.players.Level
 import cardofthedead.players.Player
 import cardofthedead.players.PlayerDescriptor
 import cardofthedead.players.Sex
+import cardofthedead.players.toPlayer
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.observers.TestObserver
 import io.reactivex.rxjava3.subjects.PublishSubject
@@ -80,12 +79,7 @@ class Game private constructor(builder: Builder) {
 
     init {
         builder.playerDescriptors
-            .map { player ->
-                when (player.level) {
-                    Level.HARD -> HardPlayer(this, player.name, player.sex)
-                    else -> EasyPlayer(this, player.name, player.sex)
-                }
-            }
+            .map { it.toPlayer(this) }
             .forEach { players.add(it) }
         initialPlayersCount = players.size
 
