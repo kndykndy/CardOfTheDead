@@ -32,11 +32,12 @@ import cardofthedead.players.toPlayer
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.observers.TestObserver
 import io.reactivex.rxjava3.subjects.PublishSubject
-import java.util.concurrent.CompletableFuture
 import kotlin.random.Random
 
 
 class Game private constructor(builder: Builder) {
+
+    private var isRunning: Boolean = true
 
     /**
      * Events superqueue, combines all the subqueues from players and game queue.
@@ -105,6 +106,9 @@ class Game private constructor(builder: Builder) {
         playersToMovementPointsToEscape.getValue(initialPlayersCount)
 
     fun play() {
+        Thread(() -> {
+
+        }).run();
         val startingPlayer = lastPlayerWentToShoppingMall()
 
         publishEvent(StartedNewGame(playDeck.size(), players.size, players, startingPlayer))
@@ -118,14 +122,17 @@ class Game private constructor(builder: Builder) {
 
         players.map { it.getEvents() as PublishSubject }.forEach { it.onComplete() }
         events.onComplete()
+
+        isRunning = false
     }
+
+    fun isRunning(): Boolean = isRunning
 
     private fun playRound(startingPlayer: Player) {
         prepareForRound()
 
         var currentPlayer = startingPlayer
         publishEvent(AppointedFirstPlayer(currentPlayer))
-
 
         while (isRoundRunning()) {
             playTurn(currentPlayer)
@@ -273,16 +280,16 @@ class Game private constructor(builder: Builder) {
         playDeck.shuffle() // before initial dealing
 
         // initial dealing
-//        players.forEach { player ->
-//            player.pickCandidateCards(10)
-//            player.chooseSinglePointCardsFromCandidates(3)
-//        }
-        val map =
-            players.map { player ->
-                player.pickCandidateCards(10)
-                CompletableFuture.runAsync { player.chooseSinglePointCardsFromCandidates(3) }
-            }.toTypedArray()
-        CompletableFuture.allOf(*map).get()
+        players.forEach { player ->
+            player.pickCandidateCards(10)
+            player.chooseSinglePointCardsFromCandidates(3)
+        }
+//        val map =
+//            players.map { player ->
+//                player.pickCandidateCards(10)
+//                CompletableFuture.runAsync { player.chooseSinglePointCardsFromCandidates(3) }
+//            }.toTypedArray()
+//        CompletableFuture.allOf(*map).get()
         /*
             start completable future with timeout for each player
             humanplayer sets command processor
@@ -296,21 +303,6 @@ class Game private constructor(builder: Builder) {
 
         playDeck.shuffle()
     }
-
-//    private fun p() {
-//
-//        try {
-//            events.timeout(100, TimeUnit.MILLISECONDS).blockingFirst()
-//            val run1 = CompletableFuture.runAsync(job1::execute)
-//            val run2 = CompletableFuture.runAsync(job2::execute)
-//            val p: Array<CompletableFuture<Void>> = arrayOf(run1, run2)
-//            CompletableFuture.allOf(*p).get()
-//        } catch (e: InterruptedException) {
-//            throw RuntimeException("Jobs execution failed", e)
-//        } catch (e: ExecutionException) {
-//            throw RuntimeException("Jobs execution failed", e)
-//        }
-//    }
 
     internal fun getPrevPlayer(beforePlayer: Player): Player {
         if (players.isEmpty() || (players.size == 1 && players.first() == beforePlayer))

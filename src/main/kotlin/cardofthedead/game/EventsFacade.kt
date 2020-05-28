@@ -3,6 +3,7 @@ package cardofthedead.game
 import cardofthedead.cards.Action
 import cardofthedead.cards.Card
 import cardofthedead.cards.Zombie
+import cardofthedead.players.HumanPlayer
 import cardofthedead.players.Player
 
 class EventsFacade {
@@ -24,6 +25,13 @@ class EventsFacade {
                 val players: List<Player>,
                 val winners: List<Player>
             ) : Event
+        }
+
+        class Input {
+
+            data class InputRequested(val player: HumanPlayer) : Event
+
+            data class InputProvided(val str: String)
         }
 
         class Amid {

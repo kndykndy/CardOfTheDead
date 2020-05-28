@@ -32,6 +32,8 @@ import cardofthedead.game.EventsFacade.Game.EventCards.PlayedFog
 import cardofthedead.game.EventsFacade.Game.EventCards.PlayedHorde
 import cardofthedead.game.EventsFacade.Game.EventCards.PlayedMobs
 import cardofthedead.game.EventsFacade.Game.EventCards.PlayedRingtone
+import cardofthedead.game.EventsFacade.Game.Input.InputProvided
+import cardofthedead.game.EventsFacade.Game.Input.InputRequested
 import cardofthedead.game.Game
 import cardofthedead.players.Level.EASY
 import cardofthedead.players.Player
@@ -98,6 +100,16 @@ fun main() {
     game.getEventQueue()
         .ofType(AppointedNextPlayer::class.java)
         .subscribe { msg -> println("${msg.player.name}'s turn (#${msg.turnNumber})!") }
+
+    game.getEventQueue()
+        .ofType(InputRequested::class.java)
+        .subscribe { msg ->
+            repeat(3) {
+                val readLine = readLine()
+//                println("Enter val #$it")
+                msg.player.publishInputEvent(InputProvided("$readLine #$it"))
+            }
+        }
 
     game.getEventQueue()
         .ofType(DrewAction::class.java)
@@ -351,6 +363,9 @@ fun main() {
         }
 
     game.play()
+//    while(game.isRunning()){
+//        Thread.sleep(100L)
+//    }
 }
 
 fun printScores(players: List<Player>) {

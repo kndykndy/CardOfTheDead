@@ -3,7 +3,12 @@ package cardofthedead.players
 import cardofthedead.cards.Action
 import cardofthedead.cards.Card
 import cardofthedead.cards.PlayCardDecision
+import cardofthedead.game.EventsFacade.Game.Input.InputProvided
+import cardofthedead.game.EventsFacade.Game.Input.InputRequested
 import cardofthedead.game.Game
+import io.reactivex.rxjava3.subjects.PublishSubject
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.TimeUnit
 
 class HumanPlayer(
     game: Game,
@@ -11,8 +16,30 @@ class HumanPlayer(
     sex: Sex
 ) : Player(game, name, sex) {
 
+    private val inputEvents: PublishSubject<InputProvided> = PublishSubject.create()
+
+    private val strs = mutableListOf<String>()
+
+    fun publishInputEvent(event: InputProvided) = inputEvents.onNext(event)
+
     override fun chooseSinglePointCardsFromCandidates(n: Int) {
-        TODO("Not yet implemented")
+        publishEvent(InputRequested(this))
+
+        inputEvents
+            .ofType(InputProvided::class.java)
+            .subscribe { msg ->
+                strs.add(msg.str)
+            }
+
+        CompletableFuture
+            .supplyAsync(this::compute)
+            .orTimeout(2, TimeUnit.SECONDS).get()
+    }
+
+    fun compute() {
+        if (strs.size != 3) {
+            Thread.sleep(100)
+        }
     }
 
     override fun decideToPlayCardFromHand(): PlayCardDecision {
