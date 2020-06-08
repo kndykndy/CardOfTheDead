@@ -42,6 +42,7 @@ import cardofthedead.players.Sex.FEMALE
 import cardofthedead.players.Sex.MALE
 import cardofthedead.players.Sex.NONBINARY
 import cardofthedead.players.getPronoun
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 fun main() {
     val game = Game.Builder(
@@ -55,7 +56,10 @@ fun main() {
 
     game.getEventQueue()
         .ofType(StartedNewGame::class.java)
+        .subscribeOn(Schedulers.io())
         .subscribe { msg ->
+            println("StartedNewGame " + Thread.currentThread().name)
+
             println("Starting a new Game of the Dead!")
 
             println("${msg.cardsInDeck} cards in deck.")
@@ -89,6 +93,7 @@ fun main() {
 
     game.getEventQueue()
         .ofType(StartedNewRound::class.java)
+        .subscribeOn(Schedulers.io())
         .subscribe { msg ->
             println("Starting round #${msg.withNumber}!")
             println()
@@ -103,7 +108,11 @@ fun main() {
 
     game.getEventQueue()
         .ofType(InputRequested::class.java)
+        .subscribeOn(Schedulers.io())
+        .observeOn(Schedulers.computation())
         .subscribe { msg ->
+            println("InputRequested " + Thread.currentThread().name)
+
             repeat(3) {
                 val readLine = readLine()
 //                println("Enter val #$it")
@@ -356,7 +365,7 @@ fun main() {
                 )
             } else {
                 println(
-                    "$playerPronoun was so lucky their are still chased by " +
+                    "$playerPronoun was so lucky they are still chased by " +
                             "${msg.player.getPronoun()} zombies!"
                 )
             }

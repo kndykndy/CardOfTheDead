@@ -32,6 +32,7 @@ import cardofthedead.players.toPlayer
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.observers.TestObserver
 import io.reactivex.rxjava3.subjects.PublishSubject
+import kotlin.concurrent.thread
 import kotlin.random.Random
 
 
@@ -106,24 +107,23 @@ class Game private constructor(builder: Builder) {
         playersToMovementPointsToEscape.getValue(initialPlayersCount)
 
     fun play() {
-        Thread(() -> {
+        thread {
+            val startingPlayer = lastPlayerWentToShoppingMall()
 
-        }).run();
-        val startingPlayer = lastPlayerWentToShoppingMall()
+            publishEvent(StartedNewGame(playDeck.size(), players.size, players, startingPlayer))
 
-        publishEvent(StartedNewGame(playDeck.size(), players.size, players, startingPlayer))
+            repeat(3) { i ->
+                publishEvent(StartedNewRound(i + 1))
+                playRound(if (i == 0) startingPlayer else winners.last().random())
+            }
 
-        repeat(3) { i ->
-            publishEvent(StartedNewRound(i + 1))
-            playRound(if (i == 0) startingPlayer else winners.last().random())
+            announceGameWinners()
+
+            players.map { it.getEvents() as PublishSubject }.forEach { it.onComplete() }
+            events.onComplete()
+
+            isRunning = false
         }
-
-        announceGameWinners()
-
-        players.map { it.getEvents() as PublishSubject }.forEach { it.onComplete() }
-        events.onComplete()
-
-        isRunning = false
     }
 
     fun isRunning(): Boolean = isRunning

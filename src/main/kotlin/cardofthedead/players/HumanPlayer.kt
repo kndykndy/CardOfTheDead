@@ -6,9 +6,8 @@ import cardofthedead.cards.PlayCardDecision
 import cardofthedead.game.EventsFacade.Game.Input.InputProvided
 import cardofthedead.game.EventsFacade.Game.Input.InputRequested
 import cardofthedead.game.Game
+import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.PublishSubject
-import java.util.concurrent.CompletableFuture
-import java.util.concurrent.TimeUnit
 
 class HumanPlayer(
     game: Game,
@@ -27,19 +26,22 @@ class HumanPlayer(
 
         inputEvents
             .ofType(InputProvided::class.java)
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.computation())
             .subscribe { msg ->
+                println("InputProvided " + Thread.currentThread().name)
                 strs.add(msg.str)
             }
 
-        CompletableFuture
-            .supplyAsync(this::compute)
-            .orTimeout(2, TimeUnit.SECONDS).get()
-    }
-
-    fun compute() {
-        if (strs.size != 3) {
+        var awaitPeriod = 100
+        while (true) {
             Thread.sleep(100)
+            awaitPeriod--
+            if (strs.size == 3 || awaitPeriod <= 0) break;
         }
+//        CompletableFuture
+//            .supplyAsync(this::compute)
+//            .orTimeout(5, TimeUnit.SECONDS).get()
     }
 
     override fun decideToPlayCardFromHand(): PlayCardDecision {
