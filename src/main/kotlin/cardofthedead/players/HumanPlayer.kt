@@ -17,30 +17,39 @@ class HumanPlayer(
 
     private val inputEvents: PublishSubject<InputProvided> = PublishSubject.create()
 
-    private val strs = mutableListOf<String>()
+    private val selectedOptions = mutableSetOf<InputOption>()
 
     fun publishInputEvent(event: InputProvided) = inputEvents.onNext(event)
 
     override fun chooseSinglePointCardsFromCandidates(n: Int) {
-        publishEvent(InputRequested(this))
+        val inputOptions = candidatesToHand.cards
+            .mapIndexed { index, card -> InputOption(index, card) }
+
+        publishEvent(InputRequested(this, inputOptions))
 
         inputEvents
             .ofType(InputProvided::class.java)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.computation())
             .subscribe { msg ->
-                println("InputProvided " + Thread.currentThread().name)
-                strs.add(msg.str)
+                selectedOptions.addAll(
+                    msg.str!!.split(',')
+                        .map { it.trim() }
+                        .mapNotNull { it.toIntOrNull() }
+                        .map { inputOptions.first { inputOption -> inputOption.idx == it } }
+                )
             }
 
         var awaitPeriod = 100
         while (true) {
-            Thread.sleep(100)
+            Thread.sleep(250)
             awaitPeriod--
-            if (strs.size == 3 || awaitPeriod <= 0) break;
+            if (selectedOptions.size == 3 || awaitPeriod <= 0) break;
         }
-//        CompletableFuture
-//            .supplyAsync(this::compute)
+
+        selectedOptions
+            .forEach { candidatesToHand.pickCard(it.card)?.let(hand::addCard) }
+
 //            .orTimeout(5, TimeUnit.SECONDS).get()
     }
 
@@ -81,3 +90,5 @@ class HumanPlayer(
     }
 
 }
+
+class InputOption(val idx: Int, val card: Card)

@@ -4,6 +4,7 @@ import cardofthedead.cards.Action
 import cardofthedead.cards.Card
 import cardofthedead.cards.Zombie
 import cardofthedead.players.HumanPlayer
+import cardofthedead.players.InputOption
 import cardofthedead.players.Player
 
 class EventsFacade {
@@ -29,9 +30,12 @@ class EventsFacade {
 
         class Input {
 
-            data class InputRequested(val player: HumanPlayer) : Event
+            data class InputRequested(
+                val player: HumanPlayer,
+                val inputOptions: List<InputOption>
+            ) : Event
 
-            data class InputProvided(val str: String)
+            data class InputProvided(val str: String?)
         }
 
         class Amid {

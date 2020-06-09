@@ -58,8 +58,6 @@ fun main() {
         .ofType(StartedNewGame::class.java)
         .subscribeOn(Schedulers.io())
         .subscribe { msg ->
-            println("StartedNewGame " + Thread.currentThread().name)
-
             println("Starting a new Game of the Dead!")
 
             println("${msg.cardsInDeck} cards in deck.")
@@ -111,12 +109,18 @@ fun main() {
         .subscribeOn(Schedulers.io())
         .observeOn(Schedulers.computation())
         .subscribe { msg ->
-            println("InputRequested " + Thread.currentThread().name)
 
-            repeat(3) {
-                val readLine = readLine()
-//                println("Enter val #$it")
-                msg.player.publishInputEvent(InputProvided("$readLine #$it"))
+            val n = 3
+            val task = "chooseSinglePointCardsFromCandidates"
+
+            println()
+            println("${msg.player.name}, choose $n options for the $task:")
+            msg.inputOptions.forEach { println("  option ${it.idx} - ${it.card.title}") }
+
+            println("Type option ids either each per row or in a line separated by commas:")
+
+            repeat(n) {
+                msg.player.publishInputEvent(InputProvided("${readLine()}"))
             }
         }
 
