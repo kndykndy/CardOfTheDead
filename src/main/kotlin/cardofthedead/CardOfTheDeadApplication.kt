@@ -113,9 +113,9 @@ fun main() {
             val n = 3
             val task = "chooseSinglePointCardsFromCandidates"
 
-            println()
             println("${msg.player.name}, choose $n options for the $task:")
-            msg.inputOptions.forEach { println("  option ${it.idx} - ${it.card.title}") }
+//            msg.inputOptions.forEach { println("  option ${it.idx} - ${it.card.title}") }
+            msg.inputOptions.forEach { println("  option ${it.toString()}") }
 
             println("Type option ids either each per row or in a line separated by commas:")
 

@@ -43,6 +43,14 @@ class PlayCardDecision(
         wayToPlayCard != WayToPlayCard.CANNOT_PLAY &&
                 wayToPlayCard != WayToPlayCard.DO_NOT_PLAY
 
+    override fun toString(): String =
+        when (wayToPlayCard) {
+            WayToPlayCard.CANNOT_PLAY -> "Cannot play"
+            WayToPlayCard.DO_NOT_PLAY -> "Do not play"
+            WayToPlayCard.PLAY_AS_ACTION -> "Play ${card?.title} as action."
+            WayToPlayCard.PLAY_AS_MOVEMENT_POINTS -> "Play ${card?.title} as movement points."
+        }
+
     companion object {
 
         fun cannotPlay(): PlayCardDecision = PlayCardDecision(WayToPlayCard.CANNOT_PLAY)

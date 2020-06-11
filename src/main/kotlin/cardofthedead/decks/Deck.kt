@@ -77,6 +77,7 @@ class EmptyDeck<T : Card> : Deck<T>() {
 }
 
 fun Deck<Card>.getActions() = this.cards.filterIsInstance<Action>()
+fun Deck<Card>.getSinglePointActions() = this.getActions().filter { it.movementPoints == 1 }
 fun Deck<Action>.getMovementPoints(): Int = this.cards.sumBy { it.movementPoints }
 fun Deck<Zombie>.getZombiesAroundCount(): Int = this.cards.sumBy { it.zombiesOnCard }
 fun Deck<Zombie>.getSingleZombies(): List<Zombie> = this.cards.filter { it.zombiesOnCard == 1 }

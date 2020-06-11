@@ -27,6 +27,7 @@ import cardofthedead.cards.zombies.RedneckZombie
 import cardofthedead.cards.zombies.Zombies
 import cardofthedead.cards.zombies.`Zombies!!!`
 import cardofthedead.decks.getActions
+import cardofthedead.decks.getSinglePointActions
 import cardofthedead.decks.getSingleZombies
 import cardofthedead.game.Game
 
@@ -66,7 +67,7 @@ class EasyPlayer(
 
     override fun chooseSinglePointCardsFromCandidates(n: Int) {
         if (n <= 0) return
-        val actionCards = candidatesToHand.getActions().filter { it.movementPoints == 1 }
+        val actionCards = candidatesToHand.getSinglePointActions()
         if (actionCards.size > n) {
             actionCards.shuffled().take(n)
         } else {

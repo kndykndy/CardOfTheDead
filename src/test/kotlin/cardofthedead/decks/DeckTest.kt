@@ -23,8 +23,7 @@ import cardofthedead.cards.zombies.Zombies
 import cardofthedead.cards.zombies.`Zombies!!!`
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldBeEmpty
-import io.kotest.matchers.collections.shouldContainAll
-import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 
 class DeckTest : StringSpec({
@@ -404,8 +403,7 @@ class DeckTest : StringSpec({
 
         // then
 
-        actions shouldHaveSize 2
-        actions shouldContainAll listOf(nukes, pillage)
+        actions shouldContainExactly listOf(nukes, pillage)
         deck.size() shouldBe 3
     }
 
@@ -424,6 +422,28 @@ class DeckTest : StringSpec({
 
         actions.shouldBeEmpty()
         deck.size() shouldBe 2
+    }
+
+    "should get list of single action cards from deck keeping them in deck" {
+        // given
+
+        val game = gameWithEmptyDeck()
+
+        val lure = Lure(game)
+        val armored = Armored(game)
+
+        val deck = EmptyDeck<Card>().apply {
+            addCards(armored, lure, `Nukes!`(game), LadZombie(game))
+        }
+
+        // when
+
+        val actions = deck.getSinglePointActions()
+
+        // then
+
+        actions shouldContainExactly listOf(armored, lure)
+        deck.size() shouldBe 4
     }
 
     "should get total movement points" {
@@ -476,8 +496,7 @@ class DeckTest : StringSpec({
 
         // then
 
-        singleZombies shouldHaveSize 2
-        singleZombies shouldContainAll listOf(granny, lad)
+        singleZombies shouldContainExactly listOf(granny, lad)
         deck.size() shouldBe 4
     }
 
