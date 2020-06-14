@@ -114,7 +114,16 @@ class HumanPlayer(
     }
 
     override fun choosePlayerToGiveZombieToForLure(): Player {
-        TODO("Not yet implemented")
+        requestInput(
+            game.players
+                .filterNot { it == this }
+                .mapIndexed { index, player ->
+                    PlayerInputOption(index + 1, player)
+                },
+            "choose player to give zombie card to" // todo extract
+        )
+
+        return (selectedOptions.first() as PlayerInputOption).player
     }
 
     override fun decideToDiscardZombieOrTakeCardForSlugger(): Boolean {
@@ -130,15 +139,41 @@ class HumanPlayer(
     }
 
     override fun choosePlayerToTakeCardFromForSlugger(): Player {
-        TODO("Not yet implemented")
+        requestInput(
+            game.players
+                .filterNot { it == this }
+                .mapIndexed { index, player ->
+                    PlayerInputOption(index + 1, player)
+                },
+            "choose player to take card from" // todo extract
+        )
+
+        return (selectedOptions.first() as PlayerInputOption).player
     }
 
     override fun choosePlayerToDiscardMovementCardsFromForTripped(): Player {
-        TODO("Not yet implemented")
+        requestInput(
+            game.players
+                .filterNot { it == this }
+                .mapIndexed { index, player ->
+                    PlayerInputOption(index + 1, player)
+                },
+            "choose player to discard movement cards from" // todo extract
+        )
+
+        return (selectedOptions.first() as PlayerInputOption).player
     }
 
     override fun decideHowManyMovementCardsToDiscardForTripped(): Int {
-        TODO("Not yet implemented")
+        requestInput(
+            listOf(
+                BooleanInputOption(1, true, "one card"),
+                BooleanInputOption(2, false, "two cards")
+            ),
+            "choose how many movement cards to discard" // todo extract
+        )
+
+        return if ((selectedOptions.first() as BooleanInputOption).bvalue) 1 else 2
     }
 
     private fun requestInput(
@@ -158,34 +193,6 @@ class HumanPlayer(
             if (selectedOptions.isNotEmpty()) break
         }
     }
-
-//    inner class InputBuilder(
-//        private val title: String
-//    ) {
-//
-//        private var builderInputOptions = emptySet<InputOption>()
-//        private var builderMaxOptions = 1
-//
-//        fun withInputOptions(inputOptions: List<InputOption>) = apply {
-//            builderInputOptions = inputOptions.toSet()
-//        }
-//
-//        fun withMaxOptions(maxOptions: Int) = apply { builderMaxOptions = maxOptions }
-//
-//        fun buildAndRequest() {
-//            inputOptions.clear()
-//            selectedOptions.clear()
-//
-//            inputOptions.addAll(builderInputOptions)
-//
-//            publishEvent(InputRequested(this@HumanPlayer, inputOptions, builderMaxOptions, title))
-//
-//            while (true) {
-//                Thread.sleep(250)
-//                if (selectedOptions.isNotEmpty()) break
-//            }
-//        }
-//    }
 }
 
 abstract class InputOption(val idx: Int)
@@ -214,4 +221,9 @@ class ActionCardInputOption(idx: Int, val action: Action) : InputOption(idx) {
 class PlayCardDecisionInputOption(idx: Int, val decision: PlayCardDecision) : InputOption(idx) {
 
     override fun toString() = "$idx - $decision"
+}
+
+class PlayerInputOption(idx: Int, val player: Player) : InputOption(idx) {
+
+    override fun toString() = "$idx - ${player.name}"
 }

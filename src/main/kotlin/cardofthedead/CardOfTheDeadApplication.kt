@@ -35,6 +35,7 @@ import cardofthedead.game.EventsFacade.Game.EventCards.PlayedRingtone
 import cardofthedead.game.EventsFacade.Game.Input.InputProvided
 import cardofthedead.game.EventsFacade.Game.Input.InputRequested
 import cardofthedead.game.Game
+import cardofthedead.players.HumanPlayer
 import cardofthedead.players.Level.EASY
 import cardofthedead.players.Player
 import cardofthedead.players.PlayerDescriptor
@@ -94,16 +95,27 @@ fun main() {
         .ofType(StartedNewRound::class.java)
         .subscribeOn(Schedulers.io())
         .subscribe { msg ->
+            println()
             println("Starting round #${msg.withNumber}!")
             println()
         }
 
     game.getEventQueue()
         .ofType(AppointedFirstPlayer::class.java)
-        .subscribe { msg -> println("${msg.player.name}'s starting (#1)!") }
+        .subscribe { msg ->
+            println()
+            println("${msg.player.name}'s starting (#1)!")
+        }
     game.getEventQueue()
         .ofType(AppointedNextPlayer::class.java)
-        .subscribe { msg -> println("${msg.player.name}'s turn (#${msg.turnNumber})!") }
+        .subscribe { msg ->
+            println()
+            println("${msg.player.name}'s turn (#${msg.turnNumber})!")
+
+            if(msg.player is HumanPlayer){
+                println("") // todo
+            }
+        }
 
     game.getEventQueue()
         .ofType(InputRequested::class.java)
