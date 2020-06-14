@@ -4,6 +4,7 @@ import cardofthedead.cards.Action
 import cardofthedead.cards.Card
 import cardofthedead.cards.PlayCardDecision
 import cardofthedead.cards.WayToPlayCard
+import cardofthedead.decks.getPlayableActions
 import cardofthedead.decks.getSinglePointActions
 import cardofthedead.game.EventsFacade.Game.Input.InputProvided
 import cardofthedead.game.EventsFacade.Game.Input.InputRequested
@@ -19,48 +20,69 @@ class HumanPlayer(
 
     private val inputEvents: PublishSubject<InputProvided> = PublishSubject.create()
 
+    private val inputOptions = mutableSetOf<InputOption>()
+
     private val selectedOptions = mutableSetOf<InputOption>()
 
     fun publishInputEvent(event: InputProvided) = inputEvents.onNext(event)
 
-    override fun chooseSinglePointCardsFromCandidates(n: Int) {
-        val inputOptions = candidatesToHand
-            .getSinglePointActions()
-            .mapIndexed { index, card -> CardInputOption(index + 1, card) }
-
-        publishEvent(InputRequested(this, inputOptions))
-
+    init {
         inputEvents
             .ofType(InputProvided::class.java)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.computation())
             .subscribe { msg ->
                 selectedOptions.addAll(
-                    msg.str!!.split(',')
-                        .map { it.trim() }
-                        .mapNotNull { it.toIntOrNull() }
+                    msg.selectedOptions
                         .map { inputOptions.first { inputOption -> inputOption.idx == it } }
                 )
             }
+    }
+
+    override fun chooseSinglePointCardsFromCandidates(n: Int) {
+        InputBuilder(
+            inputOptions,
+            selectedOptions
+        )
+            .buildAndRequest()
+
+        inputOptions.clear()
+        selectedOptions.clear()
+
+        inputOptions.addAll(
+            candidatesToHand
+                .getSinglePointActions()
+                .mapIndexed { index, card -> ActionCardInputOption(index + 1, card) }
+        )
+
+        publishEvent(
+            InputRequested(
+                this, inputOptions, 3, "choose single point cards to start round with"
+            )
+        )
 
         var awaitPeriod = 100
         while (true) {
             Thread.sleep(250)
             awaitPeriod--
-            if (selectedOptions.size == 3 || awaitPeriod <= 0) break;
+            if (selectedOptions.size >= 3 || awaitPeriod <= 0) break
         }
 
         selectedOptions
-            .map { it as CardInputOption }
-            .forEach { candidatesToHand.pickCard(it.card)?.let(hand::addCard) }
+            .map { it as ActionCardInputOption }
+            .forEach { candidatesToHand.pickCard(it.action)?.let(hand::addCard) }
 
 //            .orTimeout(5, TimeUnit.SECONDS).get()
     }
 
     override fun decideToPlayCardFromHand(): PlayCardDecision {
+        inputOptions.clear()
+        selectedOptions.clear()
+
         val list =
             listOf(PlayCardDecision.doNotPlay())
-                .plus(hand.cards
+                .plus(hand
+                    .getPlayableActions()
                     .flatMap {
                         listOf(
                             PlayCardDecision(WayToPlayCard.PLAY_AS_ACTION, it),
@@ -68,33 +90,30 @@ class HumanPlayer(
                         )
                     })
 
-        val inputOptions = list
-            .mapIndexed { index, decision -> PlayCardDecisionInputOption(index + 1, decision) }
+        inputOptions.addAll(
+            list
+                .mapIndexed { index, decision -> PlayCardDecisionInputOption(index + 1, decision) }
+        )
 
-        publishEvent(InputRequested(this, inputOptions))
+        publishEvent(
+            InputRequested(
+                this, inputOptions, 1, "decide to play card from hand"
+            )
+        )
 
-        inputEvents
-            .ofType(InputProvided::class.java)
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.computation())
-            .subscribe { msg ->
-                selectedOptions.clear()
-                selectedOptions.addAll(
-                    msg.str!!.split(',')
-                        .map { it.trim() }
-                        .mapNotNull { it.toIntOrNull() }
-                        .map { inputOptions.first { inputOption -> inputOption.idx == it } }
-                )
-            }
 
         var awaitPeriod = 100
         while (true) {
             Thread.sleep(250)
             awaitPeriod--
-            if (selectedOptions.size == 1 || awaitPeriod <= 0) break;
+            if (selectedOptions.size >= 1 || awaitPeriod <= 0) break
         }
 
-        return (selectedOptions.first() as PlayCardDecisionInputOption).decision
+        return if (selectedOptions.isNotEmpty()) {
+            val decisionInputOption = selectedOptions.first() as PlayCardDecisionInputOption
+            decisionInputOption.decision.card?.let { hand.pickCard(it) }
+            decisionInputOption.decision
+        } else PlayCardDecision.doNotPlay()
     }
 
     override fun chooseWorstCandidateForBarricade(): Card? {
@@ -131,16 +150,27 @@ class HumanPlayer(
 
 }
 
-interface InputOption
+data class InputBuilder(
+    val inputOptions: MutableSet<InputOption>,
+    val selectedOptions: MutableSet<InputOption>
+) {
 
-class CardInputOption(val idx: Int, val card: Card) : InputOption {
+    fun buildAndRequest() {
+
+    }
+
+}
+
+abstract class InputOption(val idx: Int)
+
+class ActionCardInputOption(idx: Int, val action: Action) : InputOption(idx) {
 
     override fun toString(): String {
-        return "$idx - ${card.title}"
+        return "$idx - ${action.title}(${action.movementPoints})"
     }
 }
 
-class PlayCardDecisionInputOption(val idx: Int, val decision: PlayCardDecision) : InputOption {
+class PlayCardDecisionInputOption(idx: Int, val decision: PlayCardDecision) : InputOption(idx) {
 
     override fun toString(): String {
         return "$idx - $decision"

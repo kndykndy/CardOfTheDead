@@ -43,6 +43,7 @@ import cardofthedead.players.Sex.MALE
 import cardofthedead.players.Sex.NONBINARY
 import cardofthedead.players.getPronoun
 import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlin.math.min
 
 fun main() {
     val game = Game.Builder(
@@ -109,18 +110,45 @@ fun main() {
         .subscribeOn(Schedulers.io())
         .observeOn(Schedulers.computation())
         .subscribe { msg ->
+            if (msg.maxOptions == 1)
+                println("${msg.player.name}, ${msg.inputTitle}, one option:")
+            else
+                println("${msg.player.name}, ${msg.inputTitle}, max ${msg.maxOptions} options:")
+            msg.inputOptions.forEach { println("  option $it") }
 
-            val n = 3
-            val task = "chooseSinglePointCardsFromCandidates"
+            while (true) {
+                if (msg.maxOptions == 1)
+                    print("Type option id: ")
+                else
+                    print("Type option ids separated by commas: ")
 
-            println("${msg.player.name}, choose $n options for the $task:")
-//            msg.inputOptions.forEach { println("  option ${it.idx} - ${it.card.title}") }
-            msg.inputOptions.forEach { println("  option ${it.toString()}") }
+                val curVal = readLine() ?: ""
 
-            println("Type option ids either each per row or in a line separated by commas:")
+                try {
+                    val inputValues = curVal.split(',')
+                        .map { it.trim() }
+                        .mapNotNull { it.toIntOrNull() }
+                        .toSet()
 
-            repeat(n) {
-                msg.player.publishInputEvent(InputProvided("${readLine()}"))
+                    if (inputValues.isEmpty())
+                        throw IllegalArgumentException("Empty input is not allowed.")
+                    else if (inputValues.size != min(msg.maxOptions, msg.inputOptions.size))
+                        throw IllegalArgumentException(
+                            "You entered not the requested amount of options."
+                        )
+
+                    inputValues
+                        .map { msg.inputOptions.first { inputOption -> inputOption.idx == it } }
+
+                    msg.player.publishInputEvent(InputProvided(inputValues))
+                    break
+                } catch (nfe: NumberFormatException) {
+                    println("\"${curVal}\" is an incorrect input.")
+                } catch (nsee: NoSuchElementException) {
+                    println("\"${curVal}\" is an incorrect input.")
+                } catch (iae: IllegalArgumentException) {
+                    println(iae.message)
+                }
             }
         }
 

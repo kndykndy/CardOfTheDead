@@ -38,8 +38,6 @@ import kotlin.random.Random
 
 class Game private constructor(builder: Builder) {
 
-    private var isRunning: Boolean = true
-
     /**
      * Events superqueue, combines all the subqueues from players and game queue.
      */
@@ -121,12 +119,8 @@ class Game private constructor(builder: Builder) {
 
             players.map { it.getEvents() as PublishSubject }.forEach { it.onComplete() }
             events.onComplete()
-
-            isRunning = false
         }
     }
-
-    fun isRunning(): Boolean = isRunning
 
     private fun playRound(startingPlayer: Player) {
         prepareForRound()

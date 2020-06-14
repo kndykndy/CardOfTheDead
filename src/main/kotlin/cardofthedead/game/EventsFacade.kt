@@ -32,10 +32,12 @@ class EventsFacade {
 
             data class InputRequested(
                 val player: HumanPlayer,
-                val inputOptions: List<InputOption>
+                val inputOptions: Set<InputOption>,
+                val maxOptions: Int,
+                val inputTitle: String
             ) : Event
 
-            data class InputProvided(val str: String?)
+            data class InputProvided(val selectedOptions: Set<Int>)
         }
 
         class Amid {

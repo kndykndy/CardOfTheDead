@@ -26,7 +26,7 @@ import cardofthedead.cards.zombies.LadZombie
 import cardofthedead.cards.zombies.RedneckZombie
 import cardofthedead.cards.zombies.Zombies
 import cardofthedead.cards.zombies.`Zombies!!!`
-import cardofthedead.decks.getActions
+import cardofthedead.decks.getPlayableActions
 import cardofthedead.decks.getSinglePointActions
 import cardofthedead.decks.getSingleZombies
 import cardofthedead.game.Game
@@ -81,7 +81,7 @@ class EasyPlayer(
     override fun decideToPlayCardFromHand(): PlayCardDecision {
         if (hand.isEmpty()) return PlayCardDecision.cannotPlay()
 
-        val playableActions = hand.getActions().filterNot { it is Bitten }
+        val playableActions = hand.getPlayableActions()
 
         return if (playableActions.isNotEmpty()) {
             if (throwCoin()) {
