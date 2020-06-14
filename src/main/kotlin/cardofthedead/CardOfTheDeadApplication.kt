@@ -111,16 +111,16 @@ fun main() {
         .observeOn(Schedulers.computation())
         .subscribe { msg ->
             if (msg.maxOptions == 1)
-                println("${msg.player.name}, ${msg.inputTitle}, one option:")
+                println("  ${msg.player.name}, ${msg.inputTitle}, one option:")
             else
-                println("${msg.player.name}, ${msg.inputTitle}, max ${msg.maxOptions} options:")
-            msg.inputOptions.forEach { println("  option $it") }
+                println("  ${msg.player.name}, ${msg.inputTitle}, max ${msg.maxOptions}:")
+            msg.inputOptions.forEach { println("    $it") }
 
             while (true) {
                 if (msg.maxOptions == 1)
-                    print("Type option id: ")
+                    print("  Type option number: ")
                 else
-                    print("Type option ids separated by commas: ")
+                    print("  Type option numbers separated by commas: ")
 
                 val curVal = readLine() ?: ""
 
@@ -143,11 +143,11 @@ fun main() {
                     msg.player.publishInputEvent(InputProvided(inputValues))
                     break
                 } catch (nfe: NumberFormatException) {
-                    println("\"${curVal}\" is an incorrect input.")
+                    println("  \"${curVal}\" is an incorrect input.")
                 } catch (nsee: NoSuchElementException) {
-                    println("\"${curVal}\" is an incorrect input.")
+                    println("  \"${curVal}\" is an incorrect input.")
                 } catch (iae: IllegalArgumentException) {
-                    println(iae.message)
+                    println("  " + iae.message)
                 }
             }
         }
