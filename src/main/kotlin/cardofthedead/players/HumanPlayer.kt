@@ -21,7 +21,6 @@ class HumanPlayer(
     private val inputEvents: PublishSubject<InputProvided> = PublishSubject.create()
 
     private val inputOptions = mutableSetOf<InputOption>()
-
     private val selectedOptions = mutableSetOf<InputOption>()
 
     fun publishInputEvent(event: InputProvided) = inputEvents.onNext(event)
@@ -40,80 +39,42 @@ class HumanPlayer(
     }
 
     override fun chooseSinglePointCardsFromCandidates(n: Int) {
-        InputBuilder(
-            inputOptions,
-            selectedOptions
-        )
-            .buildAndRequest()
-
-        inputOptions.clear()
-        selectedOptions.clear()
-
-        inputOptions.addAll(
-            candidatesToHand
-                .getSinglePointActions()
-                .mapIndexed { index, card -> ActionCardInputOption(index + 1, card) }
-        )
-
-        publishEvent(
-            InputRequested(
-                this, inputOptions, 3, "choose single point cards to start round with"
+        InputBuilder("choose single point cards to start round with")
+            .withInputOptions(
+                candidatesToHand
+                    .getSinglePointActions()
+                    .mapIndexed { index, card ->
+                        ActionCardInputOption(index + 1, card)
+                    }
             )
-        )
-
-        var awaitPeriod = 100
-        while (true) {
-            Thread.sleep(250)
-            awaitPeriod--
-            if (selectedOptions.size >= 3 || awaitPeriod <= 0) break
-        }
+            .withMaxOptions(3)
+            .buildAndRequest()
 
         selectedOptions
             .map { it as ActionCardInputOption }
             .forEach { candidatesToHand.pickCard(it.action)?.let(hand::addCard) }
-
-//            .orTimeout(5, TimeUnit.SECONDS).get()
     }
 
     override fun decideToPlayCardFromHand(): PlayCardDecision {
-        inputOptions.clear()
-        selectedOptions.clear()
+        InputBuilder("choose to play card from hand")
+            .withInputOptions(
+                listOf(PlayCardDecision.doNotPlay())
+                    .plus(hand
+                        .getPlayableActions()
+                        .flatMap {
+                            listOf(
+                                PlayCardDecision(WayToPlayCard.PLAY_AS_ACTION, it),
+                                PlayCardDecision(WayToPlayCard.PLAY_AS_MOVEMENT_POINTS, it)
+                            )
+                        })
+                    .mapIndexed { index, decision ->
+                        PlayCardDecisionInputOption(index + 1, decision)
+                    }
+            ).buildAndRequest()
 
-        val list =
-            listOf(PlayCardDecision.doNotPlay())
-                .plus(hand
-                    .getPlayableActions()
-                    .flatMap {
-                        listOf(
-                            PlayCardDecision(WayToPlayCard.PLAY_AS_ACTION, it),
-                            PlayCardDecision(WayToPlayCard.PLAY_AS_MOVEMENT_POINTS, it)
-                        )
-                    })
-
-        inputOptions.addAll(
-            list
-                .mapIndexed { index, decision -> PlayCardDecisionInputOption(index + 1, decision) }
-        )
-
-        publishEvent(
-            InputRequested(
-                this, inputOptions, 1, "decide to play card from hand"
-            )
-        )
-
-
-        var awaitPeriod = 100
-        while (true) {
-            Thread.sleep(250)
-            awaitPeriod--
-            if (selectedOptions.size >= 1 || awaitPeriod <= 0) break
-        }
-
-        return if (selectedOptions.isNotEmpty()) {
-            val decisionInputOption = selectedOptions.first() as PlayCardDecisionInputOption
-            decisionInputOption.decision.card?.let { hand.pickCard(it) }
-            decisionInputOption.decision
-        } else PlayCardDecision.doNotPlay()
+        val decisionInputOption = selectedOptions.first() as PlayCardDecisionInputOption
+        decisionInputOption.decision.card?.let { hand.pickCard(it) }
+        return decisionInputOption.decision
     }
 
     override fun chooseWorstCandidateForBarricade(): Card? {
@@ -148,17 +109,33 @@ class HumanPlayer(
         TODO("Not yet implemented")
     }
 
-}
+    inner class InputBuilder(
+        private val title: String
+    ) {
 
-data class InputBuilder(
-    val inputOptions: MutableSet<InputOption>,
-    val selectedOptions: MutableSet<InputOption>
-) {
+        private var builderInputOptions = emptySet<InputOption>()
+        private var builderMaxOptions = 1
 
-    fun buildAndRequest() {
+        fun withInputOptions(inputOptions: List<InputOption>) = apply {
+            builderInputOptions = inputOptions.toSet()
+        }
 
+        fun withMaxOptions(maxOptions: Int) = apply { builderMaxOptions = maxOptions }
+
+        fun buildAndRequest() {
+            inputOptions.clear()
+            selectedOptions.clear()
+
+            inputOptions.addAll(builderInputOptions)
+
+            publishEvent(InputRequested(this@HumanPlayer, inputOptions, builderMaxOptions, title))
+
+            while (true) {
+                Thread.sleep(250)
+                if (selectedOptions.isNotEmpty()) break
+            }
+        }
     }
-
 }
 
 abstract class InputOption(val idx: Int)
