@@ -419,9 +419,6 @@ fun main() {
         }
 
     game.play()
-//    while(game.isRunning()){
-//        Thread.sleep(100L)
-//    }
 }
 
 fun printScores(players: List<Player>) {

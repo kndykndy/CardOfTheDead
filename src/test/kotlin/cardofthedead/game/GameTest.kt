@@ -52,6 +52,8 @@ class GameTest : StringSpec({
         // then
 
         val observer = game.getEventQueueTestObserver()
+        @Suppress("BlockingMethodInNonBlockingContext")
+        observer.await()
         observer.assertNoErrors()
         observer.assertComplete()
 
