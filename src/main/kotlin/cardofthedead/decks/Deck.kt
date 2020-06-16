@@ -26,16 +26,12 @@ abstract class Deck<T : Card> {
 
     abstract fun getCardTypeToCardAmountInDeck(): Map<KClass<out T>, Int>
 
-    // Service funcs
-
     fun size(): Int = cards.size
 
     fun isEmpty(): Boolean = cards.isEmpty()
     fun isNotEmpty(): Boolean = cards.isNotEmpty()
 
     fun shuffle() = cards.shuffle()
-
-    // Adding cards
 
     fun addCard(card: T) {
         if (!cards.contains(card)) cards.add(card)
@@ -48,14 +44,10 @@ abstract class Deck<T : Card> {
         deck.cards.clear()
     }
 
-    // Checking cards
-
     fun hasCard(card: T): Boolean = cards.contains(card)
 
     fun hasCardOfClass(cKlass: Class<out T>): Boolean =
         cards.filterIsInstance(cKlass).firstOrNull() != null
-
-    // Picking cards
 
     fun pickCard(card: T): T? = if (cards.remove(card)) card else null
     fun pickCard(idx: Int): T? =
@@ -69,7 +61,10 @@ abstract class Deck<T : Card> {
             ?.let(::pickCard)
 
     override fun toString(): String =
-        "[${cards.joinToString(",") { it.title + it.hashCode() }}]"
+        "[${cards.joinToString(",") {
+            if (it is Action) "${it.title}(${it.movementPoints})"
+            else it.title
+        }}]"
 }
 
 class EmptyDeck<T : Card> : Deck<T>() {

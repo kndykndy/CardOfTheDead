@@ -45,7 +45,7 @@ class HumanPlayer(
                 .mapIndexed { index, action ->
                     ActionCardInputOption(index + 1, action)
                 },
-            "choose single point cards to start round with", // todo extract
+            "choose single point cards to start round with",
             3
         )
 
@@ -68,7 +68,7 @@ class HumanPlayer(
                 .mapIndexed { index, decision ->
                     PlayCardDecisionInputOption(index + 1, decision)
                 },
-            "choose how to play from hand" // todo extract
+            "choose how to play from hand"
         )
 
         val decisionInputOption = selectedOptions.first() as PlayCardDecisionInputOption
@@ -82,7 +82,7 @@ class HumanPlayer(
                 .mapIndexed { index, card ->
                     CardInputOption(index + 1, card)
                 },
-            "choose worst card" // todo extract
+            "choose worst card"
         )
 
         return (selectedOptions.first() as CardInputOption).card
@@ -94,7 +94,7 @@ class HumanPlayer(
                 .mapIndexed { index, action ->
                     ActionCardInputOption(index + 1, action)
                 },
-            "choose worst movement card" // todo extract
+            "choose worst movement card"
         )
 
         return (selectedOptions.first() as ActionCardInputOption).action
@@ -106,7 +106,7 @@ class HumanPlayer(
                 BooleanInputOption(1, true, "draw"),
                 BooleanInputOption(2, false, "does not draw")
             ),
-            "choose to draw cards next turn or not" // todo extract
+            "choose to draw cards next turn or not"
         )
 
         drawCardThisTurn = (selectedOptions.first() as BooleanInputOption).bvalue
@@ -120,7 +120,7 @@ class HumanPlayer(
                 .mapIndexed { index, player ->
                     PlayerInputOption(index + 1, player)
                 },
-            "choose player to give zombie card to" // todo extract
+            "choose player to give zombie card to"
         )
 
         return (selectedOptions.first() as PlayerInputOption).player
@@ -132,7 +132,7 @@ class HumanPlayer(
                 BooleanInputOption(1, true, "discard zombie"),
                 BooleanInputOption(2, false, "take card")
             ),
-            "choose to discard a zombie or take a card" // todo extract
+            "choose to discard a zombie or take a card"
         )
 
         return (selectedOptions.first() as BooleanInputOption).bvalue
@@ -145,7 +145,7 @@ class HumanPlayer(
                 .mapIndexed { index, player ->
                     PlayerInputOption(index + 1, player)
                 },
-            "choose player to take card from" // todo extract
+            "choose player to take card from"
         )
 
         return (selectedOptions.first() as PlayerInputOption).player
@@ -158,7 +158,7 @@ class HumanPlayer(
                 .mapIndexed { index, player ->
                     PlayerInputOption(index + 1, player)
                 },
-            "choose player to discard movement cards from" // todo extract
+            "choose player to discard movement cards from"
         )
 
         return (selectedOptions.first() as PlayerInputOption).player
@@ -170,7 +170,7 @@ class HumanPlayer(
                 BooleanInputOption(1, true, "one card"),
                 BooleanInputOption(2, false, "two cards")
             ),
-            "choose how many movement cards to discard" // todo extract
+            "choose how many movement cards to discard"
         )
 
         return if ((selectedOptions.first() as BooleanInputOption).bvalue) 1 else 2

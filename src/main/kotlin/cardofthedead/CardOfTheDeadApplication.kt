@@ -112,8 +112,10 @@ fun main() {
             println()
             println("${msg.player.name}'s turn (#${msg.turnNumber})!")
 
-            if(msg.player is HumanPlayer){
-                println("") // todo
+            if (msg.player is HumanPlayer) {
+                println("Your hand: ${msg.player.hand}")
+                println("Zombies around you: ${msg.player.zombiesAround}")
+                println("Your escape cards: ${msg.player.escapeCards}")
             }
         }
 
@@ -123,9 +125,9 @@ fun main() {
         .observeOn(Schedulers.computation())
         .subscribe { msg ->
             if (msg.maxOptions == 1)
-                println("  ${msg.player.name}, ${msg.inputTitle}, one option:")
+                println("  ${msg.player.name}, ${msg.inputTitle}:")
             else
-                println("  ${msg.player.name}, ${msg.inputTitle}, max ${msg.maxOptions}:")
+                println("  ${msg.player.name}, ${msg.inputTitle}, max ${msg.maxOptions} options:")
             msg.inputOptions.forEach { println("    $it") }
 
             while (true) {
@@ -153,6 +155,7 @@ fun main() {
                         .map { msg.inputOptions.first { inputOption -> inputOption.idx == it } }
 
                     msg.player.publishInputEvent(InputProvided(inputValues))
+
                     break
                 } catch (nfe: NumberFormatException) {
                     println("  \"${curVal}\" is an incorrect input.")
