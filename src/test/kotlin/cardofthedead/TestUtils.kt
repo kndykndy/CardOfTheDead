@@ -10,6 +10,7 @@ import cardofthedead.decks.StandardDeck
 import cardofthedead.game.EventsFacade
 import cardofthedead.game.Game
 import cardofthedead.players.EasyPlayer
+import cardofthedead.players.HardPlayer
 import cardofthedead.players.Player
 import cardofthedead.players.PlayerDescriptor
 import cardofthedead.players.Sex
@@ -126,6 +127,7 @@ object TestUtils {
         }
 
     fun easyPlayerStub(game: Game): EasyPlayer = EasyPlayer(game, "Kylo Ren", Sex.FEMALE)
+    fun hardPlayerStub(game: Game): HardPlayer = HardPlayer(game, "Darth Vader", Sex.MALE)
 
     fun Player.takeToHand(vararg listOfCards: Card) =
         listOfCards.forEach { this.takeToHand(it) }
