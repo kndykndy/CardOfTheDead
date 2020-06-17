@@ -42,15 +42,13 @@ class HumanPlayer(
         requestInput(
             candidatesToHand
                 .getSinglePointActions()
-                .mapIndexed { index, action ->
-                    ActionCardInputOption(index + 1, action)
-                },
+                .mapIndexed { idx, action -> ActionCardInputOption(idx, action) },
             "choose single point cards to start round with",
             3
         )
 
         selectedOptions
-            .map { it as ActionCardInputOption }
+            .filterIsInstance<ActionCardInputOption>()
             .forEach { candidatesToHand.pickCard(it.action)?.let(hand::addCard) }
     }
 
@@ -65,9 +63,7 @@ class HumanPlayer(
                             PlayCardDecision(WayToPlayCard.PLAY_AS_MOVEMENT_POINTS, it)
                         )
                     })
-                .mapIndexed { index, decision ->
-                    PlayCardDecisionInputOption(index + 1, decision)
-                },
+                .mapIndexed { idx, decision -> PlayCardDecisionInputOption(idx, decision) },
             "choose how to play from hand"
         )
 
@@ -79,9 +75,7 @@ class HumanPlayer(
     override fun chooseWorstCandidateForBarricade(): Card? {
         requestInput(
             candidatesToHand.cards
-                .mapIndexed { index, card ->
-                    CardInputOption(index + 1, card)
-                },
+                .mapIndexed { idx, card -> CardInputOption(idx, card) },
             "choose worst card"
         )
 
@@ -91,90 +85,43 @@ class HumanPlayer(
     override fun chooseWorstMovementCardForDynamite(): Action? {
         requestInput(
             escapeCards.cards
-                .mapIndexed { index, action ->
-                    ActionCardInputOption(index + 1, action)
-                },
+                .mapIndexed { idx, action -> ActionCardInputOption(idx, action) },
             "choose worst movement card"
         )
 
         return (selectedOptions.first() as ActionCardInputOption).action
     }
 
-    override fun decideToDrawNoCardsNextTurnForHide(): Boolean {
-        requestInput(
-            listOf(
-                BooleanInputOption(1, true, "draw"),
-                BooleanInputOption(2, false, "does not draw")
-            ),
+    override fun decideToDrawNoCardsNextTurnForHide(): Boolean =
+        requestBooleanInput(
+            "draw",
+            "does not draw",
             "choose to draw cards next turn or not"
-        )
+        ).also { drawCardThisTurn = it }
 
-        drawCardThisTurn = (selectedOptions.first() as BooleanInputOption).bvalue
-        return drawCardThisTurn
-    }
+    override fun choosePlayerToGiveZombieToForLure(): Player =
+        requestPlayerInput("choose player to give zombie card to")
 
-    override fun choosePlayerToGiveZombieToForLure(): Player {
-        requestInput(
-            game.players
-                .filterNot { it == this }
-                .mapIndexed { index, player ->
-                    PlayerInputOption(index + 1, player)
-                },
-            "choose player to give zombie card to"
-        )
-
-        return (selectedOptions.first() as PlayerInputOption).player
-    }
-
-    override fun decideToDiscardZombieOrTakeCardForSlugger(): Boolean {
-        requestInput(
-            listOf(
-                BooleanInputOption(1, true, "discard zombie"),
-                BooleanInputOption(2, false, "take card")
-            ),
+    override fun decideToDiscardZombieOrTakeCardForSlugger(): Boolean =
+        requestBooleanInput(
+            "discard zombie",
+            "take card",
             "choose to discard a zombie or take a card"
         )
 
-        return (selectedOptions.first() as BooleanInputOption).bvalue
-    }
+    override fun choosePlayerToTakeCardFromForSlugger(): Player =
+        requestPlayerInput("choose player to take card from")
 
-    override fun choosePlayerToTakeCardFromForSlugger(): Player {
-        requestInput(
-            game.players
-                .filterNot { it == this }
-                .mapIndexed { index, player ->
-                    PlayerInputOption(index + 1, player)
-                },
-            "choose player to take card from"
-        )
+    override fun choosePlayerToDiscardMovementCardsFromForTripped(): Player =
+        requestPlayerInput("choose player to discard movement cards from")
 
-        return (selectedOptions.first() as PlayerInputOption).player
-    }
-
-    override fun choosePlayerToDiscardMovementCardsFromForTripped(): Player {
-        requestInput(
-            game.players
-                .filterNot { it == this }
-                .mapIndexed { index, player ->
-                    PlayerInputOption(index + 1, player)
-                },
-            "choose player to discard movement cards from"
-        )
-
-        return (selectedOptions.first() as PlayerInputOption).player
-    }
-
-    override fun decideHowManyMovementCardsToDiscardForTripped(): Int {
-        requestInput(
-            listOf(
-                BooleanInputOption(1, true, "one card"),
-                BooleanInputOption(2, false, "two cards")
-            ),
-            "choose how many movement cards to discard"
-        )
-
-        return if ((selectedOptions.first() as BooleanInputOption).bvalue) 1 else 2
-    }
+    override fun decideHowManyMovementCardsToDiscardForTripped(): Int =
+        if (requestBooleanInput(
+                "one card",
+                "two cards",
+                "choose how many movement cards to discard"
+            )
+        ) 1 else 2
 
     private fun requestInput(
         currentInputOptions: List<InputOption>,
@@ -193,6 +140,33 @@ class HumanPlayer(
             if (selectedOptions.isNotEmpty()) break
         }
     }
+
+    private fun requestBooleanInput(
+        trueDecisionText: String,
+        falseDecisionText: String,
+        title: String
+    ): Boolean {
+        requestInput(
+            listOf(
+                BooleanInputOption(1, true, trueDecisionText),
+                BooleanInputOption(2, false, falseDecisionText)
+            ),
+            title
+        )
+
+        return (selectedOptions.first() as BooleanInputOption).bvalue
+    }
+
+    private fun requestPlayerInput(title: String): Player {
+        requestInput(
+            game.players
+                .filterNot { it == this }
+                .mapIndexed { idx, player -> PlayerInputOption(idx, player) },
+            title
+        )
+
+        return (selectedOptions.first() as PlayerInputOption).player
+    }
 }
 
 abstract class InputOption(val idx: Int)
@@ -204,7 +178,7 @@ class BooleanInputOption(
     override fun toString() = "$idx - $decision"
 }
 
-class CardInputOption(idx: Int, val card: Card) : InputOption(idx) {
+class CardInputOption(idx: Int, val card: Card) : InputOption(idx + 1) {
 
     override fun toString() =
         when (card) {
@@ -213,17 +187,17 @@ class CardInputOption(idx: Int, val card: Card) : InputOption(idx) {
         }
 }
 
-class ActionCardInputOption(idx: Int, val action: Action) : InputOption(idx) {
+class ActionCardInputOption(idx: Int, val action: Action) : InputOption(idx + 1) {
 
     override fun toString() = "$idx - ${action.title}(${action.movementPoints})"
 }
 
-class PlayCardDecisionInputOption(idx: Int, val decision: PlayCardDecision) : InputOption(idx) {
+class PlayCardDecisionInputOption(idx: Int, val decision: PlayCardDecision) : InputOption(idx + 1) {
 
     override fun toString() = "$idx - $decision"
 }
 
-class PlayerInputOption(idx: Int, val player: Player) : InputOption(idx) {
+class PlayerInputOption(idx: Int, val player: Player) : InputOption(idx + 1) {
 
     override fun toString() = "$idx - ${player.name}"
 }
